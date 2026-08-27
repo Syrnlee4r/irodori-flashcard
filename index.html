@@ -1,0 +1,3076 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>言葉 — Kartu Kosakata Irodori</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#170a12; --bg2:#241028; --accent:#e8467b; --accent-soft:#ff8fb3;
+  --ink:#f4e9ee; --ink-dim:#c9b3bd; --ink-faint:#8a7480;
+  --panel:#1f0f18cc; --panel-solid:#20111a;
+  --good:#57d18a; --bad:#f0685f; --meh:#f2b84b;
+  --serif:'Shippori Mincho', serif; --jp:'Noto Sans JP', sans-serif; --ui:'Plus Jakarta Sans', sans-serif;
+  --r-lg:26px; --r-md:16px; --r-sm:10px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0; height:100%;}
+body{
+  font-family:var(--ui); color:var(--ink); min-height:100vh; overflow-x:hidden;
+  background:
+    radial-gradient(circle at 15% -10%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 45%),
+    radial-gradient(circle at 100% 10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 40%),
+    radial-gradient(circle at 50% 120%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 50%),
+    linear-gradient(160deg, var(--bg) 0%, var(--bg2) 100%);
+  background-attachment:fixed;
+  transition:background-color .5s ease;
+  position:relative;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; opacity:.5; z-index:0;
+  background-image: radial-gradient(color-mix(in srgb, var(--ink) 5%, transparent) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+.app{position:relative; z-index:1; max-width:920px; margin:0 auto; padding:28px 20px 60px; min-height:100vh; display:flex; flex-direction:column;}
+::selection{background:var(--accent); color:#fff;}
+button{font-family:inherit; cursor:pointer;}
+a{color:inherit;}
+
+/* ---------- Home ---------- */
+.brandmark{display:flex; align-items:center; gap:16px; margin-bottom:6px;}
+.seal{
+  width:56px; height:56px; border-radius:14px; flex:none; display:grid; place-items:center;
+  background:linear-gradient(150deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #000));
+  color:#fff; font-family:var(--serif); font-size:28px; font-weight:700; box-shadow:0 10px 26px -10px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+.brand-text h1{
+  font-family:var(--serif); font-weight:800; font-size:clamp(28px,5vw,40px); margin:0; letter-spacing:.02em;
+  background:linear-gradient(120deg, var(--ink), var(--accent-soft));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.brand-text p{margin:2px 0 0; color:var(--ink-dim); font-size:14px;}
+.home-hero{margin:26px 0 30px; padding:22px 24px; border-radius:var(--r-lg); background:var(--panel); backdrop-filter:blur(6px); border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);}
+.home-hero .rule{width:46px; height:3px; border-radius:3px; background:var(--accent); margin-bottom:14px;}
+.home-hero h2{font-family:var(--serif); font-size:clamp(20px,3.4vw,26px); margin:0 0 8px; font-weight:700;}
+.home-hero p{margin:0; color:var(--ink-dim); font-size:14.5px; line-height:1.6;}
+.badge-row{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;}
+.pill{font-size:12px; padding:5px 12px; border-radius:99px; border:1px solid color-mix(in srgb, var(--ink) 25%, transparent); color:var(--ink-dim);}
+.pill.on{border-color:var(--accent); color:var(--accent-soft); background:color-mix(in srgb, var(--accent) 12%, transparent);}
+.pill.soon{opacity:.55; font-style:italic;}
+
+.cat-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:16px; margin-top:6px;}
+.cat-card{
+  position:relative; overflow:hidden; text-align:left; border:none; border-radius:var(--r-md); padding:20px;
+  background:linear-gradient(160deg, color-mix(in srgb, var(--cbg) 92%, #000 8%), color-mix(in srgb, var(--cbg2) 90%, #000 10%));
+  border:1px solid color-mix(in srgb, var(--cac) 45%, transparent);
+  color:var(--ink); transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  display:flex; flex-direction:column; gap:14px; min-height:150px;
+}
+.cat-card:hover, .cat-card:focus-visible{transform:translateY(-4px); box-shadow:0 18px 34px -18px color-mix(in srgb, var(--cac) 80%, transparent); border-color:var(--cac); outline:none;}
+.cat-card .top{display:flex; justify-content:space-between; align-items:flex-start;}
+.cat-stamp{
+  width:44px; height:44px; border-radius:10px; display:grid; place-items:center; font-family:var(--serif); font-weight:700; font-size:22px;
+  background:color-mix(in srgb, var(--cac) 22%, transparent); color:var(--cac); border:1px solid color-mix(in srgb, var(--cac) 55%, transparent);
+}
+.cat-count{font-size:12px; color:var(--ink-faint); background:color-mix(in srgb, #000 30%, transparent); padding:3px 9px; border-radius:99px;}
+.cat-name{font-weight:700; font-size:16.5px; margin:0;}
+.cat-jp{font-family:var(--jp); font-size:12.5px; color:var(--ink-faint); margin:2px 0 0;}
+.cat-cta{margin-top:auto; font-size:12.5px; color:var(--cac); font-weight:600; display:flex; align-items:center; gap:6px;}
+.cat-cta svg{width:14px; height:14px;}
+
+.footnote{margin-top:36px; text-align:center; font-size:12px; color:var(--ink-faint); line-height:1.7;}
+
+/* ---------- Deck view ---------- */
+.deck-view{display:none; flex-direction:column; flex:1;}
+.deck-view.active{display:flex;}
+.home-view.hidden, .summary-view{display:none;}
+.summary-view.active{display:flex;}
+
+.deck-top{display:flex; align-items:center; gap:12px; margin-bottom:18px;}
+.back-btn{
+  width:40px; height:40px; border-radius:12px; border:1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+  background:transparent; color:var(--ink); display:grid; place-items:center; flex:none; transition:.2s;
+}
+.back-btn:hover{background:color-mix(in srgb, var(--accent) 18%, transparent); border-color:var(--accent);}
+.deck-title{flex:1; min-width:0;}
+.deck-title h2{margin:0; font-family:var(--serif); font-size:19px; display:flex; align-items:center; gap:8px;}
+.deck-title .lv{font-size:10.5px; font-weight:700; color:var(--accent); border:1px solid var(--accent); border-radius:6px; padding:1px 7px; font-family:var(--ui);}
+.deck-title p{margin:2px 0 0; font-size:12px; color:var(--ink-faint);}
+.progress-wrap{width:100%; height:5px; background:color-mix(in srgb, var(--ink) 12%, transparent); border-radius:99px; overflow:hidden; margin-top:14px;}
+.progress-bar{height:100%; background:linear-gradient(90deg, var(--accent-soft), var(--accent)); border-radius:99px; transition:width .35s ease;}
+.stat-row{display:flex; gap:10px; margin-top:12px;}
+.stat-chip{display:flex; align-items:center; gap:6px; font-size:12.5px; padding:5px 11px; border-radius:99px; background:color-mix(in srgb, #000 25%, transparent); color:var(--ink-dim);}
+.dot{width:7px; height:7px; border-radius:50%;}
+
+.stage{position:relative; flex:1; display:flex; align-items:center; justify-content:center; padding:18px 0 8px; perspective:1600px; min-height:390px;}
+.card{
+  position:absolute; top:50%; left:50%; width:min(340px, 88vw); height:440px; border-radius:22px; will-change:transform;
+  touch-action:none; user-select:none; cursor:grab;
+}
+.card:active{cursor:grabbing;}
+.card-flip{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .5s cubic-bezier(.2,.8,.2,1);}
+.card-flip.flipped{transform:rotateY(180deg);}
+.card-face{
+  position:absolute; inset:0; border-radius:22px; backface-visibility:hidden; overflow:hidden;
+  display:flex; flex-direction:column; padding:22px;
+  box-shadow:0 26px 50px -20px rgba(0,0,0,.65), 0 2px 0 0 color-mix(in srgb, var(--accent) 40%, transparent) inset;
+  border:1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.card-front{
+  background:
+    radial-gradient(circle at 85% 8%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 55%),
+    linear-gradient(165deg, color-mix(in srgb, var(--bg2) 96%, #000 4%), color-mix(in srgb, var(--bg) 94%, #000 6%));
+}
+.card-back{
+  transform:rotateY(180deg);
+  background:
+    radial-gradient(circle at 15% 92%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 55%),
+    linear-gradient(165deg, color-mix(in srgb, var(--bg) 95%, #000 5%), color-mix(in srgb, var(--bg2) 96%, #000 4%));
+}
+.face-badges{display:flex; justify-content:space-between; align-items:flex-start;}
+.badge{font-family:var(--ui); font-size:10.5px; font-weight:700; letter-spacing:.03em; padding:4px 9px; border-radius:8px;}
+.badge-level{color:var(--accent-soft); border:1px solid color-mix(in srgb, var(--accent) 55%, transparent); background:color-mix(in srgb, var(--accent) 14%, transparent);}
+.badge-pos{color:var(--bg); background:var(--accent); font-weight:800;}
+.face-center{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px;}
+.kanji-big{font-family:var(--serif); font-weight:800; font-size:clamp(40px, 11vw, 58px); line-height:1.15; color:var(--ink); text-shadow:0 0 30px color-mix(in srgb, var(--accent) 55%, transparent); word-break:keep-all;}
+.hint-tap{font-size:11.5px; color:var(--ink-faint); letter-spacing:.02em;}
+.back-kanji{font-family:var(--jp); font-size:13px; color:var(--ink-faint);}
+.furigana-big{font-family:var(--jp); font-size:clamp(22px,6vw,28px); color:var(--accent-soft); font-weight:500; margin-top:4px;}
+.meaning-rule{width:34px; height:2px; background:var(--accent); border-radius:2px; margin:14px 0;}
+.meaning-big{font-family:var(--ui); font-weight:700; font-size:clamp(18px,4.6vw,22px); line-height:1.4; color:var(--ink);}
+
+.stamp{
+  position:absolute; top:26px; padding:8px 14px; border-radius:12px; border:4px solid; font-family:var(--serif); font-weight:800;
+  font-size:26px; opacity:0; transform:rotate(-18deg) scale(.85); pointer-events:none; letter-spacing:.05em;
+  box-shadow:0 6px 18px -8px rgba(0,0,0,.5);
+}
+.stamp-ingat{right:20px; color:var(--good); border-color:var(--good); background:color-mix(in srgb, var(--good) 15%, transparent);}
+.stamp-lupa{left:20px; color:var(--bad); border-color:var(--bad); background:color-mix(in srgb, var(--bad) 15%, transparent); transform:rotate(18deg) scale(.85);}
+.stamp-gatau{left:50%; bottom:20px; top:auto; transform:translateX(-50%) rotate(0deg) scale(.85); color:var(--meh); border-color:var(--meh); background:color-mix(in srgb, var(--meh) 15%, transparent);}
+
+.controls{display:flex; align-items:center; justify-content:center; gap:22px; margin-top:14px;}
+.ctrl-btn{
+  width:58px; height:58px; border-radius:50%; border:none; display:grid; place-items:center; font-size:22px;
+  box-shadow:0 12px 22px -10px rgba(0,0,0,.5); transition:transform .15s ease, filter .15s ease;
+}
+.ctrl-btn:hover{transform:translateY(-3px) scale(1.05); filter:brightness(1.1);}
+.ctrl-btn.lupa{background:color-mix(in srgb, var(--bad) 20%, #1a0d0d); color:var(--bad); border:1px solid color-mix(in srgb, var(--bad) 55%, transparent);}
+.ctrl-btn.gatau{width:48px; height:48px; background:color-mix(in srgb, var(--meh) 20%, #1a1608); color:var(--meh); border:1px solid color-mix(in srgb, var(--meh) 55%, transparent); align-self:flex-end;}
+.ctrl-btn.ingat{background:color-mix(in srgb, var(--good) 20%, #0c1a10); color:var(--good); border:1px solid color-mix(in srgb, var(--good) 55%, transparent);}
+.controls-hint{text-align:center; color:var(--ink-faint); font-size:11.5px; margin-top:10px;}
+.voice-hint{text-align:center; color:var(--ink-faint); font-size:11.5px; margin-top:4px; opacity:.85;}
+.voice-hint.on{color:var(--accent);}
+.mic-btn{
+  width:34px; height:34px; border-radius:50%; display:grid; place-items:center; flex:none;
+  background:color-mix(in srgb, var(--ink) 10%, transparent); color:var(--ink-faint);
+  border:1px solid color-mix(in srgb, var(--ink) 18%, transparent); cursor:pointer;
+  transition:transform .15s ease, filter .15s ease, color .15s ease, background .15s ease, border-color .15s ease;
+}
+.mic-btn:hover{transform:translateY(-1px) scale(1.05); filter:brightness(1.1);}
+.mic-btn.listening{
+  color:var(--accent); background:color-mix(in srgb, var(--accent) 20%, transparent);
+  border-color:color-mix(in srgb, var(--accent) 55%, transparent);
+  animation:micPulse 1.4s ease-in-out infinite;
+}
+@keyframes micPulse{
+  0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent);}
+  50%{box-shadow:0 0 0 9px color-mix(in srgb, var(--accent) 0%, transparent);}
+}
+
+/* ---------- Summary ---------- */
+.summary-view{flex-direction:column; align-items:center; justify-content:center; flex:1; text-align:center; gap:18px;}
+.ring-wrap{position:relative; width:170px; height:170px; margin:6px auto 4px;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-label{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.ring-label .pct{font-family:var(--serif); font-size:34px; font-weight:800;}
+.ring-label span{font-size:11px; color:var(--ink-faint);}
+.summary-view h2{font-family:var(--serif); font-size:24px; margin:0;}
+.summary-view p{color:var(--ink-dim); font-size:14px; max-width:360px; margin:0;}
+.sum-stats{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+.sum-actions{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:10px;}
+.btn{
+  font-family:var(--ui); font-weight:700; font-size:13.5px; padding:12px 20px; border-radius:12px; border:1px solid transparent;
+  transition:transform .15s ease, filter .15s ease;
+}
+.btn:hover{transform:translateY(-2px); filter:brightness(1.08);}
+.btn-primary{background:var(--accent); color:#1a0a12;}
+.btn-ghost{background:transparent; color:var(--ink); border-color:color-mix(in srgb, var(--ink) 30%, transparent);}
+
+/* ---------- Count picker modal ---------- */
+.count-modal-backdrop{
+  position:fixed; inset:0; background:rgba(6,3,5,.68); backdrop-filter:blur(6px);
+  display:none; align-items:center; justify-content:center; z-index:80; padding:20px;
+}
+.count-modal-backdrop.active{display:flex;}
+.count-modal{
+  width:100%; max-width:360px; background:var(--panel-solid); border-radius:var(--r-lg);
+  border:1px solid color-mix(in srgb, var(--accent) 35%, transparent); padding:26px 24px;
+  text-align:center; box-shadow:0 26px 60px -20px rgba(0,0,0,.6);
+}
+.count-modal h3{font-family:var(--serif); font-size:20px; margin:0 0 8px; font-weight:700;}
+.count-modal p{margin:0 0 18px; color:var(--ink-dim); font-size:13px;}
+.count-options{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;}
+.count-opt{
+  min-width:64px; padding:11px 16px; border-radius:12px; font-weight:700; font-size:14.5px;
+  border:1px solid color-mix(in srgb, var(--ink) 28%, transparent); background:transparent; color:var(--ink);
+  transition:transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.count-opt:hover{transform:translateY(-2px); border-color:var(--accent); background:color-mix(in srgb, var(--accent) 16%, transparent); color:var(--accent-soft);}
+.count-custom{display:flex; gap:8px; margin-bottom:14px;}
+.count-custom input{
+  flex:1; min-width:0; padding:11px 12px; border-radius:10px; font-family:inherit; font-size:14px;
+  border:1px solid color-mix(in srgb, var(--ink) 28%, transparent); background:transparent; color:var(--ink);
+}
+.count-custom input::placeholder{color:var(--ink-faint);}
+.count-custom input:focus{outline:none; border-color:var(--accent);}
+
+@media (max-width:520px){
+  .stage{min-height:420px;}
+  .card{height:420px;}
+  .controls{gap:16px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition-duration:.01ms !important; animation-duration:.01ms !important;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ HOME ============ -->
+  <div class="home-view" id="homeView">
+    <div class="brandmark">
+      <div class="seal">言</div>
+      <div class="brand-text">
+        <h1>言葉 Kotoba</h1>
+        <p>Kartu kosakata bahasa Jepang, disusun per tema</p>
+      </div>
+    </div>
+
+    <div class="home-hero">
+      <div class="rule"></div>
+      <h2>Hafalkan kosakata Irodori per tema, bukan per bab</h2>
+      <p>Setiap tema menggabungkan kata-kata dari beberapa bab yang berkaitan, supaya lebih mudah diingat.
+      Ketuk kartu untuk membalik dan melihat cara baca serta artinya, lalu seret ke kanan kalau <b>ingat</b>,
+      ke kiri kalau <b>lupa</b>, atau ke bawah kalau <b>belum tahu</b>.</p>
+      <div class="badge-row">
+        <span class="pill on">初級2 · A2.2 tersedia</span>
+        <span class="pill soon">初級1 · A1 menyusul</span>
+        <span class="pill soon">初級2-1 · A2.1 menyusul</span>
+      </div>
+    </div>
+
+    <div class="cat-grid" id="catGrid"></div>
+
+    <div class="footnote">Kosakata diadaptasi dari <i>Irodori: Japanese for Life in Japan</i> (The Japan Foundation), buku 初級2.<br>
+    Level A1 dan A2.1 akan ditambahkan setelah materinya tersedia.</div>
+  </div>
+
+  <!-- ============ DECK ============ -->
+  <div class="deck-view" id="deckView">
+    <div class="deck-top">
+      <button class="back-btn" id="backBtn" aria-label="Kembali ke daftar kategori">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="deck-title">
+        <h2 id="deckCatName"><span class="lv" id="deckCatLv">A2.2</span> <span id="deckCatText">Kategori</span></h2>
+        <p id="deckCatSub">0 kata</p>
+      </div>
+      <div id="deckCounter" style="font-size:13px;color:var(--ink-faint);white-space:nowrap;">0 / 0</div>
+      <button class="mic-btn" id="btnMic" aria-label="Kontrol suara" title="Kontrol suara">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+    <div class="stat-row">
+      <div class="stat-chip"><span class="dot" style="background:var(--good)"></span><span id="chipIngat">0 ingat</span></div>
+      <div class="stat-chip"><span class="dot" style="background:var(--meh)"></span><span id="chipGatau">0 gatau</span></div>
+      <div class="stat-chip"><span class="dot" style="background:var(--bad)"></span><span id="chipLupa">0 lupa</span></div>
+    </div>
+
+    <div class="stage" id="stage"></div>
+
+    <div class="controls">
+      <button class="ctrl-btn lupa" id="btnLupa" aria-label="Tandai lupa" title="Lupa">✕</button>
+      <button class="ctrl-btn gatau" id="btnGatau" aria-label="Tandai belum tahu" title="Belum tahu">?</button>
+      <button class="ctrl-btn ingat" id="btnIngat" aria-label="Tandai ingat" title="Ingat">✓</button>
+    </div>
+    <div class="controls-hint">Ketuk kartu untuk membalik &nbsp;·&nbsp; seret kartu atau gunakan tombol</div>
+    <div class="voice-hint" id="voiceHint">🎤 Nonaktif · ketuk ikon mikrofon untuk kontrol suara</div>
+  </div>
+
+  <!-- ============ SUMMARY ============ -->
+  <div class="summary-view" id="summaryView">
+    <div class="ring-wrap">
+      <svg width="170" height="170" viewBox="0 0 170 170">
+        <circle cx="85" cy="85" r="74" fill="none" stroke="color-mix(in srgb, var(--ink) 14%, transparent)" stroke-width="14"/>
+        <circle id="ringFg" cx="85" cy="85" r="74" fill="none" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" stroke-dasharray="465" stroke-dashoffset="465"/>
+      </svg>
+      <div class="ring-label"><div class="pct" id="ringPct">0%</div><span>diingat</span></div>
+    </div>
+    <h2 id="summaryTitle">Selesai!</h2>
+    <p id="summarySub">Begini hasil belajar kamu untuk tema ini.</p>
+    <div class="sum-stats">
+      <div class="stat-chip"><span class="dot" style="background:var(--good)"></span><span id="sumIngat">0 ingat</span></div>
+      <div class="stat-chip"><span class="dot" style="background:var(--meh)"></span><span id="sumGatau">0 belum tahu</span></div>
+      <div class="stat-chip"><span class="dot" style="background:var(--bad)"></span><span id="sumLupa">0 lupa</span></div>
+    </div>
+    <div class="sum-actions">
+      <button class="btn btn-primary" id="btnRetryHard">Ulangi yang belum dikuasai</button>
+      <button class="btn btn-ghost" id="btnRetryAll">Kocok ulang semua</button>
+      <button class="btn btn-ghost" id="btnHome">Kembali ke kategori</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ COUNT PICKER MODAL ============ -->
+<div class="count-modal-backdrop" id="countModalBackdrop">
+  <div class="count-modal" id="countModal">
+    <h3>Berapa kata mau dipelajari?</h3>
+    <p id="countModalSub">Tema · 0 kata tersedia</p>
+    <div class="count-options">
+      <button class="count-opt" type="button" data-count="10">10</button>
+      <button class="count-opt" type="button" data-count="15">15</button>
+      <button class="count-opt" type="button" data-count="20">20</button>
+      <button class="count-opt" type="button" data-count="all">Semua</button>
+    </div>
+    <div class="count-custom">
+      <input type="number" id="countCustomInput" min="1" placeholder="Custom, mis. 25">
+      <button class="btn btn-primary" id="countCustomBtn" type="button">Mulai</button>
+    </div>
+    <button class="btn btn-ghost" id="countModalCancel" type="button">Batal</button>
+  </div>
+</div>
+
+<script>
+/* ==================== DATA ==================== */
+const CATEGORIES = [
+  {id:'bab1', name:"Bab 1: Baru Seminggu Tiba di Jepang", jp:"先週、日本に来たばかりです", icon:"1", accent:'#9b7cf0', bg:'#140d26', bg2:'#1c1236'},
+  {id:'bab2', name:"Bab 2: Sepertinya Orang yang Rajin", jp:"まじめそうな人ですね", icon:"2", accent:'#4fd18b', bg:'#0a1f16', bg2:'#0f2c1f'},
+  {id:'bab3', name:"Bab 3: Karena Alergi, Tidak Bisa Makan Itu", jp:"アレルギーがあるので、食べられないんです", icon:"3", accent:'#37c9d6', bg:'#06232a', bg2:'#0b313a'},
+  {id:'bab4', name:"Bab 4: Tolong Dimakan Tanpa Kecap", jp:"しょうゆをつけないで食べてください", icon:"4", accent:'#f2b84b', bg:'#241705', bg2:'#33200a'},
+  {id:'bab5', name:"Bab 5: Sebaiknya Cepat Pesan Tempat", jp:"早く予約したほうがいいですよ", icon:"5", accent:'#f0685f', bg:'#260c0c', bg2:'#341212'},
+  {id:'bab6', name:"Bab 6: Senang Bisa Pergi ke Berbagai Tempat", jp:"いろいろなところに行けて、よかったです", icon:"6", accent:'#5b9cf6', bg:'#0a1830', bg2:'#102142'},
+  {id:'bab7', name:"Bab 7: Kalau Hujan, Diadakan di Aula", jp:"雨が降ったら、ホールでやります", icon:"7", accent:'#8b8cf5', bg:'#120f2c', bg2:'#1a1640'},
+  {id:'bab8', name:"Bab 8: Tahu di Mana Letak Warungnya?", jp:"屋台はどこかわかりますか？", icon:"8", accent:'#9ed14f', bg:'#141f07', bg2:'#1d2c0c'},
+  {id:'bab9', name:"Bab 9: Hari Kedewasaan, Ngapain Aja?", jp:"成人の日は、何をするんですか？", icon:"9", accent:'#f0568f', bg:'#230a17', bg2:'#331023'},
+  {id:'bab10', name:"Bab 10: Baju Apa yang Sebaiknya Dipakai?", jp:"どんな服を着て行けばいいですか？", icon:"10", accent:'#9b7cf0', bg:'#140d26', bg2:'#1c1236'},
+  {id:'bab11', name:"Bab 11: Lupa Bawa Kartu Poin", jp:"ポイントカードを忘れてしまいました", icon:"11", accent:'#4fd18b', bg:'#0a1f16', bg2:'#0f2c1f'},
+  {id:'bab12', name:"Bab 12: Vacuum Cleaner Ini Ringan & Mudah Digerakkan", jp:"この掃除機は軽くて動かしやすいですよ", icon:"12", accent:'#37c9d6', bg:'#06232a', bg2:'#0b313a'},
+  {id:'bab13', name:"Bab 13: Berbagai Materi Dipajang di Sini", jp:"いろいろな資料を展示してあります", icon:"13", accent:'#f2b84b', bg:'#241705', bg2:'#33200a'},
+  {id:'bab14', name:"Bab 14: Bisa Potong Poni Sedikit Lebih Pendek?", jp:"前髪は、もう少し短く切ってもらえますか？", icon:"14", accent:'#f0685f', bg:'#260c0c', bg2:'#341212'},
+  {id:'bab15', name:"Bab 15: Lampu Ruang Rapat Menyala Terus", jp:"会議室の電気がついたままでした", icon:"15", accent:'#5b9cf6', bg:'#0a1830', bg2:'#102142'},
+  {id:'bab16', name:"Bab 16: Meski Gempa, Jangan Panik Bergerak", jp:"地震が来ても、あわてて動かないでください", icon:"16", accent:'#8b8cf5', bg:'#120f2c', bg2:'#1a1640'},
+  {id:'bab17', name:"Bab 17: Bahasa Jepang Makin Lancar dari Sebelumnya", jp:"日本語が前より話せるようになりました", icon:"17", accent:'#9ed14f', bg:'#141f07', bg2:'#1d2c0c'},
+  {id:'bab18', name:"Bab 18: Nanti Ingin Mendirikan Perusahaan Sendiri", jp:"将来、自分の会社を作ろうと思います", icon:"18", accent:'#f0568f', bg:'#230a17', bg2:'#331023'},
+  {id:'katakerja', name:'Kata Kerja (Semua Bab)', jp:'動詞まとめ', icon:'動', accent:'#ff8fb3', bg:'#241019', bg2:'#33172a'},
+];
+const LV = 'A2.2'; // sumber: Irodori 初級2, disusun per bab (1-18)
+
+// k = kata (kanji/kana asli), f = furigana/cara baca, m = arti (Indonesia), p = jenis kata
+const VOCAB = {
+bab1:[
+ {k:"主任",f:"しゅにん",m:"Ketua; kepala",p:'KB'},
+ {k:"パート",f:"パート",m:"Pekerja paruh waktu",p:'KB'},
+ {k:"いちばん",f:"いちばん",m:"Paling",p:'KB'},
+ {k:"長い",f:"ながい",m:"Lama; panjang (waktu)",p:'KS'},
+ {k:"～出身",f:"～しゅっしん",m:"Berasal dari ~ (cth: berasal dari Tiongkok)",p:'KB'},
+ {k:"手続き",f:"てつづき",m:"Prosedur",p:'KB'},
+ {k:"生活",f:"せいかつ",m:"Kehidupan",p:'KB'},
+ {k:"いろいろ",f:"いろいろ",m:"Bermacam-macam; berbagai",p:'KS'},
+ {k:"何でも",f:"なんでも",m:"Apapun",p:'KB'},
+ {k:"～でよかったら",f:"～でよかったら",m:"Jika~ berkenan / tidak masalah (cth: jika saya diperkenankan)",p:'KB'},
+ {k:"いつでも",f:"いつでも",m:"Kapanpun",p:'KB'},
+ {k:"担当",f:"たんとう",m:"Bertanggung jawab; penanggung jawab",p:'KB'},
+ {k:"申す",f:"もうす",m:"Bernama; dipanggil sebagai (nama)",p:'KK'},
+ {k:"呼ぶ",f:"よぶ",m:"Memanggil",p:'KK'},
+ {k:"一生懸命",f:"いっしょうけんめい",m:"Bekerja keras",p:'KB'},
+ {k:"がんばる",f:"がんばる",m:"Berusaha; bekerja keras",p:'KK'},
+ {k:"J-POP",f:"ジェーポップ",m:"Musik pop Jepang; japanese pop music",p:'KB'},
+ {k:"がんばります",f:"がんばります",m:"Saya akan berusaha / bekerja keras sebaik mungkin",p:'KB'},
+ {k:"Perfume",f:"パフューム",m:"Perfume (kelompok musik pop Jepang beraliran techno-pop yang terdiri dari 3 orang penyanyi wanita)",p:'KB'},
+ {k:"方角",f:"ほうがく",m:"Arah",p:'KB'},
+ {k:"北",f:"きた",m:"Utara",p:'KB'},
+ {k:"東",f:"ひがし",m:"Timur",p:'KB'},
+ {k:"南",f:"みなみ",m:"Selatan",p:'KB'},
+ {k:"西",f:"にし",m:"Barat",p:'KB'},
+ {k:"自然",f:"しぜん",m:"Alam",p:'KB'},
+ {k:"川",f:"かわ",m:"Sungai",p:'KB'},
+ {k:"島",f:"しま",m:"Pulau",p:'KB'},
+ {k:"森",f:"もり",m:"Hutan",p:'KB'},
+ {k:"ジャングル",f:"ジャングル",m:"Hutan rimba; hutan belantara",p:'KB'},
+ {k:"草原",f:"そうげん",m:"Padang rumput",p:'KB'},
+ {k:"砂漠",f:"さばく",m:"Padang pasir",p:'KB'},
+ {k:"高原",f:"こうげん",m:"Dataran tinggi",p:'KB'},
+ {k:"首都",f:"しゅと",m:"Ibu kota",p:'KB'},
+ {k:"観光地",f:"かんこうち",m:"Destinasi wisata; tempat wisata",p:'KB'},
+ {k:"モンゴル",f:"モンゴル",m:"Mongolia",p:'KB'},
+ {k:"のんびりしている",f:"のんびりしている",m:"Santai; bersantai",p:'KB'},
+ {k:"都会",f:"とかい",m:"Kota",p:'KB'},
+ {k:"畑",f:"はたけ",m:"Ladang",p:'KB'},
+ {k:"観光客",f:"かんこうきゃく",m:"Turis; wisatawan",p:'KB'},
+ {k:"大勢",f:"おおぜい",m:"Banyak",p:'KB'},
+ {k:"お客さん",f:"おきゃくさん",m:"Tamu; pengunjung",p:'KB'},
+ {k:"テント",f:"テント",m:"Tenda",p:'KB'},
+ {k:"違います",f:"ちがいます",m:"Berbeda",p:'KB'},
+ {k:"セブ",f:"セブ",m:"Cebu (Kota di Filipina)",p:'KB'},
+ {k:"ウランバートル",f:"ウランバートル",m:"Ulan Bator (Ibu kota Mongolia)",p:'KB'},
+ {k:"ホーチミン",f:"ホーチミン",m:"Ho Chi Minh (Kota di Vietnam)",p:'KB'},
+ {k:"ウォノソボ",f:"ウォノソボ",m:"Wonosobo (Kota di Jawa Tengah)",p:'KB'},
+ {k:"セブ島",f:"セブとう",m:"Pulau Cebu",p:'KB'},
+ {k:"自己紹介",f:"じこしょうかい",m:"Perkenalan diri",p:'KB'},
+ {k:"猫",f:"ねこ",m:"Kucing",p:'KB'},
+ {k:"グループ",f:"グループ",m:"Grup; kelompok",p:'KB'},
+ {k:"コミュニケーションする",f:"コミュニケーションする",m:"Berkomunikasi",p:'KK'},
+ {k:"インド料理",f:"インドりょうり",m:"Masakan khas India",p:'KB'},
+ {k:"食べ歩き",f:"たべあるき",m:"Wisata kuliner (di berbagai daerah & tempat)",p:'KB'},
+ {k:"ニックネーム",f:"ニックネーム",m:"Nama panggilan",p:'KB'},
+ {k:"バンコク",f:"バンコク",m:"Bangkok (Ibu kota Thailand)",p:'KB'},
+ {k:"アニソン",f:"アニソン",m:"Ani-son (anime song); lagu film animasi",p:'KB'},
+],
+bab2:[
+ {k:"髪",f:"かみ",m:"Rambut",p:'KB'},
+ {k:"髪が長い",f:"かみがながい",m:"Rambut panjang",p:'KS'},
+ {k:"髪が短い",f:"かみがみじかい",m:"Rambut pendek",p:'KS'},
+ {k:"背",f:"せ",m:"Tinggi badan",p:'KB'},
+ {k:"背が高い",f:"せがたかい",m:"(badan) tinggi",p:'KS'},
+ {k:"座る",f:"すわる",m:"Duduk",p:'KK'},
+ {k:"立つ",f:"たつ",m:"Berdiri",p:'KK'},
+ {k:"かぶる",f:"かぶる",m:"Memakai; mengenakan (cth: memakai topi)",p:'KK'},
+ {k:"ピアス",f:"ピアス",m:"Anting-anting",p:'KB'},
+ {k:"する",f:"する",m:"Memakai; mengenakan (cth: mengenakan anting-anting)",p:'KK'},
+ {k:"ワンピース",f:"ワンピース",m:"Baju terusan",p:'KB'},
+ {k:"着る",f:"きる",m:"Memakai; mengenakan (pakaian)",p:'KK'},
+ {k:"はく",f:"はく",m:"Memakai; mengenakan (cth: memakai sepatu)",p:'KK'},
+ {k:"めがね",f:"めがね",m:"Kacamata",p:'KB'},
+ {k:"かける",f:"かける",m:"Memakai; mengenakan (cth: memakai kacamata)",p:'KK'},
+ {k:"ひげ",f:"ひげ",m:"Jenggot",p:'KB'},
+ {k:"はやす",f:"はやす",m:"Menumbuhkan (cth: menumbuhkan jenggot)",p:'KK'},
+ {k:"シャツ",f:"シャツ",m:"Kemeja",p:'KB'},
+ {k:"ズボン",f:"ズボン",m:"Celana panjang",p:'KB'},
+ {k:"赤い",f:"あかい",m:"Merah",p:'KS'},
+ {k:"白い",f:"しろい",m:"Putih",p:'KS'},
+ {k:"黄色い",f:"きいろい",m:"Kuning",p:'KS'},
+ {k:"青い",f:"あおい",m:"Biru",p:'KS'},
+ {k:"黒い",f:"くろい",m:"Hitam",p:'KS'},
+ {k:"男の人",f:"おとこのひと",m:"Pria",p:'KB'},
+ {k:"ジャンパー",f:"ジャンパー",m:"Jaket",p:'KB'},
+ {k:"ほら",f:"ほら",m:"Lihat (lah)..",p:'KB'},
+ {k:"やさしい",f:"やさしい",m:"Baik hati",p:'KS'},
+ {k:"きびしい",f:"きびしい",m:"Tegas",p:'KS'},
+ {k:"こわい",f:"こわい",m:"Seram",p:'KS'},
+ {k:"忙しい",f:"いそがしい",m:"Sibuk",p:'KS'},
+ {k:"まじめ",f:"まじめ",m:"Rajin",p:'KS'},
+ {k:"元気",f:"げんき",m:"Energik; bersemangat",p:'KS'},
+ {k:"恋人",f:"こいびと",m:"Pacar; kekasih",p:'KB'},
+ {k:"孫",f:"まご",m:"Cucu",p:'KB'},
+ {k:"この間",f:"このあいだ",m:"Beberapa waktu lalu",p:'KB'},
+ {k:"赤ちゃん",f:"あかちゃん",m:"Bayi",p:'KB'},
+ {k:"泣く",f:"なく",m:"Menangis",p:'KK'},
+ {k:"今度",f:"こんど",m:"Kali ini",p:'KB'},
+ {k:"見た目",f:"みため",m:"Penampilan",p:'KB'},
+ {k:"遅くまで",f:"おそくまで",m:"Sampai larut malam",p:'KB'},
+ {k:"心配",f:"しんぱい",m:"Khawatir",p:'KS'},
+ {k:"かっこいい",f:"かっこいい",m:"Keren",p:'KS'},
+ {k:"歌",f:"うた",m:"Menyanyi",p:'KB'},
+ {k:"演技",f:"えんぎ",m:"Berakting",p:'KB'},
+ {k:"ダンス",f:"ダンス",m:"Berdansa; menari",p:'KB'},
+ {k:"上手",f:"じょうず",m:"Mahir; pandai",p:'KS'},
+ {k:"歌手",f:"かしゅ",m:"Penyanyi",p:'KB'},
+ {k:"だれか",f:"だれか",m:"Seseorang",p:'KB'},
+ {k:"引退する",f:"いんたいする",m:"Pensiun",p:'KK'},
+ {k:"今でも",f:"いまでも",m:"Bahkan sekarang",p:'KB'},
+ {k:"俳優",f:"はいゆう",m:"Aktor",p:'KB'},
+ {k:"そんな",f:"そんな",m:"Seperti itu",p:'KB'},
+ {k:"きっかけ",f:"きっかけ",m:"Hal yang memicu /mendorong / membuat jadi (suka)",p:'KB'},
+ {k:"映画祭",f:"えいがさい",m:"Festival film",p:'KB'},
+ {k:"世界中",f:"せかいじゅう",m:"Seluruh dunia",p:'KB'},
+ {k:"ファン",f:"ファン",m:"Fan; penggemar",p:'KB'},
+ {k:"安室奈美恵",f:"あむろなみえ",m:"Amuro Namie (penyanyi berkebangsaan Jepang)",p:'KB'},
+ {k:"三船敏郎",f:"みふねとしろう",m:"Mifune Toshiro (aktor berkebangsaan Jepang)",p:'KB'},
+ {k:"七人の侍",f:"しちにんのさむらい",m:"Seven Samurai (sebuah film karya sutradara Kurosawa Akira)",p:'KB'},
+ {k:"まず",f:"まず",m:"Mula-mula",p:'KB'},
+ {k:"金色",f:"きんいろ",m:"Warna keemasan",p:'KB'},
+ {k:"驚く",f:"おどろく",m:"Terkejut",p:'KK'},
+ {k:"明るい",f:"あかるい",m:"Terang",p:'KS'},
+ {k:"びっくりする",f:"びっくりする",m:"Kaget",p:'KK'},
+ {k:"ハイキング",f:"ハイキング",m:"Hiking",p:'KB'},
+ {k:"できれば",f:"できれば",m:"Bila memungkinkan",p:'KB'},
+ {k:"シリーズ",f:"シリーズ",m:"Seri; rangkaian",p:'KB'},
+ {k:"おとなりさん",f:"おとなりさん",m:"Tetangga",p:'KB'},
+ {k:"簡単に",f:"かんたんに",m:"Dengan mudah",p:'KB'},
+ {k:"ヤンゴン",f:"ヤンゴン",m:"Yangon",p:'KB'},
+ {k:"パゴダ",f:"パゴダ",m:"Pagoda",p:'KB'},
+ {k:"増える",f:"ふえる",m:"Bertambah",p:'KK'},
+ {k:"交流協会",f:"こうりゅうきょうかい",m:"Asosiasi pertukaran",p:'KB'},
+],
+bab3:[
+ {k:"定食",f:"ていしょく",m:"Menu paket",p:'KB'},
+ {k:"日替わり",f:"ひがわり",m:"(menu) spesial harian",p:'KB'},
+ {k:"大盛り",f:"おおもり",m:"Porsi besar",p:'KB'},
+ {k:"おかわり自由",f:"おかわりじゆう",m:"Bebas tambah porsi",p:'KB'},
+ {k:"平日",f:"へいじつ",m:"Hari kerja",p:'KB'},
+ {k:"～のみ",f:"～のみ",m:"Hanya ~ (cth: hanya pada hari kerja)",p:'KB'},
+ {k:"ホット",f:"ホット",m:"Hot; panas; hangat",p:'KB'},
+ {k:"アイス",f:"アイス",m:"Iced; dingin (menggunakan es)",p:'KB'},
+ {k:"焼き魚",f:"やきざかな",m:"Ikan panggang",p:'KB'},
+ {k:"ハンバーグ",f:"ハンバーグ",m:"Hamburger steak; steak daging",p:'KB'},
+ {k:"カレーライス",f:"カレーライス",m:"Nasi kare khas Jepang",p:'KB'},
+ {k:"かつ丼",f:"かつどん",m:"Katsu-don (semangkuk nasi khas Jepang yang disajikan dengan potongan daging babi)",p:'KB'},
+ {k:"親子丼",f:"おやこどん",m:"Oyako-don (semangkuk nasi khas Jepang yang disajikan dengan potongan daging ayam dan telur)",p:'KB'},
+ {k:"つく",f:"つく",m:"Disajikan beserta ~ (cth: disajikan beserta sup miso)",p:'KK'},
+ {k:"だめ",f:"だめ",m:"Tidak dapat; tidak bisa (mengonsumsi)",p:'KS'},
+ {k:"材料",f:"ざいりょう",m:"Bahan",p:'KB'},
+ {k:"豚肉",f:"ぶたにく",m:"Daging babi",p:'KB'},
+ {k:"牛肉",f:"ぎゅうにく",m:"Daging sapi",p:'KB'},
+ {k:"カニ",f:"カニ",m:"Kepiting",p:'KB'},
+ {k:"ナッツ",f:"ナッツ",m:"Kacang-kacangan",p:'KB'},
+ {k:"わさび",f:"わさび",m:"Wasabi (semacam lobak khas Jepang)",p:'KB'},
+ {k:"ねぎ",f:"ねぎ",m:"Daun bawang",p:'KB'},
+ {k:"みりん",f:"みりん",m:"Mirin (sake manis untuk keperluan memasak)",p:'KB'},
+ {k:"宗教",f:"しゅうきょう",m:"Agama",p:'KB'},
+ {k:"～上",f:"～じょう",m:"Dalam hal~ (cth: karena (dalam hal) agama saya)",p:'KB'},
+ {k:"理由",f:"りゆう",m:"Alasan",p:'KB'},
+ {k:"アレルギー",f:"アレルギー",m:"Alergi",p:'KB'},
+ {k:"自転車",f:"じてんしゃ",m:"Sepeda",p:'KB'},
+ {k:"来る",f:"くる",m:"Datang",p:'KK'},
+ {k:"ベジタリアン",f:"ベジタリアン",m:"Vegetarian",p:'KB'},
+ {k:"豆腐",f:"とうふ",m:"Tofu (tahu khas Jepang)",p:'KB'},
+ {k:"注文する",f:"ちゅうもんする",m:"Memesan",p:'KK'},
+ {k:"飲める",f:"のめる",m:"Dapat meminum",p:'KB'},
+ {k:"メニュー",f:"メニュー",m:"Menu",p:'KB'},
+ {k:"食べられる",f:"たべられる",m:"Dapat memakan; dapat mengonsumsi",p:'KB'},
+ {k:"ほかの",f:"ほかの",m:"Lainnya",p:'KB'},
+ {k:"～抜き",f:"～ぬき",m:"Tanpa ~ (cth: tanpa wasabi)",p:'KB'},
+ {k:"そっか",f:"そっか",m:"Gitu ya. (bentuk informasi dari そうですか)",p:'KB'},
+ {k:"かしこまりました",f:"かしこまりました",m:"Saya mengerti; dimengerti (ungkapan bentuk sopan)",p:'KB'},
+ {k:"カウンター",f:"カウンター",m:"Meja bar restoran",p:'KB'},
+ {k:"座敷",f:"ざしき",m:"Zashiki / ruang tatami (ruang untuk duduk berlesehan)",p:'KB'},
+ {k:"テーブル",f:"テーブル",m:"Meja",p:'KB'},
+ {k:"会計／お会計",f:"かいけい",m:"Kasir; pembayaran",p:'KB'},
+ {k:"レジ",f:"レジ",m:"Kasir; mesin kasir",p:'KB'},
+ {k:"禁煙",f:"きんえん",m:"Larangan merokok",p:'KB'},
+ {k:"～名",f:"～めい",m:"~ orang (cth: 2 orang)",p:'KB'},
+ {k:"当店",f:"とうてん",m:"Restoran kami; restoran ini",p:'KB'},
+ {k:"全面",f:"ぜんめん",m:"Secara keseluruhan",p:'KB'},
+ {k:"決まる",f:"きまる",m:"Memutuskan",p:'KK'},
+ {k:"おすすめ",f:"おすすめ",m:"Rekomendasi",p:'KB'},
+ {k:"人気がある",f:"にんきがある",m:"Populer",p:'KK'},
+ {k:"フライ",f:"フライ",m:"Furai (lauk berupa gorengan)",p:'KB'},
+ {k:"ミックスフライ",f:"ミックスフライ",m:"Aneka lauk goreng",p:'KB'},
+ {k:"量",f:"りょう",m:"Porsi",p:'KB'},
+ {k:"普通",f:"ふつう",m:"Biasa",p:'KB'},
+ {k:"先に",f:"さきに",m:"Terlebih dulu",p:'KB'},
+ {k:"別々",f:"べつべつ",m:"Bayar masing-masing",p:'KB'},
+ {k:"クーポン",f:"クーポン",m:"Voucer, kupon",p:'KB'},
+ {k:"次回",f:"じかい",m:"Lain kali; kedatangan berikutnya",p:'KB'},
+ {k:"それにします",f:"それにします",m:"Saya memilih / memesan yang itu.",p:'KB'},
+ {k:"お会計、お願いします",f:"おかいけい、おねがいします",m:"Bisakah kami meminta bon / tagihannya?",p:'KB'},
+ {k:"別々でお願いします",f:"べつべつでおねがいします",m:"Kami ingin membayarnya masing-masing.",p:'KB'},
+ {k:"お客様",f:"おきゃくさま",m:"Pak / Bu; Tuan / Nyonya (ungkapan bentuk sopan untuk menyebut tamu / pelanggan)",p:'KB'},
+ {k:"何名様",f:"なんめいさま",m:"Berapa orang? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"～名様",f:"～めいさま",m:"~ orang (cth: 2 orang) (ungkapan bentuk sopan)",p:'KB'},
+ {k:"ご注文",f:"ごちゅうもん",m:"Pesanan (ungkapan bentuk sopan)",p:'KB'},
+ {k:"いかが",f:"いかが",m:"Bagaimana ~ (ungkapan bentuk sopan dari どう)",p:'KB'},
+ {k:"ごいっしょ",f:"ごいっしょ",m:"Bersama-sama (ungkapan bentuk sopan)",p:'KB'},
+ {k:"よろしいですか？",f:"よろしいですか？",m:"Apakah sudah benar? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"～がございます",f:"～がございます",m:"Ada / tersedia ~ (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お決まりですか？",f:"おきまりですか？",m:"Apakah Anda sudah memutuskan? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"いかがですか？",f:"いかがですか？",m:"Apakah Anda ingin~? / Bagaimana dengan ~? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"どうなさいますか？",f:"どうなさいますか？",m:"Bagaimana? / Berapa banyak yang Anda inginkan? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"以上でよろしいですか？",f:"いじょうでよろしいですか？",m:"Apakah (pesanannya) sudah semuanya? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お使いください",f:"おつかいください",m:"Silakan gunakan. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"少なめ",f:"すくなめ",m:"Porsi kecil",p:'KB'},
+ {k:"食後に",f:"しょくごに",m:"Setelah (makan) hidangan utama",p:'KB'},
+ {k:"日にち／お日にち",f:"ひにち",m:"Tanggal",p:'KB'},
+ {k:"まちがい",f:"まちがい",m:"Kesalahan",p:'KS'},
+ {k:"失礼しました",f:"しつれいしました",m:"Saya mohon maaf.",p:'KB'},
+ {k:"お電話",f:"おでんわ",m:"Telepon (ungkapan bentuk sopan)",p:'KB'},
+ {k:"ご予約",f:"ごよやく",m:"Reservasi (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お時間",f:"おじかん",m:"Jam; waktu (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お電話番号",f:"おでんわばんごう",m:"Nomor telepon (ungkapan bentuk sopan)",p:'KB'},
+ {k:"～様",f:"～さま",m:"Bapak ~ / Ibu ~ / Tuan ~ / Nyonya ~ (ungkapan bentuk sopan dari) ～さん",p:'KB'},
+ {k:"おまちがいないでしょう",f:"おまちがいないでしょうか？",m:"Apakah sudah benar? / Apakah tidak ada kesalahan? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"半額",f:"はんがく",m:"Separuh harga",p:'KB'},
+ {k:"有効期限",f:"ゆうこうきげん",m:"Masa berlaku",p:'KB'},
+ {k:"ドリンクバー",f:"ドリンクバー",m:"Drink bar (layanan mandiri / self service berupa bar minuman soft drink bagi pengunjung)",p:'KB'},
+ {k:"おこさま",f:"おこさま",m:"Anak kecil (ungkapan bentuk sopan)",p:'KB'},
+ {k:"ご注文時",f:"ごちゅうもんじ",m:"Saat melakukan pemesanan (ungkapan bentuk sopan)",p:'KB'},
+ {k:"本券",f:"ほんけん",m:"Kupon / voucer ini",p:'KB'},
+ {k:"使用",f:"しよう",m:"Penggunaan; pemakaian",p:'KB'},
+ {k:"時間帯",f:"じかんたい",m:"Selama periode waktu",p:'KB'},
+ {k:"ご提示ください",f:"ごていじください",m:"Silakan tunjukkan / perlihatkan ~ (ungkapan bentuk sopan)",p:'KS'},
+ {k:"ご利用できません",f:"ごりようできません",m:"Anda tidak dapat menggunakan / memakai ~ (ungkapan bentuk sopan)",p:'KB'},
+ {k:"ご飲食代",f:"ごいんしょくだい",m:"Harga (biaya) makan dan minum (ungkapan bentuk sopan)",p:'KB'},
+ {k:"会計時",f:"かいけいじ",m:"Saat melakukan pembayaran",p:'KB'},
+ {k:"利用可能",f:"りようかのう",m:"Dapat digunakan",p:'KS'},
+ {k:"～限り",f:"～かぎり",m:"Hanya ~ (hanya 1 kali)",p:'KB'},
+ {k:"有効",f:"ゆうこう",m:"Berlaku; valid",p:'KS'},
+ {k:"他の",f:"たの",m:"Lainnya",p:'KB'},
+ {k:"併用",f:"へいよう",m:"Digunakan bersama dengan ~",p:'KB'},
+ {k:"お見せください",f:"おみせください",m:"Silakan tunjukkan / perlihatkan ~ (ungkapan bentuk sopan)",p:'KS'},
+],
+bab4:[
+ {k:"本物",f:"ほんもの",m:"Asli; autentik",p:'KB'},
+ {k:"量",f:"りょう",m:"Jumlah; porsi",p:'KB'},
+ {k:"とり",f:"とり",m:"Ayam",p:'KB'},
+ {k:"彼女",f:"かのじょ",m:"Pacar; kekasih (perempuan)",p:'KB'},
+ {k:"食事",f:"しょくじ",m:"Makan",p:'KB'},
+ {k:"ベトナム料理",f:"ベトナムりょうり",m:"Masakan khas Vietnam",p:'KB'},
+ {k:"土地",f:"とち",m:"Lokal",p:'KB'},
+ {k:"おれ",f:"おれ",m:"Aku (umumnya digunakan pria)",p:'KB'},
+ {k:"看板",f:"かんばん",m:"Papan nama",p:'KB'},
+ {k:"この辺",f:"このへん",m:"Sekitar sini",p:'KB'},
+ {k:"新しく",f:"あたらしく",m:"Baru",p:'KB'},
+ {k:"できる",f:"できる",m:"Dibuka; rampung (cth: tokonya telah dibuka)",p:'KK'},
+ {k:"地図",f:"ちず",m:"Peta",p:'KB'},
+ {k:"送る",f:"おくる",m:"Mengirim",p:'KK'},
+ {k:"このあたり",f:"このあたり",m:"Sekitar; dekat sini",p:'KB'},
+ {k:"夫婦",f:"ふうふ",m:"Pasangan suami istri",p:'KB'},
+ {k:"知りませんでした",f:"しりませんでした",m:"Saya tidak mengetahui sebelumnya. (karena baru saja mendengarnya)",p:'KB'},
+ {k:"食べ方",f:"たべかた",m:"Cara makan",p:'KB'},
+ {k:"つける",f:"つける",m:"Mencelupkan (cth: mencelupkan ke saus)",p:'KK'},
+ {k:"混ぜる",f:"まぜる",m:"Mencampurkan",p:'KK'},
+ {k:"かける",f:"かける",m:"(cth: menuangkan saus)",p:'KK'},
+ {k:"入れる",f:"いれる",m:"Memasukkan; menambahkan",p:'KK'},
+ {k:"巻く",f:"まく",m:"Menggulung",p:'KK'},
+ {k:"のせる",f:"のせる",m:"Menambahkan; menaruh (di atas sesuatu)",p:'KK'},
+ {k:"むく",f:"むく",m:"Mengupas",p:'KK'},
+ {k:"混ぜそば",f:"まぜそば",m:"Mixed soba (hidangan mie kering yang dibuat dengan saus kecap dan lemak babi)",p:'KB'},
+ {k:"シュウマイ",f:"シュウマイ",m:"Shumai (hidangan pangsit daging khas Tiongkok)",p:'KB'},
+ {k:"天ぷら",f:"てんぷら",m:"Tempura",p:'KB'},
+ {k:"トマト",f:"トマト",m:"Tomat",p:'KB'},
+ {k:"手巻きずし",f:"てまきずし",m:"Temaki-zushi (sushi gulung)",p:'KB'},
+ {k:"焼きいも",f:"やきいも",m:"Yaki-imo (ubi manis panggang)",p:'KB'},
+ {k:"味がついている",f:"あじがついている",m:"Berbumbu",p:'KB'},
+ {k:"しょうゆ",f:"しょうゆ",m:"Kecap asin khas Jepang",p:'KB'},
+ {k:"つゆ",f:"つゆ",m:"Saus kaldu (saus celup)",p:'KB'},
+ {k:"そのまま",f:"そのまま",m:"Begitu saja",p:'KB'},
+ {k:"のり",f:"のり",m:"Rumput laut",p:'KB'},
+ {k:"皮",f:"かわ",m:"Kulit (cth: kulit tomat)",p:'KB'},
+ {k:"お待たせしました",f:"おまたせしました",m:"Terima kasih telah menunggu.",p:'KB'},
+ {k:"一度に",f:"いちどに",m:"Sekaligus",p:'KB'},
+ {k:"そんなに",f:"そんなに",m:"Sebegitu (banyak)",p:'KB'},
+ {k:"しゃぶしゃぶ",f:"しゃぶしゃぶ",m:"Shabu-shabu (hidangan khas Jepang)",p:'KB'},
+ {k:"こうやって",f:"こうやって",m:"Seperti ini",p:'KB'},
+ {k:"味がない",f:"あじがない",m:"Tidak ada rasa",p:'KS'},
+ {k:"ポン酢",f:"ポンず",m:"Cuka ponzu (saus berbasis lemon)",p:'KB'},
+ {k:"ごまだれ",f:"ごまだれ",m:"Saus wijen",p:'KB'},
+ {k:"白菜",f:"はくさい",m:"Sawi putih",p:'KB'},
+ {k:"調味料",f:"ちょうみりょう",m:"Bumbu; rempah",p:'KB'},
+ {k:"砂糖",f:"さとう",m:"Gula",p:'KB'},
+ {k:"こしょう",f:"こしょう",m:"Lada",p:'KB'},
+ {k:"スパイス",f:"スパイス",m:"Rempah-rempah",p:'KB'},
+ {k:"ソース",f:"ソース",m:"Saus",p:'KB'},
+ {k:"たれ",f:"たれ",m:"Tare (saus celup; saus cocol)",p:'KB'},
+ {k:"油",f:"あぶら",m:"Minyak",p:'KB'},
+ {k:"調理方法",f:"ちょうりほうほう",m:"Cara memasak",p:'KB'},
+ {k:"切る",f:"きる",m:"Memotong",p:'KK'},
+ {k:"焼く",f:"やく",m:"Memanggang",p:'KK'},
+ {k:"煮る",f:"にる",m:"Menggodok; merebus",p:'KK'},
+ {k:"ゆでる",f:"ゆでる",m:"Merebus",p:'KK'},
+ {k:"蒸す",f:"むす",m:"Mengukus",p:'KK'},
+ {k:"いためる",f:"いためる",m:"Menumis",p:'KK'},
+ {k:"揚げる",f:"あげる",m:"Menggoreng",p:'KK'},
+ {k:"サラダ",f:"サラダ",m:"Selada",p:'KB'},
+ {k:"餃子",f:"ぎょうざ",m:"Pangsit khas Jepang",p:'KB'},
+ {k:"家庭料理",f:"かていりょうり",m:"Masakan rumahan",p:'KB'},
+ {k:"フェイジョアーダ",f:"フェイジョアーダ",m:"Feijoada (masakan khas Brazil)",p:'KB'},
+ {k:"モモ",f:"モモ",m:"Momo (masakan khas Nepal)",p:'KB'},
+ {k:"ガドガド",f:"ガドガド",m:"Gado-gado (masakan khas Indonesia)",p:'KB'},
+ {k:"麻花",f:"マーホア",m:"Mahua (penganan / kudapan khas Tiongkok)",p:'KB'},
+ {k:"中国",f:"ちゅうごく",m:"Cina; Tiongkok",p:'KB'},
+ {k:"豆",f:"まめ",m:"Kacang",p:'KB'},
+ {k:"小麦粉",f:"こむぎこ",m:"Tepung gandum; tepung terigu",p:'KB'},
+ {k:"ピーナッツソース",f:"ピーナッツソース",m:"Saus kacang",p:'KB'},
+ {k:"皮",f:"かわ",m:"Kulit pembungkus (cth: kulit gyoza / pangsit khas Jepang)",p:'KB'},
+ {k:"ゆで卵",f:"ゆでたまご",m:"Telur rebus",p:'KB'},
+ {k:"～など",f:"～など",m:"～ dan lain-lain",p:'KB'},
+ {k:"甘辛い",f:"あまからい",m:"Pedas manis",p:'KS'},
+ {k:"固い",f:"かたい",m:"Keras",p:'KS'},
+ {k:"どれも",f:"どれも",m:"Yang mana pun",p:'KB'},
+ {k:"～屋",f:"～や",m:"～ toko / restoran (cth: restoran yang khusus menyediakan menu paket khas Jepang)",p:'KB'},
+ {k:"ボリューム",f:"ボリューム",m:"Porsi (banyaknya)",p:'KB'},
+ {k:"満足",f:"まんぞく",m:"Puas",p:'KS'},
+ {k:"おばちゃん",f:"おばちゃん",m:"Wanita paruh baya",p:'KB'},
+ {k:"リーズナブル",f:"リーズナブル",m:"Masuk akal",p:'KS'},
+ {k:"頼む",f:"たのむ",m:"Memesan",p:'KK'},
+ {k:"煮込みハンバーグ",f:"にこみハンバーグ",m:"Stewed hamburger steak (semur bistik hamburger)",p:'KB'},
+ {k:"～前",f:"～まえ",m:"Sebelum～ (cth: sebelum jam 12)",p:'KB'},
+ {k:"おすすめする",f:"おすすめする",m:"Merekomendasikan",p:'KK'},
+ {k:"やっている",f:"やっている",m:"Menjalankan (sebuah toko)",p:'KB'},
+ {k:"時間がかかる",f:"じかんがかかる",m:"Memerlukan waktu",p:'KK'},
+ {k:"値段",f:"ねだん",m:"Harga",p:'KB'},
+ {k:"その他",f:"そのた",m:"Lainnya",p:'KB'},
+],
+bab5:[
+ {k:"自然",f:"しぜん",m:"Kekayaan alam",p:'KB'},
+ {k:"豊か",f:"ゆたか",m:"Melimpah",p:'KS'},
+ {k:"暖かい",f:"あたたかい",m:"Hangat",p:'KS'},
+ {k:"混んでいる",f:"こんでいる",m:"Penuh sesak",p:'KB'},
+ {k:"遊ぶ",f:"あそぶ",m:"Bermain; bersenang-senang",p:'KK'},
+ {k:"海外",f:"かいがい",m:"Luar negeri",p:'KB'},
+ {k:"観光客",f:"かんこうきゃく",m:"Turis; wisatawan",p:'KB'},
+ {k:"人気がある",f:"にんきがある",m:"Populer",p:'KK'},
+ {k:"北海道",f:"ほっかいどう",m:"Hokkaido",p:'KB'},
+ {k:"沖縄",f:"おきなわ",m:"Okinawa",p:'KB'},
+ {k:"一日中",f:"いちにちじゅう",m:"Seharian penuh",p:'KB'},
+ {k:"新鮮",f:"しんせん",m:"Segar",p:'KS'},
+ {k:"ウニ",f:"ウニ",m:"Landak lauk / bulu babi",p:'KB'},
+ {k:"シュノーケリング",f:"シュノーケリング",m:"Snorkeling (selam permukaan)",p:'KB'},
+ {k:"番組",f:"ばんぐみ",m:"Acara TV",p:'KB'},
+ {k:"いつか",f:"いつか",m:"Suatu hari nanti",p:'KB'},
+ {k:"やっぱり",f:"やっぱり",m:"Ternyata (sesuai dugaan)",p:'KB'},
+ {k:"ラッシュ",f:"ラッシュ",m:"Jam sibuk",p:'KB'},
+ {k:"水族館",f:"すいぞくかん",m:"Akuarium raksasa; sea world",p:'KB'},
+ {k:"ボート",f:"ボート",m:"Perahu",p:'KB'},
+ {k:"サイクリング",f:"サイクリング",m:"Bersepeda",p:'KB'},
+ {k:"遊園地",f:"ゆうえんち",m:"Taman hiburan",p:'KB'},
+ {k:"温泉",f:"おんせん",m:"Pemandian air panas",p:'KB'},
+ {k:"行き先",f:"いきさき",m:"Tujuan / tempat tujuan",p:'KB'},
+ {k:"湖",f:"みずうみ",m:"Danau",p:'KB'},
+ {k:"レンタサイクル",f:"レンタサイクル",m:"Rental / persewaan sepeda",p:'KB'},
+ {k:"先輩",f:"せんぱい",m:"Senior; rekan kerja senior",p:'KB'},
+ {k:"出発する",f:"しゅっぱつする",m:"Berangkat",p:'KK'},
+ {k:"ごめんなさい",f:"ごめんなさい",m:"Maaf.",p:'KS'},
+ {k:"旅行",f:"りょこう",m:"Wisata",p:'KB'},
+ {k:"泊まる",f:"とまる",m:"Menginap",p:'KK'},
+ {k:"ホテル",f:"ホテル",m:"Hotel",p:'KB'},
+ {k:"旅館",f:"りょかん",m:"Penginapan ala Jepang",p:'KB'},
+ {k:"民宿",f:"みんしゅく",m:"Penginapan kecil; losmen (akomodasi yang dikelola oleh suatu keluarga)",p:'KB'},
+ {k:"交通手段",f:"こうつうしゅだん",m:"Alat transportasi",p:'KB'},
+ {k:"バス",f:"バス",m:"Bus",p:'KB'},
+ {k:"電車",f:"でんしゃ",m:"Kereta",p:'KB'},
+ {k:"船",f:"ふね",m:"Kapal",p:'KB'},
+ {k:"飛行機",f:"ひこうき",m:"Pesawat",p:'KB'},
+ {k:"車",f:"くるま",m:"Mobil",p:'KB'},
+ {k:"準備する",f:"じゅんびする",m:"Mempersiapkan",p:'KK'},
+ {k:"スキー板",f:"スキーいた",m:"Papan ski",p:'KB'},
+ {k:"スキーウェア",f:"スキーウェア",m:"Pakaian ski",p:'KB'},
+ {k:"手袋",f:"てぶくろ",m:"Sarung tangan",p:'KB'},
+ {k:"サングラス",f:"サングラス",m:"Sunglasses; kacamata hitam",p:'KB'},
+ {k:"水着",f:"みずぎ",m:"Pakaian renang",p:'KB'},
+ {k:"日光",f:"にっこう",m:"Nikko",p:'KB'},
+ {k:"紅葉",f:"こうよう",m:"Daun maple yang memerah",p:'KB'},
+ {k:"かなり",f:"かなり",m:"Cukup",p:'KB'},
+ {k:"厚い",f:"あつい",m:"Tebal / berat",p:'KS'},
+ {k:"上着",f:"うわぎ",m:"Jaket",p:'KB'},
+ {k:"奈良",f:"なら",m:"Nara",p:'KB'},
+ {k:"小さな",f:"ちいさな",m:"Kecil; mungil",p:'KB'},
+ {k:"宿",f:"やど",m:"Penginapan",p:'KB'},
+ {k:"時期",f:"じき",m:"Musim",p:'KB'},
+ {k:"混む",f:"こむ",m:"Ramai; penuh",p:'KK'},
+ {k:"計画",f:"けいかく",m:"Rencana",p:'KB'},
+ {k:"立てる",f:"たてる",m:"Membuat rencana",p:'KK'},
+ {k:"調べる",f:"しらべる",m:"Mengecek; mencari tahu",p:'KK'},
+ {k:"富山",f:"とやま",m:"Toyama",p:'KB'},
+ {k:"くわしい",f:"くわしい",m:"Rinci, mendetail",p:'KS'},
+ {k:"回転ずし",f:"かいてんずし",m:"Restoran sushi modern dengan meja konveyor",p:'KB'},
+ {k:"並ぶ",f:"ならぶ",m:"Berbaris, mengantri",p:'KK'},
+ {k:"長野",f:"ながの",m:"Nagano",p:'KB'},
+ {k:"日焼けする",f:"ひやけする",m:"Berjemur",p:'KK'},
+ {k:"スキー",f:"スキー",m:"Ski",p:'KB'},
+ {k:"スキー場",f:"スキーじょう",m:"Tempat ski; resor ski",p:'KB'},
+ {k:"こっち",f:"こっち",m:"Di sini (bentuk informal dari こちら)",p:'KB'},
+ {k:"撮る",f:"とる",m:"Mengambil (foto, video)",p:'KK'},
+ {k:"オルゴール",f:"オルゴール",m:"Kotak musik",p:'KB'},
+ {k:"美術館",f:"びじゅつかん",m:"Museum seni",p:'KB'},
+ {k:"ロープウェイ",f:"ロープウェイ",m:"Kereta gantung",p:'KB'},
+ {k:"湖",f:"みずうみ",m:"Danau",p:'KB'},
+ {k:"そば",f:"そば",m:"Di sebelah (cth: di sebelah danau)",p:'KB'},
+ {k:"露天風呂",f:"ろてんぶろ",m:"Pemandian air panas di alam terbuka",p:'KB'},
+ {k:"日帰り",f:"ひがえり",m:"Perjalanan sehari",p:'KB'},
+ {k:"まったく～ない",f:"まったく～ない",m:"Sama sekali tidak ~",p:'KS'},
+ {k:"寄る",f:"よる",m:"Mampir; singgah",p:'KK'},
+ {k:"意外に",f:"いがいに",m:"Di luar dugaan",p:'KB'},
+ {k:"楽しむ",f:"たのしむ",m:"Menikmati",p:'KK'},
+ {k:"宿泊",f:"しゅくはく",m:"Akomodasi; penginapan",p:'KB'},
+ {k:"観光",f:"かんこう",m:"Wisata",p:'KB'},
+ {k:"グルメ",f:"グルメ",m:"Kuliner",p:'KB'},
+ {k:"旅券",f:"りょけん",m:"Tiket transportasi",p:'KB'},
+ {k:"口コミ",f:"くちコミ",m:"(ulasan) dari mulut ke mulut",p:'KB'},
+ {k:"投稿する",f:"とうこうする",m:"Membuat posting",p:'KK'},
+ {k:"～のまわり",f:"～のまわり",m:"Sekitar (cth: sekitar danau) ～",p:'KB'},
+ {k:"帰り",f:"かえり",m:"Perjalanan pulang",p:'KB'},
+],
+bab6:[
+ {k:"～発",f:"～はつ",m:"Berangkat pada ~",p:'KB'},
+ {k:"～着",f:"～ちゃく",m:"Tiba di ~",p:'KB'},
+ {k:"～号",f:"～ごう",m:"Nomor ~",p:'KB'},
+ {k:"～号車",f:"～ごうしゃ",m:"Gerbong nomor ~",p:'KB'},
+ {k:"～席",f:"～せき",m:"Tempat duduk nomor ~",p:'KB'},
+ {k:"特急券",f:"とっきゅうけん",m:"Tiket kereta jenis ekspres (limited express)",p:'KB'},
+ {k:"秋田",f:"あきた",m:"Akita",p:'KB'},
+ {k:"こまち",f:"こまち",m:"Komachi (salah satu jenis kereta Shinkansen)",p:'KB'},
+ {k:"通路側",f:"つうろがわ",m:"Tempat duduk dekat lorong",p:'KB'},
+ {k:"窓側",f:"まどがわ",m:"Tempat duduk dekat jendela",p:'KB'},
+ {k:"遅れ",f:"おくれ",m:"Terlambat",p:'KB'},
+ {k:"約",f:"やく",m:"Sekitar ~ / kira-kira ~ (cth: kira-kira 10 menit)",p:'KB'},
+ {k:"～両編成",f:"～りょうへんせい",m:"Terdiri dari ~ gerbong (cth: terdiri dari 10 gerbong kereta)",p:'KB'},
+ {k:"運転見合わせ",f:"うんてんみあわせ",m:"Dihentikan sementara waktu; ditunda",p:'KB'},
+ {k:"お知らせ",f:"おしらせ",m:"Pengumuman",p:'KB'},
+ {k:"台風～号",f:"たいふう～ごう",m:"Angin topan nomor ～",p:'KB'},
+ {k:"接近",f:"せっきん",m:"Mendekat",p:'KB'},
+ {k:"～に伴い",f:"～にともない",m:"Sebagai akibat dari ～",p:'KB'},
+ {k:"見合わせる",f:"みあわせる",m:"Menunda",p:'KK'},
+ {k:"ゆば",f:"ゆば",m:"Yuba (kulit tahu khas Jepang)",p:'KB'},
+ {k:"外国",f:"がいこく",m:"Luar negeri",p:'KB'},
+ {k:"～泊",f:"～はく",m:"Menginap ～ malam (cth: menginap semalam / 1 malam)",p:'KB'},
+ {k:"名物",f:"めいぶつ",m:"Kuliner khas lokal",p:'KB'},
+ {k:"東照宮",f:"とうしょうぐう",m:"Kuil Toshogu",p:'KB'},
+ {k:"中禅寺湖",f:"ちゅうぜんじこ",m:"Danau Chuzenji",p:'KB'},
+ {k:"指定席",f:"していせき",m:"Tempat duduk sesuai pesanan",p:'KB'},
+ {k:"自由席",f:"じゆうせき",m:"Tempat duduk bebas",p:'KB'},
+ {k:"～番乗り場",f:"～ばんのりば",m:"Peron nomor ~",p:'KB'},
+ {k:"～番線",f:"～ばんせん",m:"Jalur nomor ~",p:'KB'},
+ {k:"～行き",f:"～いき",m:"Tujuan (ke) ～",p:'KB'},
+ {k:"～線",f:"～せん",m:"Jalur ～",p:'KB'},
+ {k:"～方面",f:"～ほうめん",m:"Arah ～",p:'KB'},
+ {k:"発車する",f:"はっしゃする",m:"Berangkat",p:'KK'},
+ {k:"到着する",f:"とうちゃくする",m:"Tiba",p:'KK'},
+ {k:"乗り換える",f:"のりかえる",m:"Berpindah; transfer",p:'KK'},
+ {k:"特急",f:"とっきゅう",m:"Kereta ekspres (limited express)",p:'KB'},
+ {k:"～両",f:"～りょう",m:"Gerbong (cth: sembilan gerbong) ～",p:'KB'},
+ {k:"順",f:"じゅん",m:"Urutan",p:'KB'},
+ {k:"グリーン車",f:"グリーンしゃ",m:"Green car (gerbong eksekutif; gerbong kelas utama)",p:'KB'},
+ {k:"金沢",f:"かなざわ",m:"Kanazawa",p:'KB'},
+ {k:"列車",f:"れっしゃ",m:"Kereta",p:'KB'},
+ {k:"乗車／ご乗車",f:"じょうしゃ",m:"Naik ke kereta",p:'KB'},
+ {k:"～ほど",f:"～ほど",m:"Sekitar ~ / kira-kira ~ (cth: kira-kira 3 menit)",p:'KB'},
+ {k:"岡山",f:"おかやま",m:"Okayama",p:'KB'},
+ {k:"お出口",f:"おでぐち",m:"Pintu keluar (ungkapan bentuk sopan)",p:'KB'},
+ {k:"左側",f:"ひだりがわ",m:"Sisi kiri",p:'KB'},
+ {k:"各駅",f:"かくえき",m:"Setiap stasiun",p:'KB'},
+ {k:"向かい側",f:"むかいがわ",m:"Sisi berlawanan",p:'KB'},
+ {k:"中ほど",f:"なかほど",m:"Tengah",p:'KB'},
+ {k:"ご案内をいたします",f:"ごあんないをいたします",m:"Berikut adalah pengumuman. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お越しください",f:"おこしください",m:"Silakan menuju ke ～ (ungkapan bentuk sopan)",p:'KS'},
+ {k:"事故",f:"じこ",m:"Kecelakaan",p:'KB'},
+ {k:"壊れる",f:"こわれる",m:"Rusak",p:'KK'},
+ {k:"信号",f:"しんごう",m:"Lampu lalu lintas",p:'KB'},
+ {k:"信号故障",f:"しんごうこしょう",m:"Kerusakan lampu lalu lintas",p:'KB'},
+ {k:"アナウンス",f:"アナウンス",m:"Pengumuman",p:'KB'},
+ {k:"困る",f:"こまる",m:"Menyulitkan; membuat susah / jengkel",p:'KK'},
+ {k:"何て言ってましたか？",f:"なんていってましたか？",m:"Apa katanya?",p:'KB'},
+ {k:"当駅",f:"とうえき",m:"Stasiun ini",p:'KB'},
+ {k:"～のため",f:"～のため",m:"Karena ～",p:'KB'},
+ {k:"運転",f:"うんてん",m:"Pengoperasian (kereta)",p:'KB'},
+ {k:"お急ぎのところ",f:"おいそぎのところ",m:"Dalam keadaan terburu-buru (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お知らせいたします",f:"おしらせいたします",m:"Berikut adalah pengumuman. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"行っております",f:"おこなっております",m:"Melakukan ～ (ungkapan bentuk sopan untuk しています)",p:'KB'},
+ {k:"ご迷惑をおかけします",f:"ごめいわくをおかけします",m:"Mohon maaf atas ketidaknyamanannya. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"人身事故",f:"じんしんじこ",m:"Kecelakaan fatal / serius",p:'KB'},
+ {k:"影響",f:"えいきょう",m:"Dampak",p:'KB'},
+ {k:"全線",f:"ぜんせん",m:"Seluruh jalur",p:'KB'},
+ {k:"お越し",f:"おこし",m:"Menuju (ungkapan bentuk sopan)",p:'KB'},
+ {k:"ご利用ください",f:"ごりようください",m:"Silakan gunakan (ungkapan bentuk sopan)",p:'KS'},
+ {k:"感動する",f:"かんどうする",m:"Menjadi tersentuh",p:'KK'},
+ {k:"気持ちいい",f:"きもちいい",m:"Menyegarkan perasaan / suasana hati",p:'KS'},
+ {k:"残念",f:"ざんねん",m:"Mengecewakan",p:'KS'},
+ {k:"疲れる",f:"つかれる",m:"Lelah; capek / capai",p:'KK'},
+ {k:"びっくりする",f:"びっくりする",m:"Kaget; terkejut",p:'KK'},
+ {k:"驚く",f:"おどろく",m:"Kaget; terkejut",p:'KK'},
+ {k:"こわい",f:"こわい",m:"Takut",p:'KS'},
+ {k:"よかった",f:"よかった",m:"Bagus",p:'KB'},
+ {k:"大阪",f:"おおさか",m:"Osaka",p:'KB'},
+ {k:"串カツ",f:"くしカツ",m:"Kushi-katsu (masakan campuran daging, sayuran dan seafood yang ditusukkan seperti sate)",p:'KB'},
+ {k:"たこ焼き",f:"たこやき",m:"Takoyaki (masakan dengan isian gurita yang dipanggang berbentuk bola-bola)",p:'KB'},
+ {k:"登る",f:"のぼる",m:"Naik",p:'KK'},
+ {k:"あべのハルカス",f:"あべのハルカス",m:"Abeno Harukas (nama gedung pencakar langit di Osaka)",p:'KB'},
+ {k:"大阪城",f:"おおさかじょう",m:"Kastel Osaka",p:'KB'},
+ {k:"通天閣",f:"つうてんかく",m:"Menara Tsutenkaku",p:'KB'},
+ {k:"鳥",f:"とり",m:"Burung",p:'KB'},
+ {k:"あげる",f:"あげる",m:"Memberi",p:'KK'},
+ {k:"つり",f:"つり",m:"Memancing",p:'KB'},
+ {k:"空",f:"そら",m:"Langit",p:'KB'},
+ {k:"ウミネコ",f:"ウミネコ",m:"Camar ekor hitam",p:'KB'},
+ {k:"あの辺",f:"あのへん",m:"Sekitar sana",p:'KB'},
+ {k:"浄土ヶ浜",f:"じょうどがはま",m:"Pantai Jodogahama",p:'KB'},
+ {k:"ケーブルカー",f:"ケーブルカー",m:"Kereta gantung",p:'KB'},
+ {k:"歩く",f:"あるく",m:"Berjalan",p:'KK'},
+ {k:"リス",f:"リス",m:"Tupai",p:'KB'},
+ {k:"だから",f:"だから",m:"Karena itulah",p:'KB'},
+ {k:"あきらめる",f:"あきらめる",m:"Menyerah",p:'KK'},
+ {k:"頂上",f:"ちょうじょう",m:"Puncak",p:'KB'},
+ {k:"高尾山",f:"たかおさん",m:"Gunung Takao",p:'KB'},
+ {k:"町並み",f:"まちなみ",m:"Pemandangan kota",p:'KB'},
+ {k:"花畑",f:"はなばたけ",m:"Ladang bunga",p:'KB'},
+ {k:"イルミネーション",f:"イルミネーション",m:"Iluminasi (penerangan dengan lampu hias)",p:'KB'},
+ {k:"ショー",f:"ショー",m:"Pertunjukan",p:'KB'},
+ {k:"泊まる",f:"とまる",m:"Menginap",p:'KK'},
+ {k:"滝",f:"たき",m:"Air terjun",p:'KB'},
+ {k:"きらきら",f:"きらきら",m:"Kilauan",p:'KB'},
+ {k:"光る",f:"ひかる",m:"Bercahaya",p:'KK'},
+ {k:"ハウステンボス",f:"ハウステンボス",m:"Huis Ten Bosch (taman rekreasi di Prefektur Nagasaki)",p:'KB'},
+ {k:"オランダ",f:"オランダ",m:"Belanda",p:'KB'},
+ {k:"インスタントラーメン",f:"インスタントラーメン",m:"Mi instan",p:'KB'},
+ {k:"描く",f:"かく",m:"Menggambar; melukis",p:'KK'},
+ {k:"カップラーメン",f:"カップラーメン",m:"Mi instan dalam kemasan cup",p:'KB'},
+ {k:"絵",f:"え",m:"Gambar",p:'KB'},
+ {k:"トッピング",f:"トッピング",m:"Topping; taburan",p:'KB'},
+],
+bab7:[
+ {k:"おみこし",f:"おみこし",m:"Kuil portabel (semacam kuil yang bisa dibawa dan dipindahkan)",p:'KB'},
+ {k:"かつぐ",f:"かつぐ",m:"Mengusung (di bahu / pundak)",p:'KK'},
+ {k:"海岸",f:"かいがん",m:"Pantai",p:'KB'},
+ {k:"ごみ",f:"ごみ",m:"Sampah",p:'KB'},
+ {k:"拾う",f:"ひろう",m:"Memungut",p:'KK'},
+ {k:"出る",f:"でる",m:"Mengalir (cth: air mengalir)",p:'KK'},
+ {k:"地震",f:"じしん",m:"Gempa bumi",p:'KB'},
+ {k:"火事",f:"かじ",m:"Kebakaran",p:'KB'},
+ {k:"訓練",f:"くんれん",m:"Latihan",p:'KB'},
+ {k:"断水する",f:"だんすいする",m:"Pemadaman air",p:'KK'},
+ {k:"水道工事",f:"すいどうこうじ",m:"Pekerjaan perbaikan saluran air",p:'KB'},
+ {k:"濁る",f:"にごる",m:"Keruh (cth: airnya keruh)",p:'KK'},
+ {k:"使用する",f:"しようする",m:"Menggunakan",p:'KK'},
+ {k:"お知らせ",f:"おしらせ",m:"Pengumuman",p:'KB'},
+ {k:"下記のとおり",f:"かきのとおり",m:"Sebagai berikut",p:'KB'},
+ {k:"しばらく",f:"しばらく",m:"Sebentar",p:'KB'},
+ {k:"出す",f:"だす",m:"Mengalirkan (cth: mengalirkan air)",p:'KK'},
+ {k:"迷惑／ご迷惑",f:"めいわく",m:"Ketidaknyamanan",p:'KB'},
+ {k:"ご協力お願いいたします",f:"ごきょうりょくおねがいいたしま",m:"Kami mohon kerja sama Anda.",p:'KB'},
+ {k:"す",f:"す",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"防災",f:"ぼうさい",m:"Pencegahan bencana",p:'KB'},
+ {k:"小学校",f:"しょうがっこう",m:"Sekolah Dasar (SD)",p:'KB'},
+ {k:"校庭",f:"こうてい",m:"Halaman sekolah",p:'KB'},
+ {k:"雨天",f:"うてん",m:"Hujan",p:'KB'},
+ {k:"場合",f:"ばあい",m:"Apabila",p:'KB'},
+ {k:"内容",f:"ないよう",m:"Isi",p:'KB'},
+ {k:"通報訓練",f:"つうほうくんれん",m:"Pelatihan pelaporan bencana",p:'KB'},
+ {k:"避難訓練",f:"ひなんくんれん",m:"Pelatihan evakuasi",p:'KB'},
+ {k:"消火訓練",f:"しょうかくんれん",m:"Pelatihan pemadaman kebakaran",p:'KB'},
+ {k:"AED訓練",f:"エーイーディーくんれん",m:"Pelatihan penyelamatan dasar menggunakan AED (Automated External Defibrillator)",p:'KB'},
+ {k:"隣近所の人",f:"となりきんじょのひと",m:"Tetangga",p:'KB'},
+ {k:"声をかけあう",f:"こえをかけあう",m:"Saling berbicara / menyampaikan satu sama lain",p:'KK'},
+ {k:"条件",f:"じょうけん",m:"Kondisi; syarat",p:'KB'},
+ {k:"運動靴",f:"うんどうぐつ",m:"Sepatu olahraga",p:'KB'},
+ {k:"動きやすい",f:"うごきやすい",m:"Mudah bergerak",p:'KS'},
+ {k:"はっぴ",f:"はっぴ",m:"Rompi happi",p:'KB'},
+ {k:"貸し出し",f:"かしだし",m:"Rental",p:'KB'},
+ {k:"希望",f:"きぼう",m:"Harapan; keinginan",p:'KB'},
+ {k:"申し込む",f:"もうしこむ",m:"Mendaftarkan diri",p:'KK'},
+ {k:"集合",f:"しゅうごう",m:"Berkumpul",p:'KB'},
+ {k:"ジーンズ",f:"ジーンズ",m:"Celana jin (jeans)",p:'KB'},
+ {k:"当日",f:"とうじつ",m:"Pada hari itu (Hari-H)",p:'KB'},
+ {k:"おいでください",f:"おいでください",m:"Silakan datang. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"延期する",f:"えんきする",m:"Ditunda; diundur",p:'KK'},
+ {k:"持ち物",f:"もちもの",m:"Bawaan (barang yang perlu dibawa)",p:'KB'},
+ {k:"汚れる",f:"よごれる",m:"Menjadi kotor",p:'KK'},
+ {k:"軍手",f:"ぐんて",m:"Sarung tangan kerja",p:'KB'},
+ {k:"～程度",f:"～ていど",m:"Sekitar ～ (cth: sekitar 2 jam)",p:'KB'},
+ {k:"作業",f:"さぎょう",m:"Pekerjaan",p:'KB'},
+ {k:"世話役",f:"せわやく",m:"Fasilitator",p:'KB'},
+ {k:"会",f:"かい",m:"Grup (cth: grup sukarelawan) kelompok;",p:'KB'},
+ {k:"ガス",f:"ガス",m:"Gas",p:'KB'},
+ {k:"点検",f:"てんけん",m:"Inspeksi; pengecekan",p:'KB'},
+ {k:"フリーマーケット",f:"フリーマーケット",m:"Flea market (semacam pasar kaget; pasar loak)",p:'KB'},
+ {k:"祭り／お祭り",f:"まつり",m:"Festival",p:'KB'},
+ {k:"寄付",f:"きふ",m:"Donasi",p:'KB'},
+ {k:"お願い",f:"おねがい",m:"Permintaan",p:'KS'},
+ {k:"花火大会",f:"はなびたいかい",m:"Pesta kembang api",p:'KB'},
+ {k:"今月",f:"こんげつ",m:"Bulan ini",p:'KB'},
+ {k:"来月",f:"らいげつ",m:"Bulan depan",p:'KB'},
+ {k:"ポスト",f:"ポスト",m:"Kotak pos",p:'KB'},
+ {k:"ガス会社",f:"ガスがいしゃ",m:"Perusahaan gas",p:'KB'},
+ {k:"間",f:"あいだ",m:"Antara (cth: antara pukul 14:00 - 15:00)",p:'KB'},
+ {k:"封筒",f:"ふうとう",m:"Amplop",p:'KB'},
+ {k:"手紙",f:"てがみ",m:"Surat",p:'KB'},
+ {k:"～だけ",f:"～だけ",m:"Hanya ～",p:'KB'},
+ {k:"中止",f:"ちゅうし",m:"Batal",p:'KB'},
+ {k:"広場",f:"ひろば",m:"Lapangan",p:'KB'},
+ {k:"～回目",f:"～かいめ",m:"(yang) ke～ (cth: yang ke-2 / kedua)",p:'KB'},
+ {k:"食器",f:"しょっき",m:"Alat makan",p:'KB'},
+ {k:"おもちゃ",f:"おもちゃ",m:"Mainan",p:'KB'},
+ {k:"コンサート",f:"コンサート",m:"Konser",p:'KB'},
+ {k:"販売会",f:"はんばいかい",m:"Acara pemasaran / penjualan",p:'KB'},
+ {k:"カラオケ大会",f:"カラオケたいかい",m:"Kompetisi karaoke",p:'KB'},
+ {k:"ブラスバンド",f:"ブラスバンド",m:"Orkes alat musik tiup (brass band)",p:'KB'},
+ {k:"演奏",f:"えんそう",m:"Pertunjukan musik",p:'KB'},
+ {k:"踊り",f:"おどり",m:"Tarian",p:'KB'},
+ {k:"練習",f:"れんしゅう",m:"Latihan",p:'KB'},
+ {k:"道の駅",f:"みちのえき",m:"Michi-no-eki (stasiun tepi jalan)",p:'KB'},
+ {k:"公民館",f:"こうみんかん",m:"Pusat / aula komunitas lokal",p:'KB'},
+ {k:"市民センター",f:"しみんセンター",m:"Balai warga",p:'KB'},
+ {k:"～において",f:"～において",m:"Di ～",p:'KB'},
+ {k:"開催する",f:"かいさいする",m:"Mengadakan",p:'KK'},
+ {k:"入場券",f:"にゅうじょうけん",m:"Tiket masuk",p:'KB'},
+ {k:"販売中",f:"はんばいちゅう",m:"Sedang dijual; dalam masa penjualan",p:'KB'},
+ {k:"ピアノの夕べ",f:"ピアノのゆうべ",m:"Malam musik piano",p:'KB'},
+ {k:"および",f:"および",m:"Dan",p:'KB'},
+ {k:"～からお知らせします",f:"～からおしらせします",m:"(Berikut ini adalah) pengumuman dari ～. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"皆様のご来場をお待ちし",f:"みなさまのごらいじょうを",m:"Kami menantikan kehadiran / kedatangan Anda.",p:'KB'},
+ {k:"おまちしています",f:"おまちしています",m:"(ungkapan betuk sopan)",p:'KB'},
+ {k:"明日",f:"あす",m:"Besok",p:'KB'},
+ {k:"行う",f:"おこなう",m:"Menyelenggarakan",p:'KK'},
+ {k:"見学する",f:"けんがくする",m:"Mengamati; mengobservasi; meninjau",p:'KK'},
+ {k:"どなたでも",f:"どなたでも",m:"Siapapun (ungkapan bentuk sopan)",p:'KB'},
+ {k:"～からのお知らせです",f:"～からのおしらせです",m:"(Berikut ini adalah) pengumuman dari ～. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お気軽にお越しください",f:"おきがるにおこしください",m:"Silakan mampir / berkunjung. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"～について",f:"～について",m:"Tentang; mengenai",p:'KB'},
+ {k:"本日",f:"ほんじつ",m:"Hari ini",p:'KB'},
+ {k:"開く",f:"ひらく",m:"Mengadakan",p:'KK'},
+ {k:"予定する",f:"よていする",m:"Dijadwalkan",p:'KK'},
+ {k:"～についてお知らせしま",f:"～についておしらせします",m:"Kami mengumumkan tentang ～. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お誘い合わせの上、お出",f:"おさそいあわせのうえ、おでかけ",m:"Silakan hadiri acara kami bersama teman dan",p:'KB'},
+ {k:"ください",f:"ください",m:"Keluarga Anda. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"地元",f:"じもと",m:"Lokal",p:'KB'},
+ {k:"農家",f:"のうか",m:"Petani",p:'KB'},
+ {k:"生産する",f:"せいさんする",m:"Memproduksi",p:'KK'},
+ {k:"町役場",f:"まちやくば",m:"Balai kota",p:'KB'},
+ {k:"盆踊り",f:"ぼんおどり",m:"Tarian Bon Odori",p:'KB'},
+ {k:"輪になる",f:"わになる",m:"Membuat lingkaran",p:'KK'},
+ {k:"～に合わせて",f:"～にあわせて",m:"Mengikuti ～ (cth: mengikuti iringan musik)",p:'KB'},
+ {k:"だれでも",f:"だれでも",m:"Siapapun",p:'KB'},
+ {k:"～たち",f:"～たち",m:"Pengungkapan jamak dari orang / manusia (cth: putri-putriku)",p:'KB'},
+ {k:"1人で",f:"ひとりで",m:"(melakukan) sendiri (tanpa bantuan orang lain)",p:'KB'},
+],
+bab8:[
+ {k:"イベント会場",f:"イベントかいじょう",m:"Tempat acara / kegiatan",p:'KB'},
+ {k:"屋台",f:"やたい",m:"Warung; pedagang kaki lima (PKL)",p:'KB'},
+ {k:"ステージ",f:"ステージ",m:"Panggung",p:'KB'},
+ {k:"パフォーマンス",f:"パフォーマンス",m:"Penampilan",p:'KB'},
+ {k:"観光紹介",f:"かんこうしょうかい",m:"Gerai / konter informasi wisata",p:'KB'},
+ {k:"～コーナー",f:"～コーナー",m:"Gerai / konter ～",p:'KB'},
+ {k:"スピーチコンテスト",f:"スピーチコンテスト",m:"Kontes / lomba pidato",p:'KB'},
+ {k:"～コンテスト",f:"～コンテスト",m:"Kontes / lomba ～",p:'KB'},
+ {k:"カラオケ",f:"カラオケ",m:"Karaoke",p:'KB'},
+ {k:"～大会",f:"～たいかい",m:"Kompetisi ～",p:'KB'},
+ {k:"合気道",f:"あいきどう",m:"Aikido",p:'KB'},
+ {k:"～デモンストレーション",f:"～デモンストレーション",m:"Peragaan ～",p:'KB'},
+ {k:"世界",f:"せかい",m:"Dunia",p:'KB'},
+ {k:"遊び",f:"あそび",m:"Permainan",p:'KB'},
+ {k:"～体験",f:"～たいけん",m:"Mencoba ~ (sesuatu)",p:'KB'},
+ {k:"ファッションショー",f:"ファッションショー",m:"Fashion show (peragaan busana)",p:'KB'},
+ {k:"～ショー",f:"～ショー",m:"Pertunjukan; peragaan ～",p:'KB'},
+ {k:"スタンプラリー",f:"スタンプラリー",m:"Mengoleksi stempel",p:'KB'},
+ {k:"国際交流",f:"こくさいこうりゅう",m:"Pertukaran budaya internasional",p:'KB'},
+ {k:"入場料",f:"にゅうじょうりょう",m:"Harga tiket masuk (HTM)",p:'KB'},
+ {k:"交流プラザ",f:"こうりゅうプラザ",m:"Exchange plaza (ruang pertemuan / ruang pertukaran)",p:'KB'},
+ {k:"主催",f:"しゅさい",m:"Pelaksana",p:'KB'},
+ {k:"協力",f:"きょうりょく",m:"Kerja sama",p:'KB'},
+ {k:"民族衣装",f:"みんぞくいしょう",m:"Pakaian tradisional",p:'KB'},
+ {k:"本部",f:"ほんぶ",m:"Kantor pusat",p:'KB'},
+ {k:"ふれあい",f:"ふれあい",m:"Berinteraksi; bersentuhan langsung",p:'KS'},
+ {k:"フラダンス",f:"フラダンス",m:"Tarian Hula / Hula-Hula (tarian khas Hawaii)",p:'KB'},
+ {k:"和太鼓",f:"わだいこ",m:"Wadaiko (beduk khas Jepang)",p:'KB'},
+ {k:"ワールドマーケット",f:"ワールドマーケット",m:"World market; pasar aneka barang dunia",p:'KB'},
+ {k:"トルコ",f:"トルコ",m:"Turki",p:'KB'},
+ {k:"ペルー",f:"ペルー",m:"Peru",p:'KB'},
+ {k:"雑貨",f:"ざっか",m:"Aneka barang; pernak-pernik",p:'KB'},
+ {k:"団体紹介",f:"だんたいしょうかい",m:"Pengenalan organisasi",p:'KB'},
+ {k:"民芸品",f:"みんげいひん",m:"Kerajinan tradisional masyarakat",p:'KB'},
+ {k:"手芸品",f:"しゅげいひん",m:"Kerajinan tangan",p:'KB'},
+ {k:"ガーナ",f:"ガーナ",m:"Ghana",p:'KB'},
+ {k:"フェアトレード",f:"フェアトレード",m:"Fair trade (perdagangan adil)",p:'KB'},
+ {k:"外国人支援ネットワーク",f:"がいこくじんしえんネットワーク",m:"Jaringan dukungan bagi orang asing",p:'KB'},
+ {k:"ピニャータ",f:"ピニャータ",m:"Pinata (benda yang menjadi simbol tradisi saat anak-anak di Meksiko berulang tahun)",p:'KB'},
+ {k:"くす玉割り",f:"くすだまわり",m:"Memecahkan bola berisi konfeti",p:'KB'},
+ {k:"中国ゴマ",f:"ちゅうごくゴマ",m:"Diabolo (semacam mainan yoyo khas Tiongkok)",p:'KB'},
+ {k:"回す",f:"まわす",m:"Memutar",p:'KK'},
+ {k:"手作り",f:"てづくり",m:"Buatan tangan",p:'KB'},
+ {k:"やっている",f:"やっている",m:"Berlangsung; dilaksanakan",p:'KB'},
+ {k:"まだ",f:"まだ",m:"Masih",p:'KB'},
+ {k:"受け付け",f:"うけつけ",m:"Penerimaan tamu",p:'KB'},
+ {k:"あっち",f:"あっち",m:"Di sana",p:'KB'},
+ {k:"つきあたり",f:"つきあたり",m:"Di ujung ~ (jalan; lorong)",p:'KB'},
+ {k:"たぶん",f:"たぶん",m:"Mungkin",p:'KB'},
+ {k:"無理ですか？",f:"むりですか？",m:"Apakah tidak memungkinkan (lagi)?",p:'KB'},
+ {k:"さあ",f:"さあ",m:"Hmmm.. (ekspresi saat Anda menyatakan tidak begitu yakin tentang sesuatu)",p:'KB'},
+ {k:"中学生",f:"ちゅうがくせい",m:"Siswa SMP (Sekolah Menengah Pertama)",p:'KB'},
+ {k:"プロ",f:"プロ",m:"Profesional",p:'KB'},
+ {k:"遠慮する",f:"えんりょする",m:"Diharapkan tidak melakukan (sesuatu)",p:'KK'},
+ {k:"出る",f:"でる",m:"Berpartisipasi",p:'KK'},
+ {k:"（カラオケたいかいにでる）",f:"（カラオケたいかいにでる）",m:"(cth: berpartisipasi pada kompetisi karaoke)",p:'KB'},
+ {k:"参加費",f:"さんかひ",m:"Biaya pendaftaran",p:'KB'},
+ {k:"優勝する",f:"ゆうしょうする",m:"Memenangkan (kompetisi); pemenang pertama",p:'KK'},
+ {k:"賞品",f:"しょうひん",m:"Hadiah",p:'KB'},
+ {k:"出る",f:"でる",m:"(ada) hadiahnya",p:'KK'},
+ {k:"楽器",f:"がっき",m:"Alat musik",p:'KB'},
+ {k:"曲",f:"きょく",m:"Lagu",p:'KB'},
+ {k:"相談する",f:"そうだんする",m:"Berkonsultasi",p:'KK'},
+ {k:"申込書",f:"もうしこみしょ",m:"Formulir pendaftaran",p:'KB'},
+ {k:"必要事項",f:"ひつようじこう",m:"Informasi yang dibutuhkan",p:'KB'},
+ {k:"申し込み",f:"もうしこみ",m:"Pendaftaran; registrasi",p:'KB'},
+ {k:"先着順",f:"せんちゃくじゅん",m:"Berdasarkan urutan tiba (siapa cepat dia dapat)",p:'KB'},
+ {k:"順番に",f:"じゅんばんに",m:"Secara berurutan",p:'KB'},
+ {k:"いただく",f:"いただく",m:"Menerima (ungkapan bentuk sopan dari もらう)",p:'KK'},
+ {k:"スピーチ",f:"スピーチ",m:"Pidato",p:'KB'},
+ {k:"テーマ",f:"テーマ",m:"Topik; tema",p:'KB'},
+ {k:"動画",f:"どうが",m:"Video",p:'KB'},
+ {k:"撮影",f:"さつえい",m:"Fotografi / pembuatan video",p:'KB'},
+ {k:"飲食",f:"いんしょく",m:"Makan dan minum",p:'KB'},
+ {k:"販売",f:"はんばい",m:"Penjualan",p:'KB'},
+ {k:"携帯電話",f:"けいたいでんわ",m:"Telepon genggam; handphone",p:'KB'},
+ {k:"～内",f:"～ない",m:"Dalam ～ (cth: dalam taman)",p:'KB'},
+ {k:"協力する",f:"きょうりょくする",m:"Bekerja sama",p:'KK'},
+ {k:"お子様",f:"おこさま",m:"Anak-anak (ungkapan bentuk sopan)",p:'KB'},
+ {k:"皆様にお願いいたします",f:"みなさまにおねがいいたしま",m:"Kami mohon kepada Anda sekalian.",p:'KB'},
+ {k:"す",f:"す",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"お見えです",f:"おみえです",m:"Ada; datang (ungkapan bentuk sopan)",p:'KB'},
+ {k:"ご遠慮ください",f:"ごえんりょください",m:"Harap menahan diri (untuk tidak melakukan) ～.",p:'KS'},
+ {k:"ごえんりょくださいませ",f:"ごえんりょくださいませ",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"ご協力よろしくお願いい",f:"ごきょうりょくよろしくおねが",m:"Kami mohon kerja sama Anda.",p:'KS'},
+ {k:"いいたします",f:"いいたします",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"電源",f:"でんげん",m:"Power; sumber daya (listrik)",p:'KB'},
+ {k:"切る",f:"きる",m:"Mematikan",p:'KB'},
+ {k:"マナーモード",f:"マナーモード",m:"Mode senyap (silent mode)",p:'KB'},
+ {k:"設定する",f:"せっていする",m:"Mengeset; mengatur",p:'KK'},
+ {k:"通話する",f:"つうわする",m:"Berbicara di telepon",p:'KK'},
+ {k:"お忙しい中",f:"おいそがしいなか",m:"Meskipun sibuk / sedang dalam",p:'KB'},
+ {k:"おいそがしいなか",f:"おいそがしいなか",m:"Kesibukan (ungkapan bentuk sopan)",p:'KB'},
+ {k:"おいでくださって、あり",f:"おいでくださって、ありがとう",m:"Terima kasih atas kedatangan Anda.",p:'KB'},
+ {k:"ございます",f:"ございます",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"かまいません",f:"かまいません",m:"Tidak apa-apa; tidak masalah",p:'KB'},
+ {k:"持ち込み",f:"もちこみ",m:"Membawa",p:'KB'},
+ {k:"禁止",f:"きんし",m:"Dilarang",p:'KB'},
+ {k:"ロビー",f:"ロビー",m:"Lobi",p:'KB'},
+ {k:"ロールケーキ",f:"ロールケーキ",m:"Kue bolu gulung",p:'KB'},
+ {k:"終了する",f:"しゅうりょうする",m:"Berakhir; selesai",p:'KK'},
+ {k:"個数",f:"こすう",m:"Jumlah; kuantitas",p:'KB'},
+ {k:"限られている",f:"かぎられている",m:"Dibatasi; terbatas",p:'KB'},
+ {k:"列",f:"れつ",m:"Antrean",p:'KB'},
+ {k:"お求めの",f:"おもとめの",m:"Ingin membeli (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お並びください",f:"おならびください",m:"Silakan berbaris. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"太鼓",f:"たいこ",m:"Drums / beduk khas Jepang",p:'KB'},
+ {k:"たたく",f:"たたく",m:"Menabuh; memukul",p:'KK'},
+ {k:"来年",f:"らいねん",m:"Tahun depan",p:'KB'},
+ {k:"バンブーダンス",f:"バンブーダンス",m:"Tinikling (tarian tradisional Filipina menggunakan bambu)",p:'KB'},
+ {k:"バングラデシュ",f:"バングラデシュ",m:"Bangladesh",p:'KB'},
+ {k:"サテー",f:"サテー",m:"Sate (makanan khas Indonesia)",p:'KB'},
+],
+bab9:[
+ {k:"季節",f:"きせつ",m:"Musim",p:'KB'},
+ {k:"行事",f:"ぎょうじ",m:"Acara; kegiatan",p:'KB'},
+ {k:"正月／お正月",f:"しょうがつ",m:"Hari Tahun Baru",p:'KB'},
+ {k:"成人の日",f:"せいじんのひ",m:"Hari Kedewasaan",p:'KB'},
+ {k:"ひな祭り",f:"ひなまつり",m:"Hinamatsuri (Festival Boneka)",p:'KB'},
+ {k:"こどもの日",f:"こどものひ",m:"Kodomo-no-hi (Hari Anak-Anak)",p:'KB'},
+ {k:"七夕",f:"たなばた",m:"Tanabata (Festival Bintang)",p:'KB'},
+ {k:"クリスマス",f:"クリスマス",m:"Hari Natal",p:'KB'},
+ {k:"式",f:"しき",m:"Upacara",p:'KB'},
+ {k:"市長",f:"しちょう",m:"Wali kota",p:'KB'},
+ {k:"話",f:"はなし",m:"Sambutan",p:'KB'},
+ {k:"チキン",f:"チキン",m:"Ayam",p:'KB'},
+ {k:"笹の葉",f:"ささのは",m:"Daun bambu",p:'KB'},
+ {k:"飾り",f:"かざり",m:"Dekorasi",p:'KB'},
+ {k:"つける",f:"つける",m:"Memasang (cth: memasang dekorasi)",p:'KK'},
+ {k:"着物",f:"きもの",m:"Kimono (pakaian tradisional Jepang)",p:'KB'},
+ {k:"ちらしずし",f:"ちらしずし",m:"Chirashi-zushi (hidangan yang terbuat dari nasi sushi dengan hiasan berbagai topping)",p:'KB'},
+ {k:"デートする",f:"デートする",m:"Berkencan; kencan",p:'KK'},
+ {k:"短冊",f:"たんざく",m:"Tanzaku (lembaran kertas yang digunakan saat perayaan Tanabata)",p:'KB'},
+ {k:"願い事",f:"ねがいごと",m:"Harapan; keinginan",p:'KB'},
+ {k:"書く",f:"かく",m:"Menulis",p:'KK'},
+ {k:"甘酒",f:"あまざけ",m:"Amazake (minuman manis yang terbuat dari beras)",p:'KB'},
+ {k:"こうして",f:"こうして",m:"Seperti ini",p:'KB'},
+ {k:"お米",f:"おこめ",m:"Beras",p:'KB'},
+ {k:"アルコール",f:"アルコール",m:"Alkohol",p:'KB'},
+ {k:"若い",f:"わかい",m:"Muda",p:'KS'},
+ {k:"お祝いする",f:"おいわいする",m:"Merayakan",p:'KK'},
+ {k:"成人式",f:"せいじんしき",m:"Upacara Hari Kedewasaan",p:'KB'},
+ {k:"おしゃれをする",f:"おしゃれをする",m:"Berdandan; berpakaian indah",p:'KK'},
+ {k:"中学校",f:"ちゅうがっこう",m:"SMP (Sekolah Menengah Pertama)",p:'KB'},
+ {k:"盛り上がる",f:"もりあがる",m:"Meriah; semarak",p:'KK'},
+ {k:"フライドチキン",f:"フライドチキン",m:"Fried chicken (ayam goreng)",p:'KB'},
+ {k:"必ず",f:"かならず",m:"Selalu",p:'KB'},
+ {k:"過ごす",f:"すごす",m:"Menghabiskan waktu",p:'KK'},
+ {k:"DVD",f:"ディーブイディー",m:"DVD",p:'KB'},
+ {k:"実家",f:"じっか",m:"Rumah orang tua",p:'KB'},
+ {k:"ごろごろする",f:"ごろごろする",m:"Bermalas-malasan",p:'KK'},
+ {k:"お年玉",f:"おとしだま",m:"Otoshidama (angpau / uang hadiah saat perayaan Tahun Baru)",p:'KB'},
+ {k:"乗り物",f:"のりもの",m:"Wahana permainan",p:'KB'},
+ {k:"今年",f:"ことし",m:"Tahun ini",p:'KB'},
+ {k:"親戚",f:"しんせき",m:"Kerabat",p:'KB'},
+ {k:"集まる",f:"あつまる",m:"Berkumpul",p:'KK'},
+ {k:"毎年",f:"まいとし",m:"Setiap tahun",p:'KB'},
+ {k:"甥",f:"おい",m:"Keponakan laki-laki",p:'KB'},
+ {k:"姪",f:"めい",m:"Keponakan perempuan",p:'KB'},
+ {k:"あけましておめでとう",f:"あけましておめでとう",m:"Selamat Tahun Baru",p:'KB'},
+ {k:"祭り",f:"まつり",m:"Festival",p:'KB'},
+ {k:"田舎",f:"いなか",m:"Kampung halaman (di pedesaan)",p:'KB'},
+ {k:"飾る",f:"かざる",m:"Menghias",p:'KK'},
+ {k:"特別",f:"とくべつ",m:"Spesial; khusus",p:'KS'},
+ {k:"パーティー",f:"パーティー",m:"Pesta",p:'KB'},
+ {k:"歌う",f:"うたう",m:"Menyanyi",p:'KK'},
+ {k:"踊る",f:"おどる",m:"Menari",p:'KK'},
+ {k:"お金",f:"おかね",m:"Uang",p:'KB'},
+ {k:"断食",f:"だんじき",m:"Berpuasa",p:'KB'},
+ {k:"～明け",f:"～あけ",m:"Setelah (cth: setelah berpuasa) ～",p:'KB'},
+ {k:"旧暦",f:"きゅうれき",m:"Kalender lunar Tiongkok",p:'KB'},
+ {k:"キリスト教",f:"キリストきょう",m:"Agama Kristen",p:'KB'},
+ {k:"お祝い",f:"おいわい",m:"Perayaan",p:'KS'},
+ {k:"水かけ祭り",f:"みずかけまつり",m:"Festival Air (festival khas Thailand)",p:'KB'},
+ {k:"年",f:"とし",m:"Tahun",p:'KB'},
+ {k:"～によって",f:"～によって",m:"Bergantung pada ～ (cth: bergantung pada tahun)",p:'KB'},
+ {k:"春節",f:"しゅんせつ",m:"Tahun Baru Imlek",p:'KB'},
+ {k:"ソンクラーン",f:"ソンクラーン",m:"Songkran (perayaan tahun baru tradisional masyarakat Thailand)",p:'KB'},
+ {k:"レバラン",f:"レバラン",m:"Lebaran (hari raya dalam agama Islam)",p:'KB'},
+ {k:"海外旅行",f:"かいがいりょこう",m:"Berwisata ke luar negeri",p:'KB'},
+ {k:"赤い",f:"あかい",m:"Merah",p:'KS'},
+ {k:"かけ合う",f:"かけあう",m:"Saling melempar / mencipratkan (air)",p:'KK'},
+ {k:"クトゥパット",f:"クトゥパット",m:"Ketupat (makanan khas Indonesia)",p:'KB'},
+ {k:"餃子",f:"ぎょうざ",m:"Pangsit dengan isian",p:'KB'},
+ {k:"豚",f:"ぶた",m:"Babi",p:'KB'},
+ {k:"丸焼き",f:"まるやき",m:"Panggang (secara) utuh",p:'KB'},
+ {k:"クッキー",f:"クッキー",m:"Kue kering",p:'KB'},
+ {k:"大切",f:"たいせつ",m:"Penting; berharga",p:'KS'},
+ {k:"どんなふうに",f:"どんなふうに",m:"Bagaimana",p:'KB'},
+ {k:"祝う",f:"いわう",m:"Merayakan",p:'KK'},
+ {k:"赤",f:"あか",m:"Merah",p:'KB'},
+ {k:"おめでたい",f:"おめでたい",m:"Bernuansa perayaan",p:'KS'},
+ {k:"色",f:"いろ",m:"Warna",p:'KB'},
+ {k:"イスラム教",f:"イスラムきょう",m:"Agama Islam",p:'KB'},
+ {k:"ラマダン",f:"ラマダン",m:"Ramadan",p:'KB'},
+ {k:"例えば",f:"たとえば",m:"Misalnya",p:'KB'},
+ {k:"飾りつけ",f:"かざりつけ",m:"Dekorasi; hiasan",p:'KB'},
+ {k:"半分",f:"はんぶん",m:"Setengah",p:'KB'},
+ {k:"餅つき",f:"もちつき",m:"Menumbuk kue Mochi (kue beras khas Jepang)",p:'KB'},
+ {k:"当日",f:"とうじつ",m:"Pada hari itu",p:'KB'},
+ {k:"大人",f:"おとな",m:"Orang dewasa",p:'KB'},
+ {k:"味わう",f:"あじわう",m:"Merasakan; menikmati",p:'KK'},
+ {k:"伝統的",f:"でんとうてき",m:"Tradisional",p:'KS'},
+ {k:"文化",f:"ぶんか",m:"Kebudayaan",p:'KB'},
+ {k:"感想",f:"かんそう",m:"Impresi; kesan",p:'KB'},
+ {k:"語る",f:"かたる",m:"Bercerita",p:'KK'},
+ {k:"活動報告",f:"かつどうほうこく",m:"Laporan kegiatan",p:'KB'},
+ {k:"実際に",f:"じっさいに",m:"Sebenarnya",p:'KB'},
+ {k:"杵",f:"きね",m:"Alu (semacam alat dari kayu untuk menumbuk)",p:'KB'},
+ {k:"体験する",f:"たいけんする",m:"Mencoba; merasakan (pengalaman baru)",p:'KK'},
+ {k:"つきたて",f:"つきたて",m:"Baru dibuat",p:'KB'},
+ {k:"お餅",f:"おもち",m:"Mochi (kue beras khas Jepang)",p:'KB'},
+ {k:"きなこ",f:"きなこ",m:"Kinako (tepung kedelai)",p:'KB'},
+ {k:"あんこ",f:"あんこ",m:"Anko (pasta kacang merah)",p:'KB'},
+ {k:"餅をつく",f:"もちをつく",m:"Menumbuk",p:'KK'},
+ {k:"チームワーク",f:"チームワーク",m:"Kerja tim",p:'KB'},
+ {k:"トック",f:"トック",m:"Tteok (kue beras khas Korea)",p:'KB'},
+ {k:"思ったより",f:"おもったより",m:"Lebih dari yang diharapkan",p:'KB'},
+ {k:"昨年",f:"さくねん",m:"Tahun lalu",p:'KB'},
+ {k:"昨年はいろいろお世話に",f:"さくねんはいろいろ",m:"Terima kasih banyak untuk semua hal",p:'KB'},
+ {k:"おせわになりました",f:"おせわになりました",m:"Di tahun lalu.",p:'KB'},
+ {k:"今年もよろしくお願いし",f:"ことしもよろしくおねがいします",m:"Saya berharap dapat bekerja bersama Anda kembali di tahun ini.",p:'KB'},
+ {k:"あけおめ",f:"あけおめ",m:"(bentuk singkat untuk mengatakan あけましておめでとう)",p:'KB'},
+ {k:"ことよろ",f:"ことよろ",m:"(bentuk singkat untuk mengatakan ことしもよろしく)",p:'KB'},
+ {k:"謹賀新年",f:"きんがしんねん",m:"Selamat Tahun Baru (ungkapan salam ucapan tahun baru yang digunakan dalam kartu ucapan)",p:'KB'},
+ {k:"遊ぼう",f:"あそぼう",m:"Ayo nongkrong / hang out!",p:'KB'},
+ {k:"また遊ぼうね",f:"またあそぼうね",m:"Ayo nongkrong / hang out lagi selanjutnya, ya!",p:'KB'},
+],
+bab10:[
+ {k:"葬式／お葬式",f:"そうしき",m:"Upacara pemakaman",p:'KB'},
+ {k:"スーツ",f:"スーツ",m:"Setelan jas",p:'KB'},
+ {k:"暗い",f:"くらい",m:"Gelap",p:'KS'},
+ {k:"地味",f:"じみ",m:"Tidak mencolok (yang berwarna gelap)",p:'KS'},
+ {k:"ジャケット",f:"ジャケット",m:"Jas; baju atasan; jaket",p:'KB'},
+ {k:"香典／お香典",f:"こうでん",m:"Uang duka / belasungkawa",p:'KB'},
+ {k:"香典袋",f:"こうでんぶくろ",m:"Amplop untuk uang duka / belasungkawa",p:'KB'},
+ {k:"～用",f:"～よう",m:"Untuk ～ (cth: untuk upacara pemakaman)",p:'KB'},
+ {k:"披露宴",f:"ひろうえん",m:"Resepsi",p:'KB'},
+ {k:"招待状",f:"しょうたいじょう",m:"Surat undangan",p:'KB'},
+ {k:"だったら",f:"だったら",m:"Kalau begitu",p:'KB'},
+ {k:"カジュアル",f:"カジュアル",m:"Kasual",p:'KS'},
+ {k:"感じ",f:"かんじ",m:"Yang tampak; tampilan",p:'KB'},
+ {k:"白",f:"しろ",m:"Putih",p:'KB'},
+ {k:"花嫁",f:"はなよめ",m:"Pengantin; mempelai wanita",p:'KB'},
+ {k:"見舞い／お見舞い",f:"みまい",m:"Menjenguk orang sakit",p:'KS'},
+ {k:"同僚",f:"どうりょう",m:"Rekan kerja",p:'KB'},
+ {k:"骨",f:"ほね",m:"Tulang",p:'KB'},
+ {k:"折る",f:"おる",m:"Patah (cth: patah tulang)",p:'KK'},
+ {k:"入院する",f:"にゅういんする",m:"Dirawat di rumah sakit; opname",p:'KK'},
+ {k:"鉢植え",f:"はちうえ",m:"Tanaman dalam pot",p:'KB'},
+ {k:"イメージ",f:"イメージ",m:"Gambaran; imaji",p:'KB'},
+ {k:"花束",f:"はなたば",m:"Karangan bunga",p:'KB'},
+ {k:"本人",f:"ほんにん",m:"Orang itu sendiri; orangnya",p:'KB'},
+ {k:"まあ",f:"まあ",m:"Wow! (mengungkapkan keterkejutan atau emosi yang dalam)",p:'KB'},
+ {k:"あら",f:"あら",m:"Ya ampun! (mengungkapkan keterkejutan ringan)",p:'KB'},
+ {k:"どうすればいいですか？",f:"どうすればいいですか？",m:"Apa yang harus saya lakukan?",p:'KB'},
+ {k:"新築祝い",f:"しんちくいわい",m:"Syukuran rumah baru",p:'KS'},
+ {k:"習慣",f:"しゅうかん",m:"Kebiasaan",p:'KB'},
+ {k:"全員",f:"ぜんいん",m:"Semuanya",p:'KB'},
+ {k:"くり返す",f:"くりかえす",m:"Mengulang",p:'KK'},
+ {k:"オトーリ",f:"オトーリ",m:"Otoori (kebiasaan khas saat minum minuman beralkohol bersama-sama oleh masyarakat di Pulau Miyako, Prefektur Okinawa, Jepang)",p:'KB'},
+ {k:"待つ",f:"まつ",m:"Menunggu",p:'KK'},
+ {k:"流す",f:"ながす",m:"Mengalirkan",p:'KK'},
+ {k:"ごみ箱",f:"ごみばこ",m:"Bak sampah",p:'KB'},
+ {k:"捨てる",f:"すてる",m:"Membuang",p:'KK'},
+ {k:"電話",f:"でんわ",m:"Telepon",p:'KB'},
+ {k:"片付ける",f:"かたづける",m:"Membereskan; merapikan",p:'KK'},
+ {k:"掃除の人",f:"そうじのひと",m:"Orang atau petugas yang membereskan / merapikan",p:'KB'},
+ {k:"不思議",f:"ふしぎ",m:"Aneh",p:'KS'},
+ {k:"めんどくさい",f:"めんどくさい",m:"Menyusahkan",p:'KS'},
+ {k:"まじめ",f:"まじめ",m:"Serius; rajin",p:'KS'},
+ {k:"まねをする",f:"まねをする",m:"Meniru",p:'KK'},
+ {k:"ルール",f:"ルール",m:"Peraturan; aturan",p:'KB'},
+ {k:"守る",f:"（ルールをまもる）",m:"Menaati; mematuhi (cth: menaati peraturan)",p:'KK'},
+ {k:"貼り紙",f:"はりがみ",m:"Tanda; petunjuk",p:'KB'},
+ {k:"もちろん",f:"もちろん",m:"Tentu saja",p:'KB'},
+ {k:"つまる",f:"つまる",m:"Menyumbat",p:'KK'},
+ {k:"それじゃあ",f:"それじゃあ",m:"Lalu",p:'KB'},
+ {k:"臭い",f:"くさい",m:"Bau tidak sedap",p:'KS'},
+ {k:"普通に",f:"ふつうに",m:"Biasanya",p:'KB'},
+ {k:"うるさい",f:"うるさい",m:"Berisik; bising",p:'KS'},
+ {k:"～終わる",f:"～おわる",m:"Selesai ～ (cth: selesai makan)",p:'KK'},
+ {k:"席",f:"せき",m:"Tempat duduk",p:'KB'},
+ {k:"確かにねえ",f:"たしかにねえ",m:"Benar juga, ya.",p:'KB'},
+ {k:"どうしてかなあ",f:"どうしてかなあ",m:"Kenapa ya?",p:'KB'},
+ {k:"～かな？",f:"～かな？",m:"(Saya) penasaran / bertanya-tanya kenapa ~? (ekspresi ketika pembicara merasa penasaran",p:'KB'},
+ {k:"のどが渇く",f:"のどがかわく",m:"Merasa haus",p:'KK'},
+ {k:"かご",f:"かご",m:"Keranjang",p:'KB'},
+ {k:"空",f:"から",m:"Kosong",p:'KB'},
+ {k:"ボトル",f:"ボトル",m:"Botol",p:'KB'},
+ {k:"そうしたら",f:"そうしたら",m:"Lalu; dan kemudian",p:'KB'},
+ {k:"怒る",f:"おこる",m:"Marah",p:'KK'},
+ {k:"ちゃんと",f:"ちゃんと",m:"Sebagaimana mestinya",p:'KB'},
+ {k:"店長",f:"てんちょう",m:"Manajer toko",p:'KB'},
+ {k:"泥棒",f:"どろぼう",m:"Pencuri",p:'KB'},
+ {k:"イメージ",f:"イメージ",m:"Kesan",p:'KB'},
+ {k:"袋",f:"ふくろ",m:"Pembungkus; bungkusan",p:'KB'},
+ {k:"あとから",f:"あとから",m:"Setelahnya",p:'KB'},
+ {k:"どうしたの？",f:"どうしたの？",m:"Ada apa?",p:'KB'},
+ {k:"そうなの？",f:"そうなの？",m:"Benarkah itu?",p:'KB'},
+ {k:"そうかなあ",f:"そうかなあ",m:"(Saya) tidak begitu yakin. (Ekspresi bahwa pembicara merasa kurang",p:'KB'},
+ {k:"にほんしゅうかん",f:"きじ",m:"Setuju dengan orang lain)",p:'KB'},
+ {k:"だんだん",f:"だんだん",m:"Sedikit demi sedikit",p:'KB'},
+ {k:"気に入る",f:"きにいる",m:"Menyukai",p:'KK'},
+ {k:"直接",f:"ちょくせつ",m:"Secara langsung",p:'KB'},
+ {k:"～杯",f:"～はい",m:"～ gelas (untuk menyatakan satuan)",p:'KB'},
+ {k:"お金を取る",f:"おかねをとる",m:"Berbayar",p:'KK'},
+ {k:"ひどい",f:"ひどい",m:"Keterlaluan",p:'KS'},
+ {k:"信じられない",f:"しんじられない",m:"Tak dapat dipercaya",p:'KS'},
+ {k:"信じる",f:"しんじる",m:"Percaya",p:'KK'},
+ {k:"チップ",f:"チップ",m:"Tip",p:'KB'},
+ {k:"マナー",f:"マナー",m:"Etika; adab; sopan santun",p:'KB'},
+ {k:"ズズズズ",f:"ズズズズ",m:"Slurp (bunyi yang muncul saat menikmati mi soba dengan cara menghirupnya)",p:'KB'},
+ {k:"音を立てる",f:"おとをたてる",m:"Membuat bunyi",p:'KK'},
+ {k:"どんぶり",f:"どんぶり",m:"Mangkuk",p:'KB'},
+ {k:"持ち上げる",f:"もちあげる",m:"Mengangkat",p:'KK'},
+ {k:"口を付ける",f:"くちをつける",m:"Menempelkan ke mulut",p:'KK'},
+ {k:"嫌",f:"いや",m:"Tidak menyukai; benci",p:'KS'},
+ {k:"何杯でも",f:"なんばいでも",m:"Bergelas-gelas; beberapa gelas pun (minuman)",p:'KB'},
+ {k:"おかわり",f:"おかわり",m:"Isi ulang",p:'KB'},
+ {k:"おしぼり",f:"おしぼり",m:"Handuk kecil basah untuk mengelap tangan",p:'KB'},
+ {k:"テーブルチャージ",f:"テーブルチャージ",m:"Biaya tambahan",p:'KB'},
+ {k:"しかも",f:"しかも",m:"Selain itu",p:'KB'},
+ {k:"こういう",f:"こういう",m:"~ seperti ini",p:'KB'},
+ {k:"ごちそうさま",f:"ごちそうさま",m:"Terima kasih untuk makanannya / hidangannya. (Ungkapan yang diucapkan setelah selesai makan)",p:'KB'},
+ {k:"どちらでもない",f:"どちらでもない",m:"Bukan keduanya",p:'KS'},
+],
+bab11:[
+ {k:"色",f:"いろ",m:"Warna",p:'KB'},
+ {k:"サイズ",f:"サイズ",m:"Ukuran",p:'KB'},
+ {k:"赤",f:"あか",m:"Merah",p:'KB'},
+ {k:"青",f:"あお",m:"Biru",p:'KB'},
+ {k:"緑",f:"みどり",m:"Hijau",p:'KB'},
+ {k:"黄色",f:"きいろ",m:"Kuning",p:'KB'},
+ {k:"黒",f:"くろ",m:"Hitam",p:'KB'},
+ {k:"白",f:"しろ",m:"Putih",p:'KB'},
+ {k:"ベージュ",f:"ベージュ",m:"Krem",p:'KB'},
+ {k:"ピンク",f:"ピンク",m:"Pink; merah muda; merah jambu",p:'KB'},
+ {k:"茶色",f:"ちゃいろ",m:"Cokelat",p:'KB'},
+ {k:"グレー",f:"グレー",m:"Abu-abu",p:'KB'},
+ {k:"カーキ",f:"カーキ",m:"Khaki; cokelat muda",p:'KB'},
+ {k:"S",f:"エス",m:"Small; ukuran kecil",p:'KB'},
+ {k:"M",f:"エム",m:"Medium; ukuran sedang",p:'KB'},
+ {k:"L",f:"エル",m:"Large; ukuran besar",p:'KB'},
+ {k:"XL",f:"エックスエル",m:"Extra large; ukuran ekstra besar",p:'KB'},
+ {k:"フリー",f:"フリー",m:"Satu ukuran / satu ukuran cocok untuk semua",p:'KB'},
+ {k:"～cm",f:"～センチ",m:"～ cm (cth: 24,5 cm)",p:'KB'},
+ {k:"ただいま",f:"ただいま",m:"Saat ini",p:'KB'},
+ {k:"全品",f:"ぜんぴん",m:"Semua produk",p:'KB'},
+ {k:"～％オフ",f:"～パーセントオフ",m:"Diskon / potongan ～ % (cth: potongan 10%)",p:'KB'},
+ {k:"セーター",f:"セーター",m:"Sweter",p:'KB'},
+ {k:"試着室",f:"しちゃくしつ",m:"Ruang ganti; kamar pas",p:'KB'},
+ {k:"派手",f:"はで",m:"Mencolok",p:'KS'},
+ {k:"試着する",f:"しちゃくする",m:"Mencoba memakai",p:'KK'},
+ {k:"よろしければ",f:"よろしければ",m:"Jika Anda ingin (ungkapan bentuk sopan)",p:'KB'},
+ {k:"ごゆっくりごらんください",f:"ごゆっくりごらんください",m:"Silakan luangkan waktu Anda untuk melihat-lihat. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"ご案内いたします",f:"ごあんないいたします",m:"Saya akan menunjukkan tempatnya. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"駐輪場",f:"ちゅうりんじょう",m:"Tempat parkir sepeda",p:'KB'},
+ {k:"インフォメーション",f:"インフォメーション",m:"Layanan / bagian informasi",p:'KB'},
+ {k:"フードコート",f:"フードコート",m:"Food court; pujasera",p:'KB'},
+ {k:"探す",f:"さがす",m:"Mencari",p:'KK'},
+ {k:"レシート",f:"レシート",m:"Resi",p:'KB'},
+ {k:"救急車",f:"きゅうきゅうしゃ",m:"Ambulans",p:'KB'},
+ {k:"盗む",f:"ぬすむ",m:"Mencuri",p:'KK'},
+ {k:"停める",f:"とめる",m:"Memarkir",p:'KK'},
+ {k:"移動する",f:"いどうする",m:"Memindahkan; berpindah",p:'KK'},
+ {k:"急に",f:"きゅうに",m:"Tiba-tiba",p:'KB'},
+ {k:"ソファ",f:"ソファ",m:"Sofa",p:'KB'},
+ {k:"さっき",f:"さっき",m:"Tadi",p:'KB'},
+ {k:"もしかしたら",f:"もしかしたら",m:"Mungkin",p:'KB'},
+ {k:"とる",f:"とる",m:"Mengambil / mencuri",p:'KK'},
+ {k:"ポイントカード",f:"ポイントカード",m:"Kartu poin",p:'KB'},
+ {k:"スタンプ",f:"スタンプ",m:"Cap; stempel",p:'KB'},
+ {k:"押す",f:"おす",m:"Membubuhkan (cth: membubuhkan cap)",p:'KK'},
+ {k:"どうなさいましたか？",f:"どうなさいましたか？",m:"Ada apa dengan Anda? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お持ちください",f:"おもちください",m:"Silakan bawa ～. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"警察",f:"けいさつ",m:"Polisi",p:'KB'},
+ {k:"気分が悪い",f:"きぶんがわるい",m:"Merasa sakit / tidak enak badan",p:'KS'},
+ {k:"会員証",f:"かいいんしょう",m:"Kartu anggota",p:'KB'},
+ {k:"お書きください",f:"おかきください",m:"～ Silakan tulis. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"どうなさいますか？",f:"どうなさいますか？",m:"Apa yang ingin Anda lakukan? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"特徴",f:"とくちょう",m:"Ciri-ciri",p:'KB'},
+ {k:"値段",f:"ねだん",m:"Harga",p:'KB'},
+ {k:"機種",f:"きしゅ",m:"Model; tipe",p:'KB'},
+ {k:"なくす",f:"なくす",m:"Menghilangkan",p:'KK'},
+ {k:"届く",f:"とどく",m:"Diserahkan",p:'KK'},
+ {k:"スマートフォン",f:"スマートフォン",m:"Smartphone; ponsel pintar",p:'KB'},
+ {k:"カバー",f:"カバー",m:"Cover; penutup",p:'KB'},
+ {k:"ついている",f:"ついている",m:"Dengan ～",p:'KB'},
+ {k:"買い物する",f:"かいものする",m:"Berbelanja",p:'KK'},
+ {k:"気づく",f:"きづく",m:"Menyadari",p:'KK'},
+ {k:"そのような",f:"そのような",m:"Seperti itu; demikian",p:'KB'},
+ {k:"つながる",f:"つながる",m:"Tersambung",p:'KK'},
+ {k:"見つかる",f:"みつかる",m:"Menemukan",p:'KK'},
+ {k:"遺失物届",f:"いしつぶつとどけ",m:"Laporan mengenai barang hilang",p:'KB'},
+ {k:"連絡をとる",f:"れんらくをとる",m:"Menghubungi",p:'KK'},
+ {k:"お調べいたします",f:"おしらべいたします",m:"Saya akan memeriksanya. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"落とし物",f:"おとしもの",m:"Barang hilang dan temuan",p:'KB'},
+ {k:"案内",f:"あんない",m:"Informasi",p:'KB'},
+ {k:"呼び出し",f:"よびだし",m:"Panggilan",p:'KB'},
+ {k:"営業時間",f:"えいぎょうじかん",m:"Jam buka; jam operasional",p:'KB'},
+ {k:"セール",f:"セール",m:"Sale; obral",p:'KB'},
+ {k:"延長する",f:"えんちょうする",m:"Memperpanjang",p:'KK'},
+ {k:"営業する",f:"えいぎょうする",m:"Membuka; beroperasi",p:'KK'},
+ {k:"レストラン街",f:"レストランがい",m:"Area restoran",p:'KB'},
+ {k:"開催中",f:"かいさいちゅう",m:"Sedang berlangsung",p:'KB'},
+ {k:"通常どおり",f:"つうじょうどおり",m:"Seperti biasanya",p:'KB'},
+ {k:"くり返しご案内いたします",f:"くりかえしごあんないいたします",m:"Sekali lagi kami informasikan… (ungkapan bentuk sopan)",p:'KB'},
+ {k:"先ほど",f:"さきほど",m:"Tadi; baru saja",p:'KB'},
+ {k:"婦人服",f:"ふじんふく",m:"Pakaian wanita",p:'KB'},
+ {k:"～売り場",f:"～うりば",m:"(cth: area penjualan pakaian wanita) area penjualan",p:'KB'},
+ {k:"お買い上げ",f:"おかいあげ",m:"Pembelian (ungkapan bentuk sopan)",p:'KB'},
+ {k:"恐れ入りますが",f:"おそれいりますが",m:"Saya memohon maaf atas ketidaknyamanannya, akan tetapi ~ (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お呼び出しを申し上げます",f:"およびだしをもうしあげます",m:"Saya ingin memanggil ~. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お伝えしたいことがござ",f:"おつたえしたいことが",m:"Saya mempunyai informasi untuk Anda.",p:'KB'},
+ {k:"ございます",f:"ございます",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"お越しください",f:"おこしください",m:"Silakan pergi / menuju ke ~. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"男性用",f:"だんせいよう",m:"(untuk) laki-laki",p:'KB'},
+ {k:"かぎ",f:"かぎ",m:"Kunci",p:'KB'},
+ {k:"心当たり",f:"こころあたり",m:"Mengetahui; mempunyai informasi",p:'KB'},
+ {k:"インフォメーションカウンター",f:"インフォメーションカウンター",m:"Konter layanan informasi",p:'KB'},
+ {k:"～フェア",f:"～フェア",m:"～ fair; pameran; pekan raya ～ (cth: Hokkaido Fair)",p:'KB'},
+ {k:"海の幸",f:"うみのさち",m:"Boga bahari; makanan / hidangan laut",p:'KB'},
+ {k:"スイーツ",f:"スイーツ",m:"Aneka makanan / camilan manis",p:'KB'},
+ {k:"秋の味覚",f:"あきのみかく",m:"Makanan / masakan khas musim gugur",p:'KB'},
+ {k:"～限り",f:"～かぎり",m:"Hanya ~ (saja) (cth: hanya untuk 1 minggu)",p:'KB'},
+ {k:"札幌",f:"さっぽろ",m:"Sapporo (ibu kota Prefektur Hokkaido, Jepang)",p:'KB'},
+ {k:"機会",f:"きかい",m:"Kesempatan",p:'KB'},
+ {k:"ご来場を心からお待ちし",f:"ごらいじょうをこころから",m:"Kami tunggu kedatangan Anda sekalian.",p:'KB'},
+ {k:"おまちしております",f:"おまちしております",m:"(ungkapan bentuk sopan)",p:'KB'},
+],
+bab12:[
+ {k:"電気製品",f:"でんきせいひん",m:"Alat elektronik; peralatan elektronik",p:'KB'},
+ {k:"冷蔵庫",f:"れいぞうこ",m:"Kulkas; lemari pendingin",p:'KB'},
+ {k:"洗濯機",f:"せんたくき",m:"Mesin cuci",p:'KB'},
+ {k:"電子レンジ",f:"でんしレンジ",m:"Oven gelombang mikro; microwave",p:'KB'},
+ {k:"掃除機",f:"そうじき",m:"Vacuum cleaner; penyedot debu",p:'KB'},
+ {k:"ポット",f:"ポット",m:"Dispenser air panas",p:'KB'},
+ {k:"パソコン",f:"パソコン",m:"Personal computer (PC)",p:'KB'},
+ {k:"タブレット",f:"タブレット",m:"Tablet",p:'KB'},
+ {k:"イヤホン",f:"イヤホン",m:"Earphone; penyuara telinga",p:'KB'},
+ {k:"扇風機",f:"せんぷうき",m:"Kipas angin",p:'KB'},
+ {k:"ストーブ",f:"ストーブ",m:"Penghangat ruangan; pemanas (stove)",p:'KB'},
+ {k:"ヒーター",f:"ヒーター",m:"Pemanas (heater)",p:'KB'},
+ {k:"ドライヤー",f:"ドライヤー",m:"Hair-dryer; pengering rambut",p:'KB'},
+ {k:"アイロン",f:"アイロン",m:"Setrika",p:'KB'},
+ {k:"モデル",f:"モデル",m:"Model; tipe",p:'KB'},
+ {k:"音",f:"おと",m:"Bunyi",p:'KB'},
+ {k:"デザイン",f:"デザイン",m:"Desain",p:'KB'},
+ {k:"商品",f:"しょうひん",m:"Produk",p:'KB'},
+ {k:"送料",f:"そうりょう",m:"Ongkir (ongkos kirim)",p:'KB'},
+ {k:"無料",f:"むりょう",m:"Gratis; bebas biaya",p:'KB'},
+ {k:"お店の人",f:"おみせのひと",m:"Staf toko",p:'KB'},
+ {k:"相談する",f:"そうだんする",m:"Berkonsultasi",p:'KK'},
+ {k:"届く",f:"とどく",m:"Dikirimkan",p:'KK'},
+ {k:"店員",f:"てんいん",m:"Staf toko",p:'KB'},
+ {k:"便利",f:"べんり",m:"Praktis",p:'KS'},
+ {k:"すぐ",f:"すぐ",m:"Langsung; segera",p:'KB'},
+ {k:"見つかる",f:"みつかる",m:"Menemukan",p:'KK'},
+ {k:"高く",f:"たかく",m:"Harga tinggi",p:'KB'},
+ {k:"売れる",f:"うれる",m:"Bisa / dapat menjual",p:'KK'},
+ {k:"手続き",f:"てつづき",m:"Prosedur",p:'KB'},
+ {k:"簡単",f:"かんたん",m:"Mudah / sederhana",p:'KS'},
+ {k:"メーカー",f:"メーカー",m:"Produsen",p:'KB'},
+ {k:"ワイヤレス",f:"ワイヤレス",m:"Wireless; nirkabel",p:'KB'},
+ {k:"手元",f:"てもと",m:"(sampai ke) padaku",p:'KB'},
+ {k:"電気屋",f:"でんきや",m:"Toko elektronik",p:'KB'},
+ {k:"国道沿い",f:"こくどうぞい",m:"Di sepanjang jalur nasional",p:'KS'},
+ {k:"開店",f:"かいてん",m:"Pembukaan toko (obral saat pembukaan toko)",p:'KB'},
+ {k:"車を出す",f:"くるまをだす",m:"Memberi tumpangan",p:'KK'},
+ {k:"フリマサイト",f:"フリマサイト",m:"Situs flea market",p:'KB'},
+ {k:"家電",f:"かでん",m:"Perlengkapan rumah tangga",p:'KB'},
+ {k:"カテゴリー",f:"カテゴリー",m:"Kategori",p:'KB'},
+ {k:"ブランド",f:"ブランド",m:"Merek",p:'KB'},
+ {k:"ホーム",f:"ホーム",m:"Homepage; laman",p:'KB'},
+ {k:"出品",f:"しゅっぴん",m:"Submit; kirim",p:'KB'},
+ {k:"マイページ",f:"マイページ",m:"My page; halaman saya (halaman pribadi pengguna)",p:'KB'},
+ {k:"住まい",f:"すまい",m:"(untuk) rumah",p:'KS'},
+ {k:"絞り込み",f:"しぼりこみ",m:"Filter pencarian (mempersempit lingkup pencarian produk)",p:'KB'},
+ {k:"販売中",f:"はんばいちゅう",m:"Dijual; dalam masa penjualan",p:'KB'},
+ {k:"表示",f:"ひょうじ",m:"Tampilan",p:'KB'},
+ {k:"～順",f:"～じゅん",m:"Urutan ～ (cth: urutan dari harga terendah ke yang tertinggi)",p:'KB'},
+ {k:"価格",f:"かかく",m:"Harga",p:'KB'},
+ {k:"状態",f:"じょうたい",m:"Kondisi",p:'KB'},
+ {k:"配送料",f:"はいそうりょう",m:"Ongkir (ongkos kirim)",p:'KB'},
+ {k:"販売状況",f:"はんばいじょうきょう",m:"Status penjualan",p:'KB'},
+ {k:"指定する",f:"していする",m:"Menentukan; menetapkan",p:'KK'},
+ {k:"取り消し",f:"とりけし",m:"Batal; pembatalan",p:'KB'},
+ {k:"完了",f:"かんりょう",m:"Konfirmasi",p:'KB'},
+ {k:"購入する",f:"こうにゅうする",m:"Membeli",p:'KK'},
+ {k:"傷",f:"きず",m:"Goresan",p:'KB'},
+ {k:"汚れ",f:"よごれ",m:"Bercak; noda",p:'KB'},
+ {k:"～込み",f:"～こみ",m:"Termasuk ～ (cth: termasuk ongkos kirim)",p:'KB'},
+ {k:"～合",f:"～ごう",m:"～ go (satuan volume nasi di Jepang, sekitar 180 ml) (cth: 5,5 go = 990ml)",p:'KB'},
+ {k:"出品する",f:"しゅっぴんする",m:"Melakukan submit barang untuk dijual",p:'KK'},
+ {k:"問題なく",f:"もんだいなく",m:"Tanpa masalah",p:'KB'},
+ {k:"炊ける",f:"たける",m:"Menanak; memasak (cth: menanak nasi)",p:'KK'},
+ {k:"詳細",f:"しょうさい",m:"Detail; rincian",p:'KB'},
+ {k:"～製",f:"～せい",m:"～ buatan (cth: buatan tahun 2018)",p:'KB'},
+ {k:"幅",f:"はば",m:"Lebar",p:'KB'},
+ {k:"奥行",f:"おくゆき",m:"Kedalaman",p:'KB'},
+ {k:"高さ",f:"たかさ",m:"Tinggi",p:'KB'},
+ {k:"重さ",f:"おもさ",m:"Berat",p:'KB'},
+ {k:"説明書",f:"せつめいしょ",m:"Buku petunjuk penggunaan; buku panduan",p:'KB'},
+ {k:"～つき",f:"～つき",m:"Dilengkapi (dengan) ～ (cth: dilengkapi (dengan) buku panduan)",p:'KB'},
+ {k:"購入手続き",f:"こうにゅうてつづき",m:"Prosedur pembelian",p:'KB'},
+ {k:"重さ",f:"おもさ",m:"Berat",p:'KB'},
+ {k:"連続",f:"れんぞく",m:"Terus menerus; tanpa henti",p:'KB'},
+ {k:"充電",f:"じゅうでん",m:"Pengecasan; isi ulang daya",p:'KB'},
+ {k:"しっかり",f:"しっかり",m:"Sepenuhnya; sampai tuntas; secara menyeluruh",p:'KB'},
+ {k:"使用時間",f:"しようじかん",m:"Waktu penggunaan",p:'KB'},
+ {k:"こんな",f:"こんな",m:"Ini / seperti ini (cth: orang (yang) seperti ini)",p:'KB'},
+ {k:"モード",f:"モード",m:"Mode (cth: mode kuat)",p:'KB'},
+ {k:"多機能",f:"たきのう",m:"Multifungsi",p:'KB'},
+ {k:"長持ち",f:"ながもち",m:"Tahan lama; jangka panjang",p:'KB'},
+ {k:"超軽量",f:"ちょうけいりょう",m:"Sangat ringan",p:'KB'},
+ {k:"お手入れ",f:"おていれ",m:"Pemeliharaan; perawatan",p:'KB'},
+ {k:"吸引する",f:"きゅういんする",m:"Menghisap; menyedot",p:'KK'},
+ {k:"吸引力",f:"きゅういんりょく",m:"Daya hisap; daya sedot",p:'KB'},
+ {k:"コンパクト",f:"コンパクト",m:"Terpadu; menyatu dan praktis",p:'KS'},
+ {k:"持ち運ぶ",f:"もちはこぶ",m:"Membawa",p:'KK'},
+ {k:"重視する",f:"じゅうしする",m:"Memprioritaskan",p:'KK'},
+ {k:"すみずみ",f:"すみずみ",m:"(sampai) sudut ke sudut (ruangan)",p:'KB'},
+ {k:"税別",f:"ぜいべつ",m:"Harga belum termasuk pajak",p:'KB'},
+ {k:"広告の品",f:"こうこくのしな",m:"Barang yang diiklankan",p:'KB'},
+ {k:"特別価格",f:"とくべつかかく",m:"Harga spesial",p:'KB'},
+ {k:"コードレス",f:"コードレス",m:"Tanpa kabel; cordless",p:'KB'},
+ {k:"希望小売価格",f:"きぼうこうりかかく",m:"Harga eceran resmi; harga retail yang disarankan",p:'KB'},
+ {k:"軽い",f:"かるい",m:"Ringan",p:'KS'},
+ {k:"動かす",f:"うごかす",m:"Memindahkan; menggerakkan",p:'KK'},
+ {k:"持つ",f:"もつ",m:"Membawa",p:'KK'},
+ {k:"比べる",f:"くらべる",m:"Membandingkan",p:'KK'},
+ {k:"パワフル",f:"パワフル",m:"Powerful; kuat",p:'KS'},
+ {k:"機能",f:"きのう",m:"Fitur; fungsi",p:'KB'},
+ {k:"つく",f:"つく",m:"Memiliki; menyertakan; termasuk (cth: fungsi yang disertakan / memiliki fungsi)",p:'KK'},
+ {k:"カーペット",f:"カーペット",m:"Karpet",p:'KB'},
+ {k:"畳",f:"たたみ",m:"Tatami",p:'KB'},
+ {k:"エコモード",f:"エコモード",m:"Eco mode; mode hemat daya",p:'KB'},
+ {k:"ですから",f:"ですから",m:"Karena itu",p:'KB'},
+ {k:"～に合わせて",f:"～にあわせて",m:"Menyesuaikan ～ (cth: menyesuaikan dengan ruangan)",p:'KB'},
+ {k:"複雑",f:"ふくざつ",m:"Rumit",p:'KS'},
+ {k:"重い",f:"おもい",m:"Berat",p:'KS'},
+ {k:"予算オーバー",f:"よさんオーバー",m:"Melebihi anggaran",p:'KB'},
+ {k:"シンプル",f:"シンプル",m:"Simpel; sederhana",p:'KS'},
+ {k:"消費税",f:"しょうひぜい",m:"Pajak konsumen; pajak konsumsi",p:'KB'},
+ {k:"～抜き",f:"～ぬき",m:"Tanpa ～ (cth: tanpa pajak konsumen)",p:'KB'},
+ {k:"～引き",f:"～びき",m:"Diskon ～ (cth: diskon sebesar 2.000 yen)",p:'KB'},
+ {k:"配送",f:"はいそう",m:"Pengiriman",p:'KB'},
+ {k:"合わせて",f:"あわせて",m:"Digabungkan",p:'KB'},
+ {k:"ポイント",f:"ポイント",m:"Poin",p:'KB'},
+ {k:"貯まる",f:"たまる",m:"Terakumulasi; terkumpul",p:'KK'},
+ {k:"変わる",f:"かわる",m:"Berubah",p:'KK'},
+ {k:"安くなりますか？",f:"やすくなりますか？",m:"Bisakah Anda menurunkan harganya?",p:'KB'},
+ {k:"おいくらぐらいでお探し",f:"おいくらぐらいでおさがしです",m:"Berapakah anggaran Anda?",p:'KB'},
+ {k:"か？",f:"か？",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"どちらにお住まいですか？",f:"どちらにおすまいですか？",m:"Di manakah Anda tinggal? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"ご利用になりますか？",f:"ごりようになりますか？",m:"Apakah Anda akan menggunakan ～ ? (ungkapan bentuk sopan)",p:'KB'},
+],
+bab13:[
+ {k:"公共",f:"こうきょう",m:"Publik",p:'KB'},
+ {k:"施設",f:"しせつ",m:"Fasilitas",p:'KB'},
+ {k:"図書館",f:"としょかん",m:"Perpustakaan",p:'KB'},
+ {k:"美術館",f:"びじゅつかん",m:"Museum seni",p:'KB'},
+ {k:"民俗資料館",f:"みんぞくしりょうかん",m:"Museum rakyat",p:'KB'},
+ {k:"体育館",f:"たいいくかん",m:"Gimnasium; gedung olahraga",p:'KB'},
+ {k:"スポーツジム",f:"スポーツジム",m:"Pusat kebugaran",p:'KB'},
+ {k:"お風呂",f:"おふろ",m:"Ruang berendam",p:'KB'},
+ {k:"入浴施設",f:"にゅうよくしせつ",m:"Ruang mandi",p:'KB'},
+ {k:"インフォメーションコーナー",f:"インフォメーションコーナー",m:"Pojok / ruang layanan informasi",p:'KB'},
+ {k:"プラネタリウム",f:"プラネタリウム",m:"Planetarium",p:'KB'},
+ {k:"物産コーナー",f:"ぶっさんコーナー",m:"Pojok atau ruang berbagai produk / barang jadi",p:'KB'},
+ {k:"市内",f:"しない",m:"Dalam kota",p:'KB'},
+ {k:"パンフレット",f:"パンフレット",m:"Pamflet",p:'KB'},
+ {k:"外国語",f:"がいこくご",m:"Bahasa asing",p:'KB'},
+ {k:"CD",f:"シーディー",m:"CD",p:'KB'},
+ {k:"昔",f:"むかし",m:"Dahulu; masa lalu",p:'KB'},
+ {k:"道具",f:"どうぐ",m:"Peralatan; alat",p:'KB'},
+ {k:"文化施設",f:"ぶんかしせつ",m:"Pusat kebudayaan",p:'KB'},
+ {k:"建てる",f:"たてる",m:"Mendirikan",p:'KK'},
+ {k:"メイン",f:"メイン",m:"Utama",p:'KB'},
+ {k:"PC",f:"ピーシー",m:"Personal computer",p:'KB'},
+ {k:"自由に",f:"じゆうに",m:"Dengan bebas",p:'KB'},
+ {k:"展示する",f:"てんじする",m:"Memamerkan",p:'KK'},
+ {k:"歴史",f:"れきし",m:"Sejarah",p:'KB'},
+ {k:"利用する",f:"りようする",m:"Menggunakan",p:'KK'},
+ {k:"室内用",f:"しつないよう",m:"Untuk (penggunaan) dalam ruangan",p:'KB'},
+ {k:"オリエンテーション",f:"オリエンテーション",m:"Orientasi; pengenalan",p:'KB'},
+ {k:"延長料金",f:"えんちょうりょうきん",m:"Biaya perpanjangan",p:'KB'},
+ {k:"～につき",f:"～につき",m:"Untuk setiap ～ (cth: untuk setiap 30 menit)",p:'KB'},
+ {k:"かかる",f:"かかる",m:"(dikenakan) biaya; biayanya",p:'KK'},
+ {k:"下りる",f:"おりる",m:"Turun",p:'KK'},
+ {k:"シューズ",f:"シューズ",m:"Sepatu",p:'KB'},
+ {k:"マシン",f:"マシン",m:"Mesin",p:'KB'},
+ {k:"トレーナー",f:"トレーナー",m:"Pelatih; trainer",p:'KB'},
+ {k:"～ほど",f:"～ほど",m:"～ sekitar (cth: sekitar 30 menit)",p:'KB'},
+ {k:"受ける",f:"うける",m:"Menerima",p:'KK'},
+ {k:"声をかける",f:"こえをかける",m:"Menyapa; berbicara kepada",p:'KK'},
+ {k:"ご了承ください",f:"ごりょうしょうください",m:"Mohon dicatat; Mohon dipahami (ungkapan bentuk sopan)",p:'KS'},
+ {k:"受けていただきます",f:"うけていただきます",m:"Kami mohon Anda untuk bersedia mengikuti ～ (ungkapan bentuk sopan)",p:'KB'},
+ {k:"絵",f:"え",m:"Lukisan",p:'KB'},
+ {k:"さまざま",f:"さまざま",m:"Berbagai macam",p:'KS'},
+ {k:"彫刻",f:"ちょうこく",m:"Ukiran",p:'KB'},
+ {k:"画家",f:"がか",m:"Pelukis",p:'KB'},
+ {k:"～を中心に",f:"～をちゅうしんに",m:"Utamanya",p:'KB'},
+ {k:"セット券",f:"セットけん",m:"Tiket terusan",p:'KB'},
+ {k:"フラッシュ",f:"フラッシュ",m:"Lampu kilat; blitz",p:'KB'},
+ {k:"券売機",f:"けんばいき",m:"Mesin penjualan tiket",p:'KB'},
+ {k:"休憩室",f:"きゅうけいしつ",m:"Lounge; ruang santai",p:'KB'},
+ {k:"ついている",f:"ついている",m:"Disertai dengan ～; termasuk ～",p:'KB'},
+ {k:"（タオルがついている）",f:"（タオルがついている）",m:"(cth: termasuk handuk)",p:'KB'},
+ {k:"IT",f:"アイティー",m:"IT; teknologi informasi",p:'KB'},
+ {k:"利用者カード",f:"りようしゃカード",m:"Kartu pengguna",p:'KB'},
+ {k:"プリントアウト",f:"プリントアウト",m:"Print-out; hasil cetak",p:'KB'},
+ {k:"インターネット",f:"インターネット",m:"Internet",p:'KB'},
+ {k:"プリンター",f:"プリンター",m:"Printer; mesin cetak",p:'KB'},
+ {k:"空いている",f:"あいている",m:"Kosong",p:'KB'},
+ {k:"確認する",f:"かくにんする",m:"Mengecek; memastikan",p:'KK'},
+ {k:"在留カード",f:"ざいりゅうカード",m:"Kartu izin tinggal",p:'KB'},
+ {k:"何冊",f:"なんさつ",m:"Berapa banyak (jilid) buku",p:'KB'},
+ {k:"～冊",f:"～さつ",m:"～ jilid (buku) (cth: 10 jilid buku)",p:'KB'},
+ {k:"合わせて",f:"あわせて",m:"Secara keseluruhan; total",p:'KB'},
+ {k:"～点",f:"～てん",m:"～ item; ～ buah (barang) (cth: 3 buah barang)",p:'KB'},
+ {k:"飲食禁止",f:"いんしょくきんし",m:"Larangan makan dan minum",p:'KB'},
+ {k:"返す",f:"かえす",m:"Mengembalikan",p:'KK'},
+ {k:"閉まる",f:"しまる",m:"Tutup",p:'KK'},
+ {k:"返却ポスト",f:"へんきゃくポスト",m:"Kotak pengembalian",p:'KB'},
+ {k:"開く",f:"あく",m:"Buka",p:'KK'},
+ {k:"返却",f:"へんきゃく",m:"Pengembalian",p:'KB'},
+ {k:"お読みください",f:"およみください",m:"Silakan baca. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"延ばす",f:"のばす",m:"Memperpanjang",p:'KK'},
+ {k:"～のうち",f:"～のうち",m:"～ (cth: dalam 15 buah barang) dalam",p:'KB'},
+ {k:"カセットテープ",f:"カセットテープ",m:"Kaset",p:'KB'},
+ {k:"～禁止",f:"～きんし",m:"～ larangan (untuk) (cth: larangan (untuk) mengambil foto)",p:'KB'},
+ {k:"立入禁止",f:"たちいりきんし",m:"Larangan masuk",p:'KB'},
+ {k:"関係者",f:"かんけいしゃ",m:"Staf / personel yang berwenang",p:'KB'},
+ {k:"～以外",f:"～いがい",m:"Kecuali ～ (cth: kecuali staf / personel",p:'KB'},
+ {k:"預ける",f:"あずける",m:"Menitipkan; menyimpan",p:'KK'},
+ {k:"お預けください",f:"おあずけください",m:"Silakan menyimpan ～. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"館内",f:"かんない",m:"(di)dalam gedung",p:'KB'},
+ {k:"通話",f:"つうわ",m:"Panggilan telepon",p:'KB'},
+ {k:"ご遠慮ください",f:"ごえんりょください",m:"Mohon (menahan diri) untuk tidak ～. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"お控えください",f:"おひかえください",m:"Mohon (menahan diri) untuk tidak ～. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"入館",f:"にゅうかん",m:"Masuk ke gedung / ruangan; memasuki suatu tempat",p:'KB'},
+ {k:"入れ墨",f:"いれずみ",m:"Tato khas Jepang",p:'KB'},
+ {k:"タトゥー",f:"タトゥー",m:"Tato",p:'KB'},
+ {k:"シール",f:"シール",m:"Stiker tato",p:'KB'},
+ {k:"ボディペイント",f:"ボディペイント",m:"Body paint; lukis tubuh",p:'KB'},
+ {k:"お断りしています",f:"おことわりしています",m:"Kami menolak ～. (ungkapan bentuk sopan)",p:'KB'},
+],
+bab14:[
+ {k:"サービス",f:"サービス",m:"Layanan",p:'KB'},
+ {k:"郵便局",f:"ゆうびんきょく",m:"Kantor pos",p:'KB'},
+ {k:"不動産屋",f:"ふどうさんや",m:"Agen real estat",p:'KB'},
+ {k:"理髪店",f:"りはつてん",m:"Barbershop; layanan pangkas rambut",p:'KB'},
+ {k:"床屋",f:"とこや",m:"Barbershop; layanan pangkas rambut",p:'KB'},
+ {k:"美容院",f:"びよういん",m:"Salon kecantikan",p:'KB'},
+ {k:"クリーニング店",f:"クリーニングてん",m:"Layanan dry cleaning (cuci kering)",p:'KB'},
+ {k:"コインランドリー",f:"コインランドリー",m:"Layanan laundry koin",p:'KB'},
+ {k:"中古車店",f:"ちゅうこしゃてん",m:"Pusat mobil bekas",p:'KB'},
+ {k:"自転車店",f:"じてんしゃてん",m:"Toko sepeda",p:'KB'},
+ {k:"携帯ショップ",f:"けいたいショップ",m:"Pusat penjualan ponsel / handphone",p:'KB'},
+ {k:"スマホ修理店",f:"スマホしゅうりてん",m:"Layanan perbaikan ponsel",p:'KB'},
+ {k:"リサイクルショップ",f:"リサイクルショップ",m:"Layanan recycle / daur ulang",p:'KB'},
+ {k:"クリーニング",f:"クリーニング",m:"Layanan laundry dry cleaning (cuci kering)",p:'KB'},
+ {k:"シミ",f:"シミ",m:"Noda",p:'KB'},
+ {k:"落ちる",f:"おちる",m:"Hilang (cth: kotorannya hilang)",p:'KK'},
+ {k:"シミ抜き",f:"シミぬき",m:"Menghilangkan noda",p:'KB'},
+ {k:"別料金",f:"べつりょうきん",m:"Biaya tambahan",p:'KB'},
+ {k:"お渡し",f:"おわたし",m:"Penyerahan; pengembalian (ungkapan bentuk sopan)",p:'KB'},
+ {k:"空気",f:"くうき",m:"Angin; udara",p:'KB'},
+ {k:"空気入れ",f:"くうきいれ",m:"Pompa (untuk) mengisi angin",p:'KB'},
+ {k:"入る",f:"はいる",m:"(cth: angin / udaranya masuk) masuk",p:'KK'},
+ {k:"タイヤ",f:"タイヤ",m:"Ban",p:'KB'},
+ {k:"キャップ",f:"キャップ",m:"Penutup",p:'KB'},
+ {k:"はずす",f:"はずす",m:"Melepas",p:'KK'},
+ {k:"はさむ",f:"はさむ",m:"Menjepit",p:'KK'},
+ {k:"かぶせる",f:"かぶせる",m:"Menutup",p:'KK'},
+ {k:"ついでに",f:"ついでに",m:"Sekalian; sekaligus",p:'KB'},
+ {k:"油を差す",f:"あぶらをさす",m:"Meminyaki; mengolesi minyak",p:'KK'},
+ {k:"どれどれ",f:"どれどれ",m:"Biar saya lihat / cek.",p:'KB'},
+ {k:"宅配便",f:"たくはいびん",m:"Jasa layanan pengiriman paket",p:'KB'},
+ {k:"着払い",f:"ちゃくばらい",m:"Cash on delivery (COD); pembayaran oleh penerima paket",p:'KS'},
+ {k:"元払い",f:"もとばらい",m:"Pembayaran di muka; pembayaran oleh pengirim paket",p:'KS'},
+ {k:"受け取る",f:"うけとる",m:"Menerima",p:'KK'},
+ {k:"伝票",f:"でんぴょう",m:"Slip pengiriman",p:'KB'},
+ {k:"指定",f:"してい",m:"Tertentu",p:'KB'},
+ {k:"午前中",f:"ごぜんちゅう",m:"Pagi hari",p:'KB'},
+ {k:"最も",f:"もっとも",m:"Paling",p:'KB'},
+ {k:"お届け",f:"おとどけ",m:"Pengiriman (ungkapan bentuk sopan)",p:'KB'},
+ {k:"お預かりします",f:"おあずかりします",m:"Kami terima paket Anda. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"表示する",f:"ひょうじする",m:"Menampilkan",p:'KK'},
+ {k:"キャッシュカード",f:"キャッシュカード",m:"Kartu ATM; kartu debet",p:'KB'},
+ {k:"お引き出し",f:"おひきだし",m:"Penarikan uang (ungkapan bentuk sopan)",p:'KB'},
+ {k:"次に",f:"つぎに",m:"Selanjutnya",p:'KB'},
+ {k:"暗証番号",f:"あんしょうばんごう",m:"Personal identification number (PIN)",p:'KB'},
+ {k:"入力する",f:"にゅうりょくする",m:"Menginput",p:'KK'},
+ {k:"～桁",f:"～けた",m:"～ digit (cth: 4 digit)",p:'KB'},
+ {k:"緑色",f:"みどりいろ",m:"(berwarna) hijau",p:'KB'},
+ {k:"金額",f:"きんがく",m:"Besaran; nominal uang",p:'KB'},
+ {k:"～円札",f:"～えんさつ",m:"Uang pecahan ～ yen (cth: uang pecahan 10.000 yen)",p:'KB'},
+ {k:"一部",f:"いちぶ",m:"Sebagian",p:'KB'},
+ {k:"両替する",f:"りょうがえする",m:"Menukar / melakukan penukaran (pecahan uang)",p:'KK'},
+ {k:"利用明細／ご利用明細",f:"りようめいさい",m:"Setruk transaksi",p:'KB'},
+ {k:"紙幣",f:"しへい",m:"Uang kertas",p:'KB'},
+ {k:"お取りください",f:"おとりください",m:"Silakan ambil ～. (ungkapan bentuk sopan)",p:'KS'},
+ {k:"ご利用ありがとうござい",f:"ごりようありがとうござい",m:"Terima kasih telah menggunakan layanan kami.",p:'KS'},
+ {k:"ました",f:"ました",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"ポストに入れる",f:"ポストにいれる",m:"Mengirim via pos",p:'KK'},
+ {k:"インターネット",f:"インターネット",m:"Internet",p:'KB'},
+ {k:"申し込む",f:"もうしこむ",m:"Mendaftar",p:'KK'},
+ {k:"郵便物",f:"ゆうびんぶつ",m:"Paket",p:'KB'},
+ {k:"不在／ご不在",f:"ふざい",m:"Tidak berada di tempat",p:'KB'},
+ {k:"窓口",f:"まどぐち",m:"Loket; konter",p:'KB'},
+ {k:"再配達",f:"さいはいたつ",m:"Pengiriman ulang",p:'KB'},
+ {k:"自動",f:"じどう",m:"Otomatis (cth: penerimaan otomatis 24 jam)",p:'KB'},
+ {k:"連絡票",f:"れんらくひょう",m:"Pemberitahuan",p:'KB'},
+ {k:"受取り／お受け取り",f:"うけとり",m:"Penerimaan",p:'KB'},
+ {k:"印鑑",f:"いんかん",m:"Inkan (cap / stempel nama khas Jepang)",p:'KB'},
+ {k:"免許証",f:"めんきょしょう",m:"Surat izin mengemudi",p:'KB'},
+ {k:"保険証",f:"ほけんしょう",m:"Kartu asuransi kesehatan",p:'KB'},
+ {k:"マイナンバーカード",f:"マイナンバーカード",m:"Kartu nomor individu",p:'KB'},
+ {k:"当日",f:"とうじつ",m:"Hari yang sama; hari tersebut (cth: pengiriman di hari yang sama)",p:'KB'},
+ {k:"携帯電話",f:"けいたいでんわ",m:"Nomor ponsel / handphone",p:'KB'},
+ {k:"固定電話",f:"こていでんわ",m:"Telepon rumah",p:'KB'},
+ {k:"郵便番号",f:"ゆうびんばんごう",m:"Kode pos",p:'KB'},
+ {k:"種類番号",f:"しゅるいばんごう",m:"Nomor jenis surat",p:'KB'},
+ {k:"国際",f:"こくさい",m:"Internasional",p:'KB'},
+ {k:"書留",f:"かきとめ",m:"Surat tercatat",p:'KB'},
+ {k:"小包",f:"こづつみ",m:"Paket ukuran kecil",p:'KB'},
+ {k:"お知らせ番号",f:"おしらせばんごう",m:"Nomor pemberitahuan",p:'KB'},
+ {k:"配達日",f:"はいたつび",m:"Tanggal pengiriman",p:'KB'},
+ {k:"保管期限",f:"ほかんきげん",m:"Batas waktu penyimpanan",p:'KB'},
+ {k:"勤め先／お勤め先",f:"つとめさき",m:"Alamat tempat kerja",p:'KB'},
+ {k:"近所",f:"きんじょ",m:"Tetangga",p:'KB'},
+ {k:"配達希望日",f:"はいたつきぼうび",m:"Tanggal pengiriman yang diminta / diinginkan",p:'KB'},
+ {k:"配達先",f:"はいたつさき",m:"Tujuan pengiriman",p:'KB'},
+ {k:"どのように",f:"どのように",m:"Bagaimana",p:'KB'},
+ {k:"全体的に",f:"ぜんたいてきに",m:"Secara keseluruhan",p:'KB'},
+ {k:"～mm",f:"～ミリ",m:"～ milimeter",p:'KB'},
+ {k:"まわり",f:"まわり",m:"Sekitarnya",p:'KB'},
+ {k:"バリカン",f:"バリカン",m:"Mesin pencukur rambut (hair clippers)",p:'KB'},
+ {k:"ひげ剃り",f:"ひげそり",m:"Cukur jenggot",p:'KB'},
+ {k:"鏡",f:"かがみ",m:"Cermin",p:'KB'},
+ {k:"後ろのほう",f:"うしろのほう",m:"Bagian belakang",p:'KB'},
+ {k:"こんな感じ",f:"こんなかんじ",m:"Seperti ini",p:'KB'},
+ {k:"洗面台",f:"せんめんだい",m:"Wastafel; bak cuci rambut",p:'KB'},
+ {k:"洗う",f:"あらう",m:"Membasuh; mencuci",p:'KK'},
+ {k:"カット",f:"カット",m:"Potong rambut",p:'KB'},
+ {k:"預かる",f:"あずかる",m:"Menerima",p:'KK'},
+ {k:"お返し",f:"おかえし",m:"Kembalian (ungkapan bentuk sopan)",p:'KB'},
+ {k:"なさいますか？",f:"なさいますか？",m:"Apakah Anda ingin ～ ? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"～円からお預かりします",f:"～えんからおあずかりします",m:"～ Saya terima sebesar yen. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"どのような",f:"どのような",m:"Bagaimana",p:'KB'},
+ {k:"長さ",f:"ながさ",m:"Panjangnya",p:'KB'},
+ {k:"シャンプー台",f:"シャンプーだい",m:"Tempat mencuci rambut; tempat sampo",p:'KB'},
+ {k:"前髪",f:"まえがみ",m:"Poni",p:'KB'},
+ {k:"お待ちしておりました",f:"おまちしておりました",m:"Kami telah menunggu kedatangan Anda. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"かゆいところはございま",f:"かゆいところはございませ",m:"Apakah tidak ada bagian yang gatal?",p:'KB'},
+ {k:"んか？",f:"んか？",m:"(ungkapan bentuk sopan)",p:'KB'},
+ {k:"どうでしょうか？",f:"どうでしょうか？",m:"Bagaimana menurut Anda? (ungkapan bentuk sopan)",p:'KB'},
+ {k:"カラー",f:"カラー",m:"Pewarnaan",p:'KB'},
+ {k:"パーマ",f:"パーマ",m:"Pengeritingan",p:'KB'},
+ {k:"トリートメント",f:"トリートメント",m:"Perawatan",p:'KB'},
+ {k:"外国人",f:"がいこくじん",m:"Penduduk asing; orang asing",p:'KB'},
+ {k:"外国語",f:"がいこくご",m:"Bahasa asing",p:'KB'},
+ {k:"～による",f:"～による",m:"Dengan ～ / menggunakan ～ (cth: konsultasi menggunakan bahasa asing)",p:'KB'},
+ {k:"相談",f:"そうだん",m:"Konsultasi",p:'KB'},
+ {k:"翻訳",f:"ほんやく",m:"Terjemahan",p:'KB'},
+ {k:"通訳",f:"つうやく",m:"Penerjemahan lisan",p:'KB'},
+ {k:"健康診断",f:"けんこうしんだん",m:"Pemeriksaan kesehatan",p:'KB'},
+ {k:"生活ガイドブック",f:"せいかつガイドブック",m:"Buku pedoman kehidupan",p:'KB'},
+ {k:"日本語教室",f:"にほんごきょうしつ",m:"Kelas bahasa Jepang",p:'KB'},
+ {k:"交流イベント",f:"こうりゅうイベント",m:"Acara / kegiatan sosial",p:'KB'},
+ {k:"質問",f:"しつもん",m:"Pertanyaan",p:'KB'},
+ {k:"ビザ",f:"ビザ",m:"Visa",p:'KB'},
+ {k:"ほかにも",f:"ほかにも",m:"Ada juga / selain itu",p:'KB'},
+ {k:"情報",f:"じょうほう",m:"Informasi",p:'KB'},
+ {k:"けが",f:"けが",m:"Luka",p:'KB'},
+ {k:"有料",f:"ゆうりょう",m:"Berbayar",p:'KB'},
+ {k:"助かる",f:"たすかる",m:"Terbantu; tertolong",p:'KK'},
+ {k:"楽に",f:"らくに",m:"Dengan mudah",p:'KB'},
+ {k:"暮らす",f:"くらす",m:"Hidup; tinggal",p:'KK'},
+ {k:"センター",f:"センター",m:"Pusat",p:'KB'},
+ {k:"入門",f:"にゅうもん",m:"Tingkat pemula",p:'KB'},
+ {k:"上級",f:"じょうきゅう",m:"Tingkat mahir",p:'KB'},
+ {k:"個人レッスン",f:"こじんレッスン",m:"Kelas privat",p:'KB'},
+],
+bab15:[
+ {k:"消す",f:"けす",m:"Mematikan (cth: mematikan lampu)",p:'KK'},
+ {k:"忘れずに",f:"わすれずに",m:"Jangan lupa (untuk) ～",p:'KB'},
+ {k:"クールビズ",f:"クールビズ",m:"“Cool Biz” (gerakan Cool Business di Jepang)",p:'KB'},
+ {k:"実施中",f:"じっしちゅう",m:"Sedang berlangsung",p:'KB'},
+ {k:"軽装",f:"けいそう",m:"Pakaian ringan dan tipis",p:'KB'},
+ {k:"ノー～",f:"ノー～",m:"～ tanpa (cth: tanpa dasi)",p:'KB'},
+ {k:"設定",f:"せってい",m:"Pengaturan; setelan",p:'KB'},
+ {k:"ご理解とご協力のほど、",f:"ごりかいとごきょうりょくのほ",m:"Kami mohon pengertian dan kerja sama Anda",p:'KB'},
+ {k:"ど、よろしくおねがいします",f:"ど、よろしくおねがいします",m:"Sekalian. (ungkapan bentuk sopan)",p:'KB'},
+ {k:"節電",f:"せつでん",m:"Penghematan listrik",p:'KB'},
+ {k:"両面印刷",f:"りょうめんいんさつ",m:"Pencetakan dua sisi",p:'KB'},
+ {k:"マイバッグ",f:"マイバッグ",m:"My bag (tas belanja ramah lingkungan)",p:'KB'},
+ {k:"レジ袋",f:"レジぶくろ",m:"Tas belanja plastik sekali pakai",p:'KB'},
+ {k:"有料化",f:"ゆうりょうか",m:"Dikenakan biaya; berbayar",p:'KB'},
+ {k:"持参",f:"じさん",m:"Membawa",p:'KB'},
+ {k:"環境",f:"かんきょう",m:"Lingkungan",p:'KB'},
+ {k:"エコ",f:"エコ",m:"Ramah lingkungan",p:'KB'},
+ {k:"節電する",f:"せつでんする",m:"Menghemat listrik",p:'KK'},
+ {k:"節水する",f:"せっすいする",m:"Menghemat air",p:'KK'},
+ {k:"紙",f:"かみ",m:"Kertas",p:'KB'},
+ {k:"節約する",f:"せつやくする",m:"Menghemat; melakukan penghematan",p:'KK'},
+ {k:"リサイクルする",f:"リサイクルする",m:"Mendaur ulang",p:'KK'},
+ {k:"ごみ",f:"ごみ",m:"Sampah",p:'KB'},
+ {k:"分別する",f:"ぶんべつする",m:"Memilah",p:'KK'},
+ {k:"減らす",f:"へらす",m:"Mengurangi",p:'KK'},
+ {k:"設定温度",f:"せっていおんど",m:"Pengaturan / setelan temperatur",p:'KB'},
+ {k:"下げる",f:"さげる",m:"Menurunkan",p:'KK'},
+ {k:"もったいない",f:"もったいない",m:"Mubazir",p:'KS'},
+ {k:"缶",f:"かん",m:"Kaleng",p:'KB'},
+ {k:"まとめる",f:"まとめる",m:"Dikumpulkan; mengumpulkan",p:'KK'},
+ {k:"出す",f:"だす",m:"Mengalirkan (air); membuka (keran)",p:'KK'},
+ {k:"洗剤",f:"せんざい",m:"Detergen; sabun pembersih",p:'KB'},
+ {k:"止める",f:"とめる",m:"Mematikan (air); menutup (keran)",p:'KK'},
+ {k:"すすぐ",f:"すすぐ",m:"Membilas",p:'KK'},
+ {k:"ストロー",f:"ストロー",m:"Sedotan",p:'KB'},
+ {k:"マイ～",f:"マイ～",m:"My ～; ～ pribadi (cth: sedotan pribadi)",p:'KB'},
+ {k:"持ち歩く",f:"もちあるく",m:"Membawa",p:'KK'},
+ {k:"マイボトル",f:"マイボトル",m:"Botol pribadi",p:'KB'},
+ {k:"ペットボトル",f:"ペットボトル",m:"Botol plastik",p:'KB'},
+ {k:"資源",f:"しげん",m:"Dapat didaur ulang",p:'KB'},
+ {k:"分け方",f:"わけかた",m:"Cara memilah / memisahkan",p:'KB'},
+ {k:"出し方",f:"だしかた",m:"Cara membuang",p:'KB'},
+ {k:"集積所",f:"しゅうせきじょ",m:"Titik pengumpulan",p:'KB'},
+ {k:"収集日",f:"しゅうしゅうび",m:"Hari pengumpulan",p:'KB'},
+ {k:"資源ごみ",f:"しげんごみ",m:"Sampah yang dapat didaur ulang",p:'KB'},
+ {k:"～しゅるい",f:"～しゅるい",m:"～ jenis (cth: 4 jenis)",p:'KB'},
+ {k:"分ける",f:"わける",m:"Memilah; membagi",p:'KK'},
+ {k:"ひも",f:"ひも",m:"Tali",p:'KB'},
+ {k:"しばる",f:"しばる",m:"Mengikat",p:'KK'},
+ {k:"新聞",f:"しんぶん",m:"Koran",p:'KB'},
+ {k:"雑誌",f:"ざっし",m:"Majalah",p:'KB'},
+ {k:"中身",f:"なかみ",m:"Isi",p:'KB'},
+ {k:"びん",f:"びん",m:"Botol kaca",p:'KB'},
+ {k:"キャップ",f:"キャップ",m:"Tutup botol plastik",p:'KB'},
+ {k:"ラベル",f:"ラベル",m:"Label",p:'KB'},
+ {k:"つぶす",f:"つぶす",m:"Menghancurkan",p:'KK'},
+ {k:"紙パック",f:"かみパック",m:"Kemasan minuman karton",p:'KB'},
+ {k:"切り開く",f:"きりひらく",m:"Memotong terbuka",p:'KK'},
+ {k:"食品トレイ",f:"しょくひんトレイ",m:"Nampan makanan",p:'KB'},
+ {k:"可燃ごみ",f:"かねんごみ",m:"Sampah yang dapat dibakar",p:'KB'},
+ {k:"生ごみ",f:"なまごみ",m:"Sampah sisa makanan",p:'KB'},
+ {k:"水を切る",f:"みずをきる",m:"Dikeringkan; mengeringkan",p:'KK'},
+ {k:"布",f:"ぬの",m:"Kain",p:'KB'},
+ {k:"しみこませる",f:"しみこませる",m:"Dibiarkan terendam; diserap",p:'KK'},
+ {k:"固める",f:"かためる",m:"Dipadatkan",p:'KK'},
+ {k:"プラスチック",f:"プラスチック",m:"Plastik",p:'KB'},
+ {k:"再生する",f:"さいせいする",m:"Mendaur ulang",p:'KK'},
+ {k:"少量",f:"しょうりょう",m:"Jumlah kecil",p:'KB'},
+ {k:"植木",f:"うえき",m:"Tanaman",p:'KB'},
+ {k:"枝",f:"えだ",m:"Cabang",p:'KB'},
+ {k:"葉",f:"は",m:"Daun",p:'KB'},
+ {k:"使い古し",f:"つかいふるし",m:"Bekas",p:'KB'},
+ {k:"凝固剤",f:"ぎょうこざい",m:"Zat pemadat (sering digunakan untuk memadatkan minyak goreng bekas sebelum dibuang)",p:'KB'},
+ {k:"ビニール",f:"ビニール",m:"Vinil",p:'KB'},
+ {k:"～類",f:"～るい",m:"Berjenis ～ (cth: berjenis vinil)",p:'KB'},
+ {k:"ラップ",f:"ラップ",m:"Plastik pembungkus",p:'KB'},
+ {k:"容器",f:"ようき",m:"Wadah",p:'KB'},
+ {k:"発泡スチロール",f:"はっぽうスチロール",m:"Styrofoam / gabus sintetis",p:'KB'},
+ {k:"不燃ごみ",f:"ふねんごみ",m:"Sampah yang tidak dapat dibakar",p:'KB'},
+ {k:"割れる",f:"われる",m:"Pecah",p:'KK'},
+ {k:"包む",f:"つつむ",m:"Membungkus",p:'KK'},
+ {k:"危険",f:"きけん",m:"Berbahaya; bahaya",p:'KB'},
+ {k:"乾電池",f:"かんでんち",m:"Baterai kering",p:'KB'},
+ {k:"刃物",f:"はもの",m:"Pisau; benda tajam",p:'KB'},
+ {k:"ガラス",f:"ガラス",m:"Gelas",p:'KB'},
+ {k:"陶磁器",f:"とうじき",m:"Porselen; keramik",p:'KB'},
+ {k:"電球",f:"でんきゅう",m:"Bohlam",p:'KB'},
+ {k:"アルミ製品",f:"アルミせいひん",m:"Benda berbahan alumunium",p:'KB'},
+ {k:"金属",f:"きんぞく",m:"Logam",p:'KB'},
+ {k:"家電製品",f:"かでんせいひん",m:"Peralatan elektronik rumah tangga",p:'KB'},
+ {k:"粗大ごみ",f:"そだいごみ",m:"Sampah ukuran besar",p:'KB'},
+ {k:"家具",f:"かぐ",m:"Furnitur; mebel; perabot rumah tangga",p:'KB'},
+ {k:"寝具",f:"しんぐ",m:"Peralatan untuk tidur",p:'KB'},
+ {k:"牛乳パック",f:"ぎゅうにゅうパック",m:"Karton kemasan susu",p:'KB'},
+ {k:"使い切る",f:"つかいきる",m:"Menghabiskan; habis digunakan",p:'KK'},
+ {k:"燃える",f:"もえる",m:"Dapat dibakar (cth: sampah yang dapat dibakar)",p:'KK'},
+ {k:"取る",f:"とる",m:"Dilepas",p:'KK'},
+ {k:"出す",f:"だす",m:"Membuang (cth: membuang sampah)",p:'KK'},
+ {k:"粗大ごみ受付センター",f:"そだいごみうけつけセンター",m:"Pusat penerimaan sampah ukuran besar",p:'KB'},
+ {k:"大きさ",f:"おおきさ",m:"Ukuran; besarnya",p:'KB'},
+ {k:"シール",f:"シール",m:"Stiker",p:'KB'},
+ {k:"貼る",f:"はる",m:"Menempel",p:'KK'},
+],
+bab16:[
+ {k:"災害",f:"さいがい",m:"Bencana",p:'KB'},
+ {k:"台風",f:"たいふう",m:"Angin topan",p:'KB'},
+ {k:"地震",f:"じしん",m:"Gempa bumi",p:'KB'},
+ {k:"火事",f:"かじ",m:"Kebakaran",p:'KB'},
+ {k:"火災",f:"かさい",m:"Kebakaran",p:'KB'},
+ {k:"大雪",f:"おおゆき",m:"Salju lebat",p:'KB'},
+ {k:"津波",f:"つなみ",m:"Tsunami",p:'KB'},
+ {k:"起こる",f:"おこる",m:"Terjadi (cth: terjadi gempa bumi)",p:'KK'},
+ {k:"揺れる",f:"ゆれる",m:"Bergetar; bergoncang",p:'KK'},
+ {k:"火事になる",f:"かじになる",m:"Berubah menjadi kebakaran",p:'KK'},
+ {k:"火が出る",f:"ひがでる",m:"Terbakar",p:'KK'},
+ {k:"積もる",f:"つもる",m:"Menumpuk (cth: salju menumpuk)",p:'KK'},
+ {k:"ニュース",f:"ニュース",m:"Berita",p:'KB'},
+ {k:"緊急速報",f:"きんきゅうそくほう",m:"Laporan darurat",p:'KB'},
+ {k:"避難する",f:"ひなんする",m:"Mengungsi; evakuasi",p:'KK'},
+ {k:"倒れる",f:"たおれる",m:"Jatuh",p:'KK'},
+ {k:"離れる",f:"はなれる",m:"Menjauh",p:'KK'},
+ {k:"近づく",f:"ちかづく",m:"Mendekati",p:'KK'},
+ {k:"隠れる",f:"かくれる",m:"Berlindung; bersembunyi",p:'KK'},
+ {k:"あわてる",f:"あわてる",m:"Panik",p:'KK'},
+ {k:"落ち着く",f:"おちつく",m:"Tenang",p:'KK'},
+ {k:"行動する",f:"こうどうする",m:"Bertindak",p:'KK'},
+ {k:"出る",f:"でる",m:"Keluar; pergi ke luar",p:'KK'},
+ {k:"最新",f:"さいしん",m:"Terbaru",p:'KB'},
+ {k:"確認する",f:"かくにんする",m:"Mengecek",p:'KK'},
+ {k:"海岸",f:"かいがん",m:"Pantai; pesisir",p:'KB'},
+ {k:"上陸する",f:"じょうりくする",m:"Mencapai daratan",p:'KK'},
+ {k:"非常に",f:"ひじょうに",m:"Sangat",p:'KB'},
+ {k:"激しい",f:"はげしい",m:"Kuat",p:'KS'},
+ {k:"様子",f:"ようす",m:"Kondisi; keadaan",p:'KB'},
+ {k:"絶対に",f:"ぜったいに",m:"Apapun yang terjadi",p:'KB'},
+ {k:"やめる",f:"やめる",m:"Menghentikan; berhenti",p:'KK'},
+ {k:"安全",f:"あんぜん",m:"Aman",p:'KS'},
+ {k:"～から～にかけて",f:"～から～にかけて",m:"Dari ～ sampai ～",p:'KB'},
+ {k:"関東",f:"かんとう",m:"Wilayah Kanto",p:'KB'},
+ {k:"見込み",f:"みこみ",m:"Diperkirakan; perkiraan",p:'KB'},
+ {k:"伊豆諸島",f:"いずしょとう",m:"Kepulauan Izu",p:'KB'},
+ {k:"東海",f:"とうかい",m:"Wilayah Tokai",p:'KB'},
+ {k:"局地的に",f:"きょくちてきに",m:"Di daerah tertentu",p:'KB'},
+ {k:"係員",f:"かかりいん",m:"Petugas",p:'KB'},
+ {k:"指示",f:"しじ",m:"Instruksi",p:'KB'},
+ {k:"従う",f:"したがう",m:"Mematuhi (cth: mematuhi instruksi)",p:'KK'},
+ {k:"年寄り／お年寄り",f:"としより",m:"Lansia",p:'KB'},
+ {k:"優先",f:"ゆうせん",m:"Diutamakan; diprioritaskan",p:'KB'},
+ {k:"揺れ",f:"ゆれ",m:"Getaran; goncangan",p:'KB'},
+ {k:"警戒する",f:"けいかいする",m:"Mewaspadai",p:'KK'},
+ {k:"守る",f:"まもる",m:"Melindungi (cth: melindungi diri)",p:'KK'},
+ {k:"家具",f:"かぐ",m:"Furnitur; mebel",p:'KB'},
+ {k:"震源",f:"しんげん",m:"Pusat gempa",p:'KB'},
+ {k:"海底",f:"かいてい",m:"Dasar laut",p:'KB'},
+ {k:"～のおそれがある",f:"～のおそれがある",m:"Dikhawatirkan adanya ~",p:'KB'},
+ {k:"緊急地震速報",f:"きんきゅうじしんそくほう",m:"Peringatan dini gempa bumi",p:'KB'},
+ {k:"滋賀",f:"しが",m:"Shiga",p:'KB'},
+ {k:"兵庫",f:"ひょうご",m:"Hyogo",p:'KB'},
+ {k:"福井",f:"ふくい",m:"Fukui",p:'KB'},
+ {k:"三重",f:"みえ",m:"Mie",p:'KB'},
+ {k:"和歌山",f:"わかやま",m:"Wakayama",p:'KB'},
+ {k:"香川",f:"かがわ",m:"Kagawa",p:'KB'},
+ {k:"近畿地方",f:"きんきちほう",m:"Wilayah Kinki",p:'KB'},
+ {k:"感じる",f:"かんじる",m:"Merasakan",p:'KK'},
+ {k:"防災訓練",f:"ぼうさいくんれん",m:"Latihan mitigasi bencana",p:'KB'},
+ {k:"避難訓練",f:"ひなんくんれん",m:"Latihan evakuasi",p:'KB'},
+ {k:"防災頭巾",f:"ぼうさいずきん",m:"Tudung pelindung kepala saat bencana",p:'KB'},
+ {k:"ヘルメット",f:"ヘルメット",m:"Helm",p:'KB'},
+ {k:"かぶる",f:"かぶる",m:"Memakai (untuk bagian kepala)",p:'KK'},
+ {k:"（ヘルメットをかぶる）",f:"（ヘルメットをかぶる）",m:"(cth: memakai helm)",p:'KB'},
+ {k:"ドア",f:"ドア",m:"Pintu",p:'KB'},
+ {k:"開ける",f:"あける",m:"Membuka",p:'KK'},
+ {k:"火",f:"ひ",m:"Api",p:'KB'},
+ {k:"消す",f:"けす",m:"Memadamkan; mematikan (cth: memadamkan api)",p:'KK'},
+ {k:"消火する",f:"しょうかする",m:"Memadamkan api",p:'KK'},
+ {k:"消防署",f:"しょうぼうしょ",m:"Pemadam kebakaran",p:'KB'},
+ {k:"119番",f:"ひゃくじゅうきゅうばん",m:"Nomor telepon darurat 119 untuk pemadam kebakaran",p:'KB'},
+ {k:"集まる",f:"あつまる",m:"Berkumpul",p:'KK'},
+ {k:"並ぶ",f:"ならぶ",m:"Berbaris",p:'KK'},
+ {k:"点呼する",f:"てんこする",m:"Mengabsen",p:'KK'},
+ {k:"報告する",f:"ほうこくする",m:"Melaporkan",p:'KK'},
+ {k:"知らせる",f:"しらせる",m:"Menginformasikan",p:'KK'},
+ {k:"姿勢",f:"しせい",m:"Postur / posisi tubuh",p:'KB'},
+ {k:"低くする",f:"ひくくする",m:"Merendahkan",p:'KK'},
+ {k:"しゃがむ",f:"しゃがむ",m:"Berjongkok",p:'KK'},
+ {k:"ハンカチ",f:"ハンカチ",m:"Saputangan",p:'KB'},
+ {k:"口に当てる",f:"くちにあてる",m:"Menutupi bagian mulut",p:'KK'},
+ {k:"火災報知器",f:"かさいほうちき",m:"Alarm kebakaran",p:'KB'},
+ {k:"鳴る",f:"なる",m:"Berbunyi; berdering",p:'KK'},
+ {k:"震度",f:"しんど",m:"Intensitas seismik gempa",p:'KB'},
+ {k:"おさまる",f:"おさまる",m:"Reda; berhenti (cth: getaran berhenti)",p:'KK'},
+ {k:"避難",f:"ひなん",m:"Evakuasi",p:'KB'},
+ {k:"開始する",f:"かいしする",m:"Mulai",p:'KK'},
+ {k:"中庭",f:"なかにわ",m:"Taman gedung",p:'KB'},
+ {k:"～ごと",f:"～ごと",m:"Tiap ～ (cth: tiap tim)",p:'KB'},
+ {k:"初期消火",f:"しょきしょうか",m:"Memadamkam api pada tahap awal",p:'KB'},
+ {k:"消火器",f:"しょうかき",m:"Alat pemadam api",p:'KB'},
+ {k:"逃げ遅れる",f:"にげおくれる",m:"Terlambat evakuasi",p:'KK'},
+ {k:"一つ一つ",f:"ひとつひとつ",m:"Satu per satu",p:'KB'},
+ {k:"見て回る",f:"みてまわる",m:"Berkeliling memeriksa",p:'KK'},
+ {k:"煙体験",f:"けむりたいけん",m:"Simulasi kondisi berasap",p:'KB'},
+ {k:"煙",f:"けむり",m:"Asap",p:'KB'},
+ {k:"充満する",f:"じゅうまんする",m:"Terisi",p:'KK'},
+ {k:"逃げる",f:"にげる",m:"Melarikan diri",p:'KK'},
+ {k:"進む",f:"すすむ",m:"Maju",p:'KK'},
+ {k:"注意点",f:"ちゅういてん",m:"Hal yang perlu diperhatikan",p:'KB'},
+ {k:"吸う",f:"すう",m:"Mengisap (cth: mengisap asap)",p:'KK'},
+ {k:"声",f:"こえ",m:"Suara; panggil",p:'KB'},
+ {k:"声をかけ合う",f:"こえをかけあう",m:"Saling berbicara satu sama lain; saling memanggil satu sama lain",p:'KK'},
+ {k:"床",f:"ゆか",m:"Lantai",p:'KB'},
+ {k:"安全ピン",f:"あんぜんピン",m:"Pin pengaman",p:'KB'},
+ {k:"レバー",f:"レバー",m:"Tuas",p:'KB'},
+ {k:"ホース",f:"ホース",m:"Selang",p:'KB'},
+ {k:"抜く",f:"ぬく",m:"Menarik; melepas",p:'KK'},
+ {k:"先",f:"さき",m:"Ujung",p:'KB'},
+ {k:"向ける",f:"むける",m:"Menghadap; mengarahkan",p:'KK'},
+ {k:"途中",f:"とちゅう",m:"Tengah",p:'KB'},
+ {k:"握る",f:"にぎる",m:"Menggenggam",p:'KK'},
+ {k:"噴射する",f:"ふんしゃする",m:"Menyemprotkan",p:'KK'},
+ {k:"左右",f:"さゆう",m:"Kiri dan kanan",p:'KB'},
+ {k:"狙う",f:"ねらう",m:"Membidik; mengarahkan",p:'KK'},
+ {k:"消える",f:"きえる",m:"Padam",p:'KK'},
+ {k:"～m",f:"～メートル",m:"～ meter (cth: 4 meter)",p:'KB'},
+ {k:"～秒",f:"～びょう",m:"～ detik (cth: 20 detik)",p:'KB'},
+ {k:"感じる",f:"かんじる",m:"Merasa; merasakan",p:'KK'},
+ {k:"落ちる",f:"おちる",m:"Jatuh; roboh",p:'KK'},
+ {k:"ゆがむ",f:"ゆがむ",m:"Miring (gedung; bangunan); melengkung",p:'KK'},
+ {k:"無理をする",f:"むりをする",m:"Memaksakan diri",p:'KK'},
+ {k:"ガスコンロ",f:"ガスコンロ",m:"Kompor gas",p:'KB'},
+ {k:"～必要がある／ない",f:"～ひつようがある",m:"Perlu / tidak perlu untuk ～",p:'KB'},
+ {k:"天井",f:"てんじょう",m:"Atap; langit-langit; plafon",p:'KB'},
+ {k:"届く",f:"とどく",m:"Sampai; mencapai",p:'KK'},
+ {k:"危ない",f:"あぶない",m:"Berbahaya",p:'KS'},
+ {k:"町中",f:"まちなか",m:"Di jalan; di kota",p:'KB'},
+ {k:"屋外",f:"おくがい",m:"Di luar ruangan",p:'KB'},
+ {k:"ガラス",f:"ガラス",m:"Kaca",p:'KB'},
+ {k:"影響",f:"えいきょう",m:"Dampak",p:'KB'},
+ {k:"断水する",f:"だんすいする",m:"Pemadaman air",p:'KK'},
+ {k:"止まる",f:"とまる",m:"Berhenti (cth: air berhenti / air tidak keluar)",p:'KK'},
+ {k:"停電する",f:"ていでんする",m:"Pemadaman listrik",p:'KK'},
+ {k:"電気",f:"でんき",m:"Listrik; lampu",p:'KB'},
+ {k:"ガス",f:"ガス",m:"Gas",p:'KB'},
+ {k:"通行止め",f:"つうこうどめ",m:"Jalan tertutup",p:'KB'},
+ {k:"避難所",f:"ひなんじょ",m:"Tempat evakuasi",p:'KB'},
+ {k:"給水車",f:"きゅうすいしゃ",m:"Truk tangki air",p:'KB'},
+ {k:"炊き出し",f:"たきだし",m:"Distribusi makanan darurat; dapur umum",p:'KB'},
+ {k:"必要",f:"ひつよう",m:"Diperlukan",p:'KS'},
+ {k:"水",f:"みず",m:"Air",p:'KB'},
+ {k:"非常食",f:"ひじょうしょく",m:"Makanan darurat",p:'KB'},
+ {k:"懐中電灯",f:"かいちゅうでんとう",m:"Senter",p:'KB'},
+ {k:"ろうそく",f:"ろうそく",m:"Lilin",p:'KB'},
+ {k:"ラジオ",f:"ラジオ",m:"Radio",p:'KB'},
+ {k:"毛布",f:"もうふ",m:"Selimut",p:'KB'},
+ {k:"寝袋",f:"ねぶくろ",m:"Kantong tidur",p:'KB'},
+ {k:"ポリタンク",f:"ポリタンク",m:"Tangki / wadah plastik",p:'KB'},
+ {k:"充電する",f:"じゅうでんする",m:"Mengecas; mengisi daya",p:'KK'},
+ {k:"小学校",f:"しょうがっこう",m:"Sekolah dasar (SD)",p:'KB'},
+ {k:"総合福祉センター",f:"そうごうふくしセンター",m:"Pusat kesejahteraan sosial",p:'KB'},
+ {k:"ショップ",f:"ショップ",m:"Toko",p:'KB'},
+ {k:"今回",f:"こんかい",m:"Kali ini",p:'KB'},
+ {k:"レベル",f:"レベル",m:"Level; tingkat",p:'KB'},
+ {k:"一人暮らし",f:"ひとりぐらし",m:"Hidup; tinggal sendiri",p:'KB'},
+ {k:"戻る",f:"もどる",m:"Kembali",p:'KK'},
+ {k:"早め",f:"はやめ",m:"Lebih awal",p:'KB'},
+ {k:"続く",f:"つづく",m:"Berlanjut",p:'KK'},
+ {k:"容器",f:"ようき",m:"Wadah",p:'KB'},
+ {k:"仮設",f:"かせつ",m:"Sementara",p:'KB'},
+ {k:"力",f:"ちから",m:"Tenaga; kekuatan",p:'KB'},
+ {k:"持ち出す",f:"もちだす",m:"Membawa keluar",p:'KK'},
+ {k:"賞味期限",f:"しょうみきげん",m:"Masa kedaluwarsa untuk dikonsumsi",p:'KB'},
+ {k:"使用期限",f:"しようきげん",m:"Masa kedaluwarsa untuk dipakai",p:'KB'},
+ {k:"切れる",f:"きれる",m:"Habis; sudah lewat",p:'KK'},
+ {k:"（しょうみきげんがきれる）",f:"（しょうみきげんがきれる）",m:"(cth: sudah lewat masa kedaluwarsa untuk dikonsumsi)",p:'KB'},
+ {k:"切れる",f:"きれる",m:"Habis (cth: baterainya habis)",p:'KK'},
+ {k:"貴重品",f:"きちょうひん",m:"Barang berharga",p:'KB'},
+ {k:"電灯",f:"でんとう",m:"Lampu listrik",p:'KB'},
+ {k:"携帯ラジオ",f:"けいたいラジオ",m:"Radio portabel",p:'KB'},
+ {k:"非常持ち出し品",f:"ひじょうもちだしひん",m:"Barang yang harus dibawa dalam keadaan darurat",p:'KB'},
+ {k:"生活する",f:"せいかつする",m:"Hidup",p:'KK'},
+ {k:"下着",f:"したぎ",m:"Pakaian dalam",p:'KB'},
+ {k:"生理用品",f:"せいりようひん",m:"Produk kebersihan untuk menstruasi",p:'KB'},
+ {k:"ウェットティッシュ",f:"ウェットティッシュ",m:"Tisu basah",p:'KB'},
+ {k:"ライター",f:"ライター",m:"Lighter / korek api gas",p:'KB'},
+ {k:"使い捨てカイロ",f:"つかいすてカイロ",m:"Bantalan pemanas / penghangat sekali pakai",p:'KB'},
+ {k:"粉ミルク",f:"こなミルク",m:"Susu bubuk",p:'KB'},
+ {k:"おむつ",f:"おむつ",m:"Popok",p:'KB'},
+ {k:"卓上コンロ",f:"たくじょうコンロ",m:"Kompor portabel",p:'KB'},
+ {k:"ガスボンベ",f:"ガスボンベ",m:"Tabung gas",p:'KB'},
+ {k:"なべ",f:"なべ",m:"Panci; periuk",p:'KB'},
+ {k:"アウトドア用品",f:"アウトドアようひん",m:"Perlengkapan untuk kegiatan luar ruangan (outdoor)",p:'KB'},
+ {k:"かぜ薬",f:"かぜぐすり",m:"Obat flu; obat pilek",p:'KB'},
+ {k:"ばんそうこう",f:"ばんそうこう",m:"Plester; perban (untuk menutup luka)",p:'KB'},
+ {k:"消毒液",f:"しょうどくえき",m:"Larutan antiseptik",p:'KB'},
+ {k:"モバイルバッテリー",f:"モバイルバッテリー",m:"Charger / pengisi daya portabel",p:'KB'},
+ {k:"現金",f:"げんきん",m:"Uang tunai",p:'KB'},
+ {k:"預金通帳",f:"よきんつうちょう",m:"Buku tabungan rekening bank",p:'KB'},
+ {k:"パスポート",f:"パスポート",m:"Paspor",p:'KB'},
+ {k:"健康保険証",f:"けんこうほけんしょう",m:"Kartu asuransi kesehatan",p:'KB'},
+ {k:"外国人登録証",f:"がいこくじんとうろくしょう",m:"Kartu pendaftaran orang asing",p:'KB'},
+ {k:"缶づめ",f:"かんづめ",m:"Makanan kaleng",p:'KB'},
+ {k:"インスタント食品",f:"インスタントしょくひん",m:"Makanan instan",p:'KB'},
+],
+bab17:[
+ {k:"和太鼓",f:"わだいこ",m:"Taiko; beduk khas Jepang",p:'KB'},
+ {k:"サークル",f:"サークル",m:"Klub",p:'KB'},
+ {k:"入る",f:"はいる",m:"Ikut; bergabung (cth: bergabung di klub)",p:'KK'},
+ {k:"誘う",f:"さそう",m:"Mengajak",p:'KK'},
+ {k:"おかげで",f:"おかげで",m:"～; berkat berkat itu",p:'KB'},
+ {k:"増える",f:"ふえる",m:"Bertambah",p:'KK'},
+ {k:"ゲストハウス",f:"ゲストハウス",m:"Guest house (penginapan berupa rumah dengan beberapa kamar untuk disewakan untuk umum)",p:'KB'},
+ {k:"SNS",f:"エスエヌエス",m:"Social networking service / media sosial",p:'KB'},
+ {k:"やりとり",f:"やりとり",m:"Interaksi; komunikasi",p:'KB'},
+ {k:"～以外",f:"～いがい",m:"Selain ～; di luar ～ (cth: selain / di luar pekerjaan)",p:'KB'},
+ {k:"うまい",f:"うまい",m:"Terampil; pintar",p:'KS'},
+ {k:"ドラマ",f:"ドラマ",m:"Drama; sinetron",p:'KB'},
+ {k:"ほとんど",f:"ほとんど",m:"Kebanyakan; umumnya",p:'KB'},
+ {k:"セリフ",f:"セリフ",m:"Dialog",p:'KB'},
+ {k:"アイディア",f:"アイディア",m:"Ide",p:'KB'},
+ {k:"笑う",f:"わらう",m:"Tertawa",p:'KK'},
+ {k:"そろそろ",f:"そろそろ",m:"Sudah hampir",p:'KB'},
+ {k:"～のころ",f:"～のころ",m:"～ (cth: saat awal-awal) saat; waktu",p:'KB'},
+ {k:"苦労する",f:"くろうする",m:"Menjalani saat-saat yang berat; kesulitan",p:'KK'},
+ {k:"締め日",f:"しめび",m:"Tenggat; batas waktu penyelesaian transaksi",p:'KB'},
+ {k:"納期",f:"のうき",m:"Tenggat; batas waktu pengiriman",p:'KB'},
+ {k:"友だちリクエスト",f:"ともだちリクエスト",m:"Permintaan pertemanan",p:'KB'},
+ {k:"承認する",f:"しょうにんする",m:"Menyetujui; menerima",p:'KK'},
+ {k:"授業",f:"じゅぎょう",m:"Kuliah; pelajaran",p:'KB'},
+ {k:"問題",f:"もんだい",m:"Masalah",p:'KB'},
+ {k:"感謝する",f:"かんしゃする",m:"Menghargai; berterima kasih",p:'KK'},
+],
+bab18:[
+ {k:"将来",f:"しょうらい",m:"Masa depan",p:'KB'},
+ {k:"夢",f:"ゆめ",m:"Mimpi",p:'KB'},
+ {k:"希望",f:"きぼう",m:"Harapan; keinginan",p:'KB'},
+ {k:"作る",f:"つくる",m:"Membuat; memulai (cth: memulai perusahaan)",p:'KK'},
+ {k:"就職する",f:"しゅうしょくする",m:"Mendapatkan pekerjaan di perusahaan",p:'KK'},
+ {k:"持つ",f:"もつ",m:"Memiliki; mempunyai (cth: memiliki toko sendiri)",p:'KK'},
+ {k:"稼ぐ",f:"かせぐ",m:"Mengumpulkan; mendapatkan (cth: mengumpulkan uang)",p:'KK'},
+ {k:"貯金する",f:"ちょきんする",m:"Menabung",p:'KK'},
+ {k:"結婚する",f:"けっこんする",m:"Menikah",p:'KK'},
+ {k:"建てる",f:"たてる",m:"Membangun; mendirikan (cth: membangun rumah)",p:'KK'},
+ {k:"進学する",f:"しんがくする",m:"Melanjutkan pendidikan ke tingkat yang lebih tinggi",p:'KK'},
+ {k:"留学する",f:"りゅうがくする",m:"Belajar di luar negeri",p:'KK'},
+ {k:"のんびり",f:"のんびり",m:"Dengan santai",p:'KB'},
+ {k:"暮らす",f:"くらす",m:"Menjalani hidup",p:'KK'},
+ {k:"ずっと",f:"ずっと",m:"Selamanya",p:'KB'},
+ {k:"住む",f:"すむ",m:"Hidup; tinggal",p:'KK'},
+ {k:"働く",f:"はたらく",m:"Bekerja",p:'KK'},
+ {k:"職人",f:"しょくにん",m:"(seorang) ahli; profesional; perajin",p:'KB'},
+ {k:"ガイド",f:"ガイド",m:"Pemandu",p:'KB'},
+ {k:"通訳",f:"つうやく",m:"Penerjemah; juru bahasa",p:'KB'},
+ {k:"日本語教師",f:"にほんごきょうし",m:"Guru / pengajar bahasa Jepang",p:'KB'},
+ {k:"なる",f:"なる",m:"Menjadi (cth: menjadi seorang ahli)",p:'KK'},
+ {k:"自動車",f:"じどうしゃ",m:"Mobil",p:'KB'},
+ {k:"整備",f:"せいび",m:"Perawatan",p:'KB'},
+ {k:"役に立つ",f:"やくにたつ",m:"Berguna; bermanfaat",p:'KK'},
+ {k:"そのために",f:"そのために",m:"Untuk mencapai itu; untuk itu",p:'KB'},
+ {k:"技術",f:"ぎじゅつ",m:"Teknik",p:'KB'},
+ {k:"がんばる",f:"がんばる",m:"Bekerja keras",p:'KK'},
+ {k:"暮らし",f:"くらし",m:"Kehidupan",p:'KB'},
+ {k:"うまくいく",f:"うまくいく",m:"Berjalan lancar; sukses",p:'KK'},
+ {k:"周りの人",f:"まわりのひと",m:"Orang-orang di sekitar diri sendiri",p:'KB'},
+ {k:"若者",f:"わかもの",m:"Pemuda",p:'KB'},
+ {k:"卒業する",f:"そつぎょうする",m:"Lulus",p:'KK'},
+ {k:"別の",f:"べつの",m:"～ yang lain",p:'KB'},
+ {k:"広げる",f:"ひろげる",m:"Memperluas",p:'KK'},
+ {k:"もともと",f:"もともと",m:"Aslinya; awalnya",p:'KB'},
+ {k:"募集",f:"ぼしゅう",m:"Perekrutan",p:'KB'},
+ {k:"応募する",f:"おうぼする",m:"Melamar (pekerjaan)",p:'KK'},
+ {k:"続ける",f:"つづける",m:"Melanjutkan",p:'KK'},
+ {k:"とにかく",f:"とにかく",m:"Pokoknya; bagaimanapun juga",p:'KB'},
+ {k:"ストレス",f:"ストレス",m:"Stres",p:'KB'},
+ {k:"知り合う",f:"しりあう",m:"Berkenalan",p:'KK'},
+ {k:"最後",f:"さいご",m:"Terakhir",p:'KB'},
+ {k:"ひとこと",f:"ひとこと",m:"Sepatah kata",p:'KB'},
+ {k:"～始める",f:"～はじめる",m:"Mulai ～ (cth: mulai bekerja)",p:'KK'},
+ {k:"下手",f:"へた",m:"Tidak pandai; tidak mahir",p:'KS'},
+ {k:"失敗する",f:"しっぱいする",m:"Gagal; berbuat salah",p:'KK'},
+ {k:"工業",f:"こうぎょう",m:"Industri",p:'KB'},
+ {k:"親切にする",f:"しんせつにする",m:"Bersikap baik hati; memperlakukan (seseorang) dengan ramah",p:'KK'},
+ {k:"助ける",f:"たすける",m:"Menolong; membantu",p:'KK'},
+],
+katakerja:[
+ {k:"申す",f:"もうす",m:"Bernama; dipanggil sebagai (nama)",p:'KK'},
+ {k:"呼ぶ",f:"よぶ",m:"Memanggil",p:'KK'},
+ {k:"がんばる",f:"がんばる",m:"Berusaha; bekerja keras",p:'KK'},
+ {k:"コミュニケーションする",f:"コミュニケーションする",m:"Berkomunikasi",p:'KK'},
+ {k:"座る",f:"すわる",m:"Duduk",p:'KK'},
+ {k:"立つ",f:"たつ",m:"Berdiri",p:'KK'},
+ {k:"かぶる",f:"かぶる",m:"Memakai; mengenakan (cth: memakai topi)",p:'KK'},
+ {k:"する",f:"する",m:"Memakai; mengenakan (cth: mengenakan anting-anting)",p:'KK'},
+ {k:"着る",f:"きる",m:"Memakai; mengenakan (pakaian)",p:'KK'},
+ {k:"はく",f:"はく",m:"Memakai; mengenakan (cth: memakai sepatu)",p:'KK'},
+ {k:"かける",f:"かける",m:"Memakai; mengenakan (cth: memakai kacamata)",p:'KK'},
+ {k:"はやす",f:"はやす",m:"Menumbuhkan (cth: menumbuhkan jenggot)",p:'KK'},
+ {k:"泣く",f:"なく",m:"Menangis",p:'KK'},
+ {k:"引退する",f:"いんたいする",m:"Pensiun",p:'KK'},
+ {k:"驚く",f:"おどろく",m:"Terkejut",p:'KK'},
+ {k:"びっくりする",f:"びっくりする",m:"Kaget",p:'KK'},
+ {k:"増える",f:"ふえる",m:"Bertambah",p:'KK'},
+ {k:"つく",f:"つく",m:"Disajikan beserta ~ (cth: disajikan beserta sup miso)",p:'KK'},
+ {k:"来る",f:"くる",m:"Datang",p:'KK'},
+ {k:"注文する",f:"ちゅうもんする",m:"Memesan",p:'KK'},
+ {k:"決まる",f:"きまる",m:"Memutuskan",p:'KK'},
+ {k:"人気がある",f:"にんきがある",m:"Populer",p:'KK'},
+ {k:"できる",f:"できる",m:"Dibuka; rampung (cth: tokonya telah dibuka)",p:'KK'},
+ {k:"送る",f:"おくる",m:"Mengirim",p:'KK'},
+ {k:"つける",f:"つける",m:"Mencelupkan (cth: mencelupkan ke saus)",p:'KK'},
+ {k:"混ぜる",f:"まぜる",m:"Mencampurkan",p:'KK'},
+ {k:"入れる",f:"いれる",m:"Memasukkan; menambahkan",p:'KK'},
+ {k:"巻く",f:"まく",m:"Menggulung",p:'KK'},
+ {k:"のせる",f:"のせる",m:"Menambahkan; menaruh (di atas sesuatu)",p:'KK'},
+ {k:"むく",f:"むく",m:"Mengupas",p:'KK'},
+ {k:"切る",f:"きる",m:"Memotong",p:'KK'},
+ {k:"焼く",f:"やく",m:"Memanggang",p:'KK'},
+ {k:"煮る",f:"にる",m:"Menggodok; merebus",p:'KK'},
+ {k:"ゆでる",f:"ゆでる",m:"Merebus",p:'KK'},
+ {k:"蒸す",f:"むす",m:"Mengukus",p:'KK'},
+ {k:"いためる",f:"いためる",m:"Menumis",p:'KK'},
+ {k:"揚げる",f:"あげる",m:"Menggoreng",p:'KK'},
+ {k:"頼む",f:"たのむ",m:"Memesan",p:'KK'},
+ {k:"おすすめする",f:"おすすめする",m:"Merekomendasikan",p:'KK'},
+ {k:"時間がかかる",f:"じかんがかかる",m:"Memerlukan waktu",p:'KK'},
+ {k:"遊ぶ",f:"あそぶ",m:"Bermain; bersenang-senang",p:'KK'},
+ {k:"出発する",f:"しゅっぱつする",m:"Berangkat",p:'KK'},
+ {k:"泊まる",f:"とまる",m:"Menginap",p:'KK'},
+ {k:"準備する",f:"じゅんびする",m:"Mempersiapkan",p:'KK'},
+ {k:"混む",f:"こむ",m:"Ramai; penuh",p:'KK'},
+ {k:"立てる",f:"たてる",m:"Membuat rencana",p:'KK'},
+ {k:"調べる",f:"しらべる",m:"Mengecek; mencari tahu",p:'KK'},
+ {k:"並ぶ",f:"ならぶ",m:"Berbaris, mengantri",p:'KK'},
+ {k:"日焼けする",f:"ひやけする",m:"Berjemur",p:'KK'},
+ {k:"撮る",f:"とる",m:"Mengambil (foto, video)",p:'KK'},
+ {k:"寄る",f:"よる",m:"Mampir; singgah",p:'KK'},
+ {k:"楽しむ",f:"たのしむ",m:"Menikmati",p:'KK'},
+ {k:"投稿する",f:"とうこうする",m:"Membuat posting",p:'KK'},
+ {k:"見合わせる",f:"みあわせる",m:"Menunda",p:'KK'},
+ {k:"発車する",f:"はっしゃする",m:"Berangkat",p:'KK'},
+ {k:"到着する",f:"とうちゃくする",m:"Tiba",p:'KK'},
+ {k:"乗り換える",f:"のりかえる",m:"Berpindah; transfer",p:'KK'},
+ {k:"壊れる",f:"こわれる",m:"Rusak",p:'KK'},
+ {k:"困る",f:"こまる",m:"Menyulitkan; membuat susah / jengkel",p:'KK'},
+ {k:"感動する",f:"かんどうする",m:"Menjadi tersentuh",p:'KK'},
+ {k:"疲れる",f:"つかれる",m:"Lelah; capek / capai",p:'KK'},
+ {k:"登る",f:"のぼる",m:"Naik",p:'KK'},
+ {k:"あげる",f:"あげる",m:"Memberi",p:'KK'},
+ {k:"歩く",f:"あるく",m:"Berjalan",p:'KK'},
+ {k:"あきらめる",f:"あきらめる",m:"Menyerah",p:'KK'},
+ {k:"光る",f:"ひかる",m:"Bercahaya",p:'KK'},
+ {k:"描く",f:"かく",m:"Menggambar; melukis",p:'KK'},
+ {k:"かつぐ",f:"かつぐ",m:"Mengusung (di bahu / pundak)",p:'KK'},
+ {k:"拾う",f:"ひろう",m:"Memungut",p:'KK'},
+ {k:"出る",f:"でる",m:"Mengalir (cth: air mengalir)",p:'KK'},
+ {k:"断水する",f:"だんすいする",m:"Pemadaman air",p:'KK'},
+ {k:"濁る",f:"にごる",m:"Keruh (cth: airnya keruh)",p:'KK'},
+ {k:"使用する",f:"しようする",m:"Menggunakan",p:'KK'},
+ {k:"出す",f:"だす",m:"Mengalirkan (cth: mengalirkan air)",p:'KK'},
+ {k:"声をかけあう",f:"こえをかけあう",m:"Saling berbicara / menyampaikan satu sama lain",p:'KK'},
+ {k:"申し込む",f:"もうしこむ",m:"Mendaftarkan diri",p:'KK'},
+ {k:"延期する",f:"えんきする",m:"Ditunda; diundur",p:'KK'},
+ {k:"汚れる",f:"よごれる",m:"Menjadi kotor",p:'KK'},
+ {k:"開催する",f:"かいさいする",m:"Mengadakan",p:'KK'},
+ {k:"行う",f:"おこなう",m:"Menyelenggarakan",p:'KK'},
+ {k:"見学する",f:"けんがくする",m:"Mengamati; mengobservasi; meninjau",p:'KK'},
+ {k:"開く",f:"ひらく",m:"Mengadakan",p:'KK'},
+ {k:"予定する",f:"よていする",m:"Dijadwalkan",p:'KK'},
+ {k:"生産する",f:"せいさんする",m:"Memproduksi",p:'KK'},
+ {k:"輪になる",f:"わになる",m:"Membuat lingkaran",p:'KK'},
+ {k:"回す",f:"まわす",m:"Memutar",p:'KK'},
+ {k:"遠慮する",f:"えんりょする",m:"Diharapkan tidak melakukan (sesuatu)",p:'KK'},
+ {k:"優勝する",f:"ゆうしょうする",m:"Memenangkan (kompetisi); pemenang pertama",p:'KK'},
+ {k:"相談する",f:"そうだんする",m:"Berkonsultasi",p:'KK'},
+ {k:"いただく",f:"いただく",m:"Menerima (ungkapan bentuk sopan dari もらう)",p:'KK'},
+ {k:"協力する",f:"きょうりょくする",m:"Bekerja sama",p:'KK'},
+ {k:"設定する",f:"せっていする",m:"Mengeset; mengatur",p:'KK'},
+ {k:"通話する",f:"つうわする",m:"Berbicara di telepon",p:'KK'},
+ {k:"終了する",f:"しゅうりょうする",m:"Berakhir; selesai",p:'KK'},
+ {k:"たたく",f:"たたく",m:"Menabuh; memukul",p:'KK'},
+ {k:"デートする",f:"デートする",m:"Berkencan; kencan",p:'KK'},
+ {k:"書く",f:"かく",m:"Menulis",p:'KK'},
+ {k:"お祝いする",f:"おいわいする",m:"Merayakan",p:'KK'},
+ {k:"おしゃれをする",f:"おしゃれをする",m:"Berdandan; berpakaian indah",p:'KK'},
+ {k:"盛り上がる",f:"もりあがる",m:"Meriah; semarak",p:'KK'},
+ {k:"過ごす",f:"すごす",m:"Menghabiskan waktu",p:'KK'},
+ {k:"ごろごろする",f:"ごろごろする",m:"Bermalas-malasan",p:'KK'},
+ {k:"集まる",f:"あつまる",m:"Berkumpul",p:'KK'},
+ {k:"飾る",f:"かざる",m:"Menghias",p:'KK'},
+ {k:"歌う",f:"うたう",m:"Menyanyi",p:'KK'},
+ {k:"踊る",f:"おどる",m:"Menari",p:'KK'},
+ {k:"かけ合う",f:"かけあう",m:"Saling melempar / mencipratkan (air)",p:'KK'},
+ {k:"祝う",f:"いわう",m:"Merayakan",p:'KK'},
+ {k:"味わう",f:"あじわう",m:"Merasakan; menikmati",p:'KK'},
+ {k:"語る",f:"かたる",m:"Bercerita",p:'KK'},
+ {k:"体験する",f:"たいけんする",m:"Mencoba; merasakan (pengalaman baru)",p:'KK'},
+ {k:"餅をつく",f:"もちをつく",m:"Menumbuk",p:'KK'},
+ {k:"折る",f:"おる",m:"Patah (cth: patah tulang)",p:'KK'},
+ {k:"入院する",f:"にゅういんする",m:"Dirawat di rumah sakit; opname",p:'KK'},
+ {k:"くり返す",f:"くりかえす",m:"Mengulang",p:'KK'},
+ {k:"待つ",f:"まつ",m:"Menunggu",p:'KK'},
+ {k:"流す",f:"ながす",m:"Mengalirkan",p:'KK'},
+ {k:"捨てる",f:"すてる",m:"Membuang",p:'KK'},
+ {k:"片付ける",f:"かたづける",m:"Membereskan; merapikan",p:'KK'},
+ {k:"まねをする",f:"まねをする",m:"Meniru",p:'KK'},
+ {k:"守る",f:"（ルールをまもる）",m:"Menaati; mematuhi (cth: menaati peraturan)",p:'KK'},
+ {k:"つまる",f:"つまる",m:"Menyumbat",p:'KK'},
+ {k:"～終わる",f:"～おわる",m:"Selesai ～ (cth: selesai makan)",p:'KK'},
+ {k:"のどが渇く",f:"のどがかわく",m:"Merasa haus",p:'KK'},
+ {k:"怒る",f:"おこる",m:"Marah",p:'KK'},
+ {k:"気に入る",f:"きにいる",m:"Menyukai",p:'KK'},
+ {k:"お金を取る",f:"おかねをとる",m:"Berbayar",p:'KK'},
+ {k:"信じる",f:"しんじる",m:"Percaya",p:'KK'},
+ {k:"音を立てる",f:"おとをたてる",m:"Membuat bunyi",p:'KK'},
+ {k:"持ち上げる",f:"もちあげる",m:"Mengangkat",p:'KK'},
+ {k:"口を付ける",f:"くちをつける",m:"Menempelkan ke mulut",p:'KK'},
+ {k:"試着する",f:"しちゃくする",m:"Mencoba memakai",p:'KK'},
+ {k:"探す",f:"さがす",m:"Mencari",p:'KK'},
+ {k:"盗む",f:"ぬすむ",m:"Mencuri",p:'KK'},
+ {k:"停める",f:"とめる",m:"Memarkir",p:'KK'},
+ {k:"移動する",f:"いどうする",m:"Memindahkan; berpindah",p:'KK'},
+ {k:"とる",f:"とる",m:"Mengambil / mencuri",p:'KK'},
+ {k:"押す",f:"おす",m:"Membubuhkan (cth: membubuhkan cap)",p:'KK'},
+ {k:"なくす",f:"なくす",m:"Menghilangkan",p:'KK'},
+ {k:"届く",f:"とどく",m:"Diserahkan",p:'KK'},
+ {k:"買い物する",f:"かいものする",m:"Berbelanja",p:'KK'},
+ {k:"気づく",f:"きづく",m:"Menyadari",p:'KK'},
+ {k:"つながる",f:"つながる",m:"Tersambung",p:'KK'},
+ {k:"見つかる",f:"みつかる",m:"Menemukan",p:'KK'},
+ {k:"連絡をとる",f:"れんらくをとる",m:"Menghubungi",p:'KK'},
+ {k:"延長する",f:"えんちょうする",m:"Memperpanjang",p:'KK'},
+ {k:"営業する",f:"えいぎょうする",m:"Membuka; beroperasi",p:'KK'},
+ {k:"売れる",f:"うれる",m:"Bisa / dapat menjual",p:'KK'},
+ {k:"車を出す",f:"くるまをだす",m:"Memberi tumpangan",p:'KK'},
+ {k:"指定する",f:"していする",m:"Menentukan; menetapkan",p:'KK'},
+ {k:"購入する",f:"こうにゅうする",m:"Membeli",p:'KK'},
+ {k:"出品する",f:"しゅっぴんする",m:"Melakukan submit barang untuk dijual",p:'KK'},
+ {k:"炊ける",f:"たける",m:"Menanak; memasak (cth: menanak nasi)",p:'KK'},
+ {k:"吸引する",f:"きゅういんする",m:"Menghisap; menyedot",p:'KK'},
+ {k:"持ち運ぶ",f:"もちはこぶ",m:"Membawa",p:'KK'},
+ {k:"重視する",f:"じゅうしする",m:"Memprioritaskan",p:'KK'},
+ {k:"動かす",f:"うごかす",m:"Memindahkan; menggerakkan",p:'KK'},
+ {k:"持つ",f:"もつ",m:"Membawa",p:'KK'},
+ {k:"比べる",f:"くらべる",m:"Membandingkan",p:'KK'},
+ {k:"貯まる",f:"たまる",m:"Terakumulasi; terkumpul",p:'KK'},
+ {k:"変わる",f:"かわる",m:"Berubah",p:'KK'},
+ {k:"建てる",f:"たてる",m:"Mendirikan",p:'KK'},
+ {k:"展示する",f:"てんじする",m:"Memamerkan",p:'KK'},
+ {k:"利用する",f:"りようする",m:"Menggunakan",p:'KK'},
+ {k:"かかる",f:"かかる",m:"(dikenakan) biaya; biayanya",p:'KK'},
+ {k:"下りる",f:"おりる",m:"Turun",p:'KK'},
+ {k:"受ける",f:"うける",m:"Menerima",p:'KK'},
+ {k:"声をかける",f:"こえをかける",m:"Menyapa; berbicara kepada",p:'KK'},
+ {k:"確認する",f:"かくにんする",m:"Mengecek; memastikan",p:'KK'},
+ {k:"返す",f:"かえす",m:"Mengembalikan",p:'KK'},
+ {k:"閉まる",f:"しまる",m:"Tutup",p:'KK'},
+ {k:"開く",f:"あく",m:"Buka",p:'KK'},
+ {k:"延ばす",f:"のばす",m:"Memperpanjang",p:'KK'},
+ {k:"預ける",f:"あずける",m:"Menitipkan; menyimpan",p:'KK'},
+ {k:"落ちる",f:"おちる",m:"Hilang (cth: kotorannya hilang)",p:'KK'},
+ {k:"入る",f:"はいる",m:"(cth: angin / udaranya masuk) masuk",p:'KK'},
+ {k:"はずす",f:"はずす",m:"Melepas",p:'KK'},
+ {k:"はさむ",f:"はさむ",m:"Menjepit",p:'KK'},
+ {k:"かぶせる",f:"かぶせる",m:"Menutup",p:'KK'},
+ {k:"油を差す",f:"あぶらをさす",m:"Meminyaki; mengolesi minyak",p:'KK'},
+ {k:"受け取る",f:"うけとる",m:"Menerima",p:'KK'},
+ {k:"表示する",f:"ひょうじする",m:"Menampilkan",p:'KK'},
+ {k:"入力する",f:"にゅうりょくする",m:"Menginput",p:'KK'},
+ {k:"両替する",f:"りょうがえする",m:"Menukar / melakukan penukaran (pecahan uang)",p:'KK'},
+ {k:"ポストに入れる",f:"ポストにいれる",m:"Mengirim via pos",p:'KK'},
+ {k:"洗う",f:"あらう",m:"Membasuh; mencuci",p:'KK'},
+ {k:"預かる",f:"あずかる",m:"Menerima",p:'KK'},
+ {k:"助かる",f:"たすかる",m:"Terbantu; tertolong",p:'KK'},
+ {k:"暮らす",f:"くらす",m:"Hidup; tinggal",p:'KK'},
+ {k:"消す",f:"けす",m:"Mematikan (cth: mematikan lampu)",p:'KK'},
+ {k:"節電する",f:"せつでんする",m:"Menghemat listrik",p:'KK'},
+ {k:"節水する",f:"せっすいする",m:"Menghemat air",p:'KK'},
+ {k:"節約する",f:"せつやくする",m:"Menghemat; melakukan penghematan",p:'KK'},
+ {k:"リサイクルする",f:"リサイクルする",m:"Mendaur ulang",p:'KK'},
+ {k:"分別する",f:"ぶんべつする",m:"Memilah",p:'KK'},
+ {k:"減らす",f:"へらす",m:"Mengurangi",p:'KK'},
+ {k:"下げる",f:"さげる",m:"Menurunkan",p:'KK'},
+ {k:"まとめる",f:"まとめる",m:"Dikumpulkan; mengumpulkan",p:'KK'},
+ {k:"止める",f:"とめる",m:"Mematikan (air); menutup (keran)",p:'KK'},
+ {k:"すすぐ",f:"すすぐ",m:"Membilas",p:'KK'},
+ {k:"持ち歩く",f:"もちあるく",m:"Membawa",p:'KK'},
+ {k:"分ける",f:"わける",m:"Memilah; membagi",p:'KK'},
+ {k:"しばる",f:"しばる",m:"Mengikat",p:'KK'},
+ {k:"つぶす",f:"つぶす",m:"Menghancurkan",p:'KK'},
+ {k:"切り開く",f:"きりひらく",m:"Memotong terbuka",p:'KK'},
+ {k:"水を切る",f:"みずをきる",m:"Dikeringkan; mengeringkan",p:'KK'},
+ {k:"しみこませる",f:"しみこませる",m:"Dibiarkan terendam; diserap",p:'KK'},
+ {k:"固める",f:"かためる",m:"Dipadatkan",p:'KK'},
+ {k:"再生する",f:"さいせいする",m:"Mendaur ulang",p:'KK'},
+ {k:"割れる",f:"われる",m:"Pecah",p:'KK'},
+ {k:"包む",f:"つつむ",m:"Membungkus",p:'KK'},
+ {k:"使い切る",f:"つかいきる",m:"Menghabiskan; habis digunakan",p:'KK'},
+ {k:"燃える",f:"もえる",m:"Dapat dibakar (cth: sampah yang dapat dibakar)",p:'KK'},
+ {k:"取る",f:"とる",m:"Dilepas",p:'KK'},
+ {k:"貼る",f:"はる",m:"Menempel",p:'KK'},
+ {k:"起こる",f:"おこる",m:"Terjadi (cth: terjadi gempa bumi)",p:'KK'},
+ {k:"揺れる",f:"ゆれる",m:"Bergetar; bergoncang",p:'KK'},
+ {k:"火事になる",f:"かじになる",m:"Berubah menjadi kebakaran",p:'KK'},
+ {k:"火が出る",f:"ひがでる",m:"Terbakar",p:'KK'},
+ {k:"積もる",f:"つもる",m:"Menumpuk (cth: salju menumpuk)",p:'KK'},
+ {k:"避難する",f:"ひなんする",m:"Mengungsi; evakuasi",p:'KK'},
+ {k:"倒れる",f:"たおれる",m:"Jatuh",p:'KK'},
+ {k:"離れる",f:"はなれる",m:"Menjauh",p:'KK'},
+ {k:"近づく",f:"ちかづく",m:"Mendekati",p:'KK'},
+ {k:"隠れる",f:"かくれる",m:"Berlindung; bersembunyi",p:'KK'},
+ {k:"あわてる",f:"あわてる",m:"Panik",p:'KK'},
+ {k:"落ち着く",f:"おちつく",m:"Tenang",p:'KK'},
+ {k:"行動する",f:"こうどうする",m:"Bertindak",p:'KK'},
+ {k:"上陸する",f:"じょうりくする",m:"Mencapai daratan",p:'KK'},
+ {k:"やめる",f:"やめる",m:"Menghentikan; berhenti",p:'KK'},
+ {k:"従う",f:"したがう",m:"Mematuhi (cth: mematuhi instruksi)",p:'KK'},
+ {k:"警戒する",f:"けいかいする",m:"Mewaspadai",p:'KK'},
+ {k:"守る",f:"まもる",m:"Melindungi (cth: melindungi diri)",p:'KK'},
+ {k:"感じる",f:"かんじる",m:"Merasakan",p:'KK'},
+ {k:"開ける",f:"あける",m:"Membuka",p:'KK'},
+ {k:"消火する",f:"しょうかする",m:"Memadamkan api",p:'KK'},
+ {k:"点呼する",f:"てんこする",m:"Mengabsen",p:'KK'},
+ {k:"報告する",f:"ほうこくする",m:"Melaporkan",p:'KK'},
+ {k:"知らせる",f:"しらせる",m:"Menginformasikan",p:'KK'},
+ {k:"低くする",f:"ひくくする",m:"Merendahkan",p:'KK'},
+ {k:"しゃがむ",f:"しゃがむ",m:"Berjongkok",p:'KK'},
+ {k:"口に当てる",f:"くちにあてる",m:"Menutupi bagian mulut",p:'KK'},
+ {k:"鳴る",f:"なる",m:"Berbunyi; berdering",p:'KK'},
+ {k:"おさまる",f:"おさまる",m:"Reda; berhenti (cth: getaran berhenti)",p:'KK'},
+ {k:"開始する",f:"かいしする",m:"Mulai",p:'KK'},
+ {k:"逃げ遅れる",f:"にげおくれる",m:"Terlambat evakuasi",p:'KK'},
+ {k:"見て回る",f:"みてまわる",m:"Berkeliling memeriksa",p:'KK'},
+ {k:"充満する",f:"じゅうまんする",m:"Terisi",p:'KK'},
+ {k:"逃げる",f:"にげる",m:"Melarikan diri",p:'KK'},
+ {k:"進む",f:"すすむ",m:"Maju",p:'KK'},
+ {k:"吸う",f:"すう",m:"Mengisap (cth: mengisap asap)",p:'KK'},
+ {k:"声をかけ合う",f:"こえをかけあう",m:"Saling berbicara satu sama lain; saling memanggil satu sama lain",p:'KK'},
+ {k:"抜く",f:"ぬく",m:"Menarik; melepas",p:'KK'},
+ {k:"向ける",f:"むける",m:"Menghadap; mengarahkan",p:'KK'},
+ {k:"握る",f:"にぎる",m:"Menggenggam",p:'KK'},
+ {k:"噴射する",f:"ふんしゃする",m:"Menyemprotkan",p:'KK'},
+ {k:"狙う",f:"ねらう",m:"Membidik; mengarahkan",p:'KK'},
+ {k:"消える",f:"きえる",m:"Padam",p:'KK'},
+ {k:"ゆがむ",f:"ゆがむ",m:"Miring (gedung; bangunan); melengkung",p:'KK'},
+ {k:"無理をする",f:"むりをする",m:"Memaksakan diri",p:'KK'},
+ {k:"止まる",f:"とまる",m:"Berhenti (cth: air berhenti / air tidak keluar)",p:'KK'},
+ {k:"停電する",f:"ていでんする",m:"Pemadaman listrik",p:'KK'},
+ {k:"充電する",f:"じゅうでんする",m:"Mengecas; mengisi daya",p:'KK'},
+ {k:"戻る",f:"もどる",m:"Kembali",p:'KK'},
+ {k:"続く",f:"つづく",m:"Berlanjut",p:'KK'},
+ {k:"持ち出す",f:"もちだす",m:"Membawa keluar",p:'KK'},
+ {k:"切れる",f:"きれる",m:"Habis; sudah lewat",p:'KK'},
+ {k:"生活する",f:"せいかつする",m:"Hidup",p:'KK'},
+ {k:"誘う",f:"さそう",m:"Mengajak",p:'KK'},
+ {k:"笑う",f:"わらう",m:"Tertawa",p:'KK'},
+ {k:"苦労する",f:"くろうする",m:"Menjalani saat-saat yang berat; kesulitan",p:'KK'},
+ {k:"承認する",f:"しょうにんする",m:"Menyetujui; menerima",p:'KK'},
+ {k:"感謝する",f:"かんしゃする",m:"Menghargai; berterima kasih",p:'KK'},
+ {k:"作る",f:"つくる",m:"Membuat; memulai (cth: memulai perusahaan)",p:'KK'},
+ {k:"就職する",f:"しゅうしょくする",m:"Mendapatkan pekerjaan di perusahaan",p:'KK'},
+ {k:"稼ぐ",f:"かせぐ",m:"Mengumpulkan; mendapatkan (cth: mengumpulkan uang)",p:'KK'},
+ {k:"貯金する",f:"ちょきんする",m:"Menabung",p:'KK'},
+ {k:"結婚する",f:"けっこんする",m:"Menikah",p:'KK'},
+ {k:"進学する",f:"しんがくする",m:"Melanjutkan pendidikan ke tingkat yang lebih tinggi",p:'KK'},
+ {k:"留学する",f:"りゅうがくする",m:"Belajar di luar negeri",p:'KK'},
+ {k:"住む",f:"すむ",m:"Hidup; tinggal",p:'KK'},
+ {k:"働く",f:"はたらく",m:"Bekerja",p:'KK'},
+ {k:"なる",f:"なる",m:"Menjadi (cth: menjadi seorang ahli)",p:'KK'},
+ {k:"役に立つ",f:"やくにたつ",m:"Berguna; bermanfaat",p:'KK'},
+ {k:"うまくいく",f:"うまくいく",m:"Berjalan lancar; sukses",p:'KK'},
+ {k:"卒業する",f:"そつぎょうする",m:"Lulus",p:'KK'},
+ {k:"広げる",f:"ひろげる",m:"Memperluas",p:'KK'},
+ {k:"応募する",f:"おうぼする",m:"Melamar (pekerjaan)",p:'KK'},
+ {k:"続ける",f:"つづける",m:"Melanjutkan",p:'KK'},
+ {k:"知り合う",f:"しりあう",m:"Berkenalan",p:'KK'},
+ {k:"～始める",f:"～はじめる",m:"Mulai ～ (cth: mulai bekerja)",p:'KK'},
+ {k:"失敗する",f:"しっぱいする",m:"Gagal; berbuat salah",p:'KK'},
+ {k:"親切にする",f:"しんせつにする",m:"Bersikap baik hati; memperlakukan (seseorang) dengan ramah",p:'KK'},
+ {k:"助ける",f:"たすける",m:"Menolong; membantu",p:'KK'},
+],
+};
+
+/* ==================== STATE ==================== */
+const els = {
+  home:document.getElementById('homeView'), deck:document.getElementById('deckView'),
+  summary:document.getElementById('summaryView'), catGrid:document.getElementById('catGrid'),
+  stage:document.getElementById('stage'), back:document.getElementById('backBtn'),
+  deckCatText:document.getElementById('deckCatText'), deckCatSub:document.getElementById('deckCatSub'),
+  deckCounter:document.getElementById('deckCounter'), progressBar:document.getElementById('progressBar'),
+  chipIngat:document.getElementById('chipIngat'), chipGatau:document.getElementById('chipGatau'), chipLupa:document.getElementById('chipLupa'),
+  btnLupa:document.getElementById('btnLupa'), btnGatau:document.getElementById('btnGatau'), btnIngat:document.getElementById('btnIngat'),
+  ringFg:document.getElementById('ringFg'), ringPct:document.getElementById('ringPct'),
+  summaryTitle:document.getElementById('summaryTitle'), summarySub:document.getElementById('summarySub'),
+  sumIngat:document.getElementById('sumIngat'), sumGatau:document.getElementById('sumGatau'), sumLupa:document.getElementById('sumLupa'),
+  btnRetryHard:document.getElementById('btnRetryHard'), btnRetryAll:document.getElementById('btnRetryAll'), btnHome:document.getElementById('btnHome'),
+  countModalBackdrop:document.getElementById('countModalBackdrop'), countModal:document.getElementById('countModal'),
+  countModalSub:document.getElementById('countModalSub'), countCustomInput:document.getElementById('countCustomInput'),
+  countCustomBtn:document.getElementById('countCustomBtn'), countModalCancel:document.getElementById('countModalCancel'),
+  btnMic:document.getElementById('btnMic'), voiceHint:document.getElementById('voiceHint'),
+};
+
+const POS_LABEL = {KB:'Kata Benda', KK:'Kata Kerja', KS:'Kata Sifat', ADV:'Kata Keterangan'};
+
+let state = { cat:null, deck:[], pos:0, stats:{ingat:0,gatau:0,lupa:0}, missed:[] };
+
+const HOME_THEME = {accent:'#e8467b', bg:'#170a12', bg2:'#241028'};
+
+function setTheme(t){
+  document.body.style.setProperty('--accent', t.accent);
+  document.body.style.setProperty('--accent-soft', shade(t.accent, .35));
+  document.body.style.setProperty('--bg', t.bg);
+  document.body.style.setProperty('--bg2', t.bg2);
+}
+function shade(hex, amt){
+  const c = hex.replace('#','');
+  const n = parseInt(c,16);
+  let r=(n>>16)+Math.round(255*amt), g=((n>>8)&0xff)+Math.round(255*amt), b=(n&0xff)+Math.round(255*amt);
+  r=Math.min(255,r); g=Math.min(255,g); b=Math.min(255,b);
+  return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+/* ==================== HOME RENDER ==================== */
+function renderHome(){
+  els.catGrid.innerHTML = CATEGORIES.map(c=>{
+    return `<button class="cat-card" style="--cbg:${c.bg};--cbg2:${c.bg2};--cac:${c.accent}" data-cat="${c.id}">
+      <div class="top">
+        <div class="cat-stamp">${c.icon}</div>
+        <div class="cat-count">${VOCAB[c.id].length} kata</div>
+      </div>
+      <div>
+        <p class="cat-name">${c.name}</p>
+        <p class="cat-jp">${c.jp}</p>
+      </div>
+      <div class="cat-cta">Mulai belajar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </button>`;
+  }).join('');
+  els.catGrid.querySelectorAll('.cat-card').forEach(btn=>{
+    btn.addEventListener('click', ()=> showCountModal(btn.dataset.cat));
+  });
+}
+
+/* ==================== COUNT PICKER MODAL ==================== */
+let pendingCatId = null;
+
+function showCountModal(id){
+  pendingCatId = id;
+  const cat = CATEGORIES.find(c=>c.id===id);
+  const total = VOCAB[id].length;
+  els.countModalSub.textContent = `${cat.name} · ${total} kata tersedia`;
+  els.countCustomInput.value = '';
+  els.countCustomInput.max = String(total);
+  els.countModalBackdrop.classList.add('active');
+}
+function hideCountModal(){
+  els.countModalBackdrop.classList.remove('active');
+  pendingCatId = null;
+}
+els.countModalBackdrop.querySelectorAll('.count-opt').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(!pendingCatId) return;
+    const id = pendingCatId, val = btn.dataset.count;
+    hideCountModal();
+    openCategory(id, val);
+  });
+});
+els.countCustomBtn.addEventListener('click', ()=>{
+  if(!pendingCatId) return;
+  const n = parseInt(els.countCustomInput.value, 10);
+  if(!n || n<1) return;
+  const id = pendingCatId;
+  hideCountModal();
+  openCategory(id, n);
+});
+els.countCustomInput.addEventListener('keydown', (e)=>{
+  if(e.key==='Enter') els.countCustomBtn.click();
+});
+els.countModalCancel.addEventListener('click', hideCountModal);
+els.countModalBackdrop.addEventListener('click', (e)=>{
+  if(e.target===els.countModalBackdrop) hideCountModal();
+});
+
+function openCategory(id, count){
+  const cat = CATEGORIES.find(c=>c.id===id);
+  state.cat = cat;
+  let deck = shuffle(VOCAB[id]);
+  if(count && count!=='all'){
+    const n = Math.min(parseInt(count,10) || deck.length, deck.length);
+    deck = deck.slice(0, n);
+  }
+  state.deck = deck;
+  state.pos = 0;
+  state.stats = {ingat:0,gatau:0,lupa:0};
+  state.missed = [];
+  setTheme(cat);
+  els.deckCatText.textContent = cat.name;
+  els.deckCatSub.textContent = `${cat.jp} · ${state.deck.length} kata`;
+  show('deck');
+  renderStage();
+  updateHud();
+}
+
+function show(view){
+  els.home.classList.toggle('hidden', view!=='home');
+  els.deck.classList.toggle('active', view==='deck');
+  els.summary.classList.toggle('active', view==='summary');
+  if(view==='home') setTheme(HOME_THEME);
+  if(view!=='deck') stopMic();
+}
+
+els.back.addEventListener('click', ()=> show('home'));
+els.btnHome.addEventListener('click', ()=> show('home'));
+
+/* ==================== HUD ==================== */
+function updateHud(){
+  const total = state.deck.length;
+  const done = Math.min(state.pos, total);
+  els.deckCounter.textContent = `${done} / ${total}`;
+  els.progressBar.style.width = total? (done/total*100)+'%' : '0%';
+  els.chipIngat.textContent = state.stats.ingat+' ingat';
+  els.chipGatau.textContent = state.stats.gatau+' gatau';
+  els.chipLupa.textContent = state.stats.lupa+' lupa';
+}
+
+/* ==================== CARD STACK ==================== */
+function renderStage(){
+  els.stage.innerHTML = '';
+  if(state.pos >= state.deck.length){ return finishDeck(); }
+  const remaining = state.deck.slice(state.pos, state.pos+3);
+  // append back-to-front so the first (next) word sits visually on top
+  for(let i=remaining.length-1; i>=0; i--){
+    const el = buildCard(remaining[i], i); // depth 0 = next word = interactive top card
+    els.stage.appendChild(el);
+  }
+}
+
+function buildCard(word, depth){
+  const wrap = document.createElement('div');
+  wrap.className = 'card';
+  const isTop = depth===0;
+  wrap.style.zIndex = String(10-depth);
+  wrap.style.transform = `translate(-50%,-50%) translateY(${depth*10}px) scale(${1-depth*0.045})`;
+  wrap.style.opacity = depth>1 ? '0' : (depth===1?'0.75':'1');
+
+  const posLabel = word.p;
+  wrap.innerHTML = `
+    <div class="card-flip">
+      <div class="card-face card-front">
+        <div class="face-badges">
+          <span class="badge badge-level" title="Level Irodori">${LV}</span>
+          <span class="badge badge-pos" title="${POS_LABEL[posLabel]||''}">${posLabel}</span>
+        </div>
+        <div class="face-center">
+          <div class="kanji-big">${word.k}</div>
+        </div>
+        <div class="hint-tap" style="text-align:center;">ketuk untuk membalik</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="face-badges">
+          <span class="badge badge-level">${LV}</span>
+          <span class="badge badge-pos">${posLabel}</span>
+        </div>
+        <div class="face-center">
+          <div class="back-kanji">${word.k}</div>
+          <div class="furigana-big">${word.f}</div>
+          <div class="meaning-rule"></div>
+          <div class="meaning-big">${word.m}</div>
+        </div>
+        <div class="hint-tap" style="text-align:center;">ketuk untuk kembali</div>
+      </div>
+    </div>
+    <div class="stamp stamp-ingat">覚</div>
+    <div class="stamp stamp-lupa">忘</div>
+    <div class="stamp stamp-gatau">？</div>
+  `;
+
+  if(isTop) attachDrag(wrap);
+  return wrap;
+}
+
+/* ==================== DRAG / FLIP ==================== */
+function attachDrag(card){
+  const flipEl = card.querySelector('.card-flip');
+  const stampIngat = card.querySelector('.stamp-ingat');
+  const stampLupa = card.querySelector('.stamp-lupa');
+  const stampGatau = card.querySelector('.stamp-gatau');
+
+  let dragging=false, startX=0, startY=0, dx=0, dy=0, moved=false, pointerId=null;
+
+  card.addEventListener('pointerdown', (e)=>{
+    dragging=true; moved=false; startX=e.clientX; startY=e.clientY; dx=0; dy=0;
+    pointerId=e.pointerId; card.setPointerCapture(pointerId);
+    card.style.transition='none';
+  });
+
+  card.addEventListener('pointermove', (e)=>{
+    if(!dragging) return;
+    dx = e.clientX-startX; dy = e.clientY-startY;
+    if(Math.abs(dx)>6 || Math.abs(dy)>6) moved=true;
+    const rot = Math.max(-22, Math.min(22, dx/12));
+    card.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg)`;
+    const rightP = Math.max(0, Math.min(1, dx/120));
+    const leftP = Math.max(0, Math.min(1, -dx/120));
+    const downP = Math.max(0, Math.min(1, dy/100));
+    stampIngat.style.opacity = (dx>0)? rightP : 0;
+    stampLupa.style.opacity = (dx<0)? leftP : 0;
+    stampGatau.style.opacity = (dy>0 && Math.abs(dx)<80)? downP : 0;
+  });
+
+  function endDrag(){
+    if(!dragging) return;
+    dragging=false;
+    card.style.transition='transform .35s cubic-bezier(.2,.8,.2,1)';
+
+    if(!moved){
+      // treat as tap -> flip
+      flipEl.classList.toggle('flipped');
+      card.style.transform='translate(-50%,-50%) rotate(0deg)';
+      return;
+    }
+
+    const horiz = Math.abs(dx) > Math.abs(dy);
+    if(horiz && dx > 110){ resolveCard(card, 'ingat', 620, dy); return; }
+    if(horiz && dx < -110){ resolveCard(card, 'lupa', -620, dy); return; }
+    if(!horiz && dy > 90){ resolveCard(card, 'gatau', dx, 700); return; }
+
+    // snap back
+    card.style.transform='translate(-50%,-50%) rotate(0deg)';
+    stampIngat.style.opacity=0; stampLupa.style.opacity=0; stampGatau.style.opacity=0;
+  }
+
+  card.addEventListener('pointerup', endDrag);
+  card.addEventListener('pointercancel', endDrag);
+}
+
+function resolveCard(card, result, toX, toY){
+  card.style.transform = `translate(calc(-50% + ${toX}px), calc(-50% + ${toY}px)) rotate(${toX/10}deg)`;
+  card.style.opacity = '0';
+  const stampEl = result==='ingat'? card.querySelector('.stamp-ingat') : result==='lupa'? card.querySelector('.stamp-lupa') : card.querySelector('.stamp-gatau');
+  if(stampEl) stampEl.style.opacity = 1;
+
+  let done=false;
+  const finish = ()=>{
+    if(done) return; done=true;
+    commitResult(result);
+  };
+  card.addEventListener('transitionend', finish, {once:true});
+  setTimeout(finish, 420); // safety fallback
+}
+
+function commitResult(result){
+  const word = state.deck[state.pos];
+  state.stats[result]++;
+  if(result!=='ingat') state.missed.push(word);
+  state.pos++;
+  updateHud();
+  renderStage();
+}
+
+function manualAction(result){
+  const top = els.stage.querySelector('.card:last-child') || els.stage.lastElementChild;
+  if(!top) return;
+  const map = {ingat:[620,0], lupa:[-620,0], gatau:[0,700]};
+  const [tx,ty] = map[result];
+  card_transition_and_resolve(top, result, tx, ty);
+}
+function card_transition_and_resolve(card, result, tx, ty){
+  card.style.transition='transform .4s cubic-bezier(.2,.8,.2,1)';
+  resolveCard(card, result, tx, ty);
+}
+els.btnIngat.addEventListener('click', ()=> manualAction('ingat'));
+els.btnLupa.addEventListener('click', ()=> manualAction('lupa'));
+els.btnGatau.addEventListener('click', ()=> manualAction('gatau'));
+
+/* keyboard support */
+document.addEventListener('keydown', (e)=>{
+  if(!els.deck.classList.contains('active')) return;
+  if(e.key==='ArrowRight') manualAction('ingat');
+  else if(e.key==='ArrowLeft') manualAction('lupa');
+  else if(e.key==='ArrowDown') manualAction('gatau');
+  else if(e.key===' '){
+    e.preventDefault();
+    const top = els.stage.lastElementChild;
+    if(top) top.querySelector('.card-flip').classList.toggle('flipped');
+  }
+});
+
+/* ==================== VOICE CONTROL ==================== */
+/* Ucapkan kata di kartu depan -> otomatis dibalik lalu ditandai "ingat".
+   Perintah suara: "flip"/"balik" (buka kartu saja), "ingat", "lupa", "gatau"/"ga tau"/"tidak tahu". */
+
+function kanaToRomaji(str){
+  str = (str||'').replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0)-0x60));
+  const combo = {きゃ:'kya',きゅ:'kyu',きょ:'kyo',ぎゃ:'gya',ぎゅ:'gyu',ぎょ:'gyo',しゃ:'sha',しゅ:'shu',しょ:'sho',
+    じゃ:'ja',じゅ:'ju',じょ:'jo',ちゃ:'cha',ちゅ:'chu',ちょ:'cho',ぢゃ:'ja',ぢゅ:'ju',ぢょ:'jo',
+    にゃ:'nya',にゅ:'nyu',にょ:'nyo',ひゃ:'hya',ひゅ:'hyu',ひょ:'hyo',びゃ:'bya',びゅ:'byu',びょ:'byo',
+    ぴゃ:'pya',ぴゅ:'pyu',ぴょ:'pyo',みゃ:'mya',みゅ:'myu',みょ:'myo',りゃ:'rya',りゅ:'ryu',りょ:'ryo'};
+  const single = {あ:'a',い:'i',う:'u',え:'e',お:'o',か:'ka',き:'ki',く:'ku',け:'ke',こ:'ko',
+    が:'ga',ぎ:'gi',ぐ:'gu',げ:'ge',ご:'go',さ:'sa',し:'shi',す:'su',せ:'se',そ:'so',
+    ざ:'za',じ:'ji',ず:'zu',ぜ:'ze',ぞ:'zo',た:'ta',ち:'chi',つ:'tsu',て:'te',と:'to',
+    だ:'da',ぢ:'ji',づ:'zu',で:'de',ど:'do',な:'na',に:'ni',ぬ:'nu',ね:'ne',の:'no',
+    は:'ha',ひ:'hi',ふ:'fu',へ:'he',ほ:'ho',ば:'ba',び:'bi',ぶ:'bu',べ:'be',ぼ:'bo',
+    ぱ:'pa',ぴ:'pi',ぷ:'pu',ぺ:'pe',ぽ:'po',ま:'ma',み:'mi',む:'mu',め:'me',も:'mo',
+    や:'ya',ゆ:'yu',よ:'yo',ら:'ra',り:'ri',る:'ru',れ:'re',ろ:'ro',
+    わ:'wa',ゐ:'i',ゑ:'e',を:'o',ん:'n'};
+  let out=[], i=0;
+  while(i<str.length){
+    const two = str.substr(i,2);
+    if(combo[two]){ out.push(combo[two]); i+=2; continue; }
+    const ch = str[i];
+    if(ch==='っ'){
+      const two2 = str.substr(i+1,2);
+      const nextRom = combo[two2] || single[str[i+1]] || '';
+      if(nextRom && !/^[aiueo]/.test(nextRom)) out.push(nextRom[0]);
+      i+=1; continue;
+    }
+    if(ch==='ー'){
+      const prev = out.length? out[out.length-1] : '';
+      const m = prev.match(/[aiueo](?!.*[aiueo])/);
+      if(m) out.push(m[0]);
+      i+=1; continue;
+    }
+    if(single[ch]){ out.push(single[ch]); i+=1; continue; }
+    out.push(ch); i+=1;
+  }
+  return out.join('');
+}
+
+function normLoose(s){ return (s||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+
+function levenshtein(a,b){
+  const m=a.length, n=b.length;
+  if(!m) return n; if(!n) return m;
+  let prev = Array.from({length:n+1}, (_,j)=>j);
+  for(let i=1;i<=m;i++){
+    let cur=[i];
+    for(let j=1;j<=n;j++){
+      cur[j] = a[i-1]===b[j-1] ? prev[j-1] : 1+Math.min(prev[j-1], prev[j], cur[j-1]);
+    }
+    prev=cur;
+  }
+  return prev[n];
+}
+
+function isCloseMatch(spoken, target){
+  const a = normLoose(spoken), b = normLoose(target);
+  if(!a || !b) return false;
+  if(a===b) return true;
+  if(a.length>=3 && b.length>=3 && (a.includes(b) || b.includes(a))) return true;
+  const dist = levenshtein(a,b);
+  return dist <= Math.max(1, Math.floor(Math.min(a.length,b.length)*0.3));
+}
+
+let recog = null, micOn = false, voiceCooldownUntil = 0;
+let micErrorStreak = 0, micStartedManually = false;
+const SpeechRecognitionImpl = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+function setVoiceHint(text, on){
+  if(!els.voiceHint) return;
+  els.voiceHint.textContent = text;
+  els.voiceHint.classList.toggle('on', !!on);
+}
+
+const VOICE_ERROR_MSG = {
+  'network': '🎤 Gagal terhubung ke layanan pengenal suara Google. Di sebagian tablet/HP tanpa Google Play Services (mis. beberapa perangkat Huawei) fitur ini memang tidak bisa jalan di Chrome.',
+  'no-speech': '🎤 Tidak ada suara terdeteksi, coba ucapkan lagi lebih dekat ke mic.',
+  'audio-capture': '🎤 Mikrofon tidak ditemukan/tidak bisa diakses di perangkat ini.',
+  'not-allowed': '🎤 Izin mikrofon ditolak. Aktifkan izin mikrofon untuk situs ini di pengaturan browser.',
+  'service-not-allowed': '🎤 Izin mikrofon ditolak. Aktifkan izin mikrofon untuk situs ini di pengaturan browser.',
+  'aborted': '🎤 Pengenalan suara terhenti.',
+  'language-not-supported': '🎤 Bahasa Indonesia tidak didukung untuk pengenal suara di perangkat ini.'
+};
+
+function handleVoiceCommand(transcript){
+  if(Date.now() < voiceCooldownUntil) return;
+  if(!els.deck.classList.contains('active')) return;
+  const top = els.stage.querySelector('.card:last-child') || els.stage.lastElementChild;
+  const word = state.deck[state.pos];
+  if(!top || !word) return;
+  const flipEl = top.querySelector('.card-flip');
+  if(!flipEl) return;
+  const isFlipped = flipEl.classList.contains('flipped');
+  const t = (transcript||'').toLowerCase().trim();
+  if(!t) return;
+
+  if(/\b(flip|balik|buka)\b/.test(t)){
+    if(!isFlipped) flipEl.classList.add('flipped');
+    setVoiceHint('🎤 "flip" — kartu dibalik', true);
+    return;
+  }
+  if(/\b(lupa)\b/.test(t)){
+    setVoiceHint('🎤 "lupa" — kartu ditandai lupa', true);
+    voiceCooldownUntil = Date.now()+900;
+    manualAction('lupa');
+    return;
+  }
+  if(/\b(ga\s*tau|gatau|ga\s*tahu|gatahu|tidak\s*tahu|nggak\s*tau|enggak\s*tau)\b/.test(t)){
+    setVoiceHint('🎤 "gatau" — kartu ditandai belum tahu', true);
+    voiceCooldownUntil = Date.now()+900;
+    manualAction('gatau');
+    return;
+  }
+  if(/\b(ingat)\b/.test(t)){
+    setVoiceHint('🎤 "ingat" — kartu ditandai ingat', true);
+    voiceCooldownUntil = Date.now()+900;
+    manualAction('ingat');
+    return;
+  }
+
+  // cocokkan ucapan dengan bacaan kata di kartu saat ini
+  const romaji = kanaToRomaji(word.f);
+  if(isCloseMatch(t, romaji) || isCloseMatch(t, word.f)){
+    voiceCooldownUntil = Date.now()+1600;
+    if(!isFlipped){
+      flipEl.classList.add('flipped');
+      setVoiceHint(`🎤 Benar! "${word.f}" — dibalik & ditandai ingat`, true);
+      setTimeout(()=> manualAction('ingat'), 650);
+    } else {
+      setVoiceHint(`🎤 Benar! "${word.f}" — ditandai ingat`, true);
+      manualAction('ingat');
+    }
+  }
+}
+
+function reallyStartRecog(){
+  try{ recog.start(); }catch(err){ /* already started, ignore */ }
+}
+
+async function startMic(){
+  if(!recog) return;
+
+  // Web Speech API butuh konteks aman (HTTPS/localhost). Kalau file dibuka
+  // langsung (file://) atau lewat HTTP biasa, mic akan diam tanpa error jelas.
+  if(!window.isSecureContext){
+    setVoiceHint('🎤 Kontrol suara butuh halaman HTTPS. File ini sepertinya dibuka langsung (bukan lewat https://), jadi mikrofon tidak bisa diaktifkan browser.', false);
+    return;
+  }
+
+  micErrorStreak = 0;
+  micOn = true;
+  if(els.btnMic) els.btnMic.classList.add('listening');
+  setVoiceHint('🎤 Meminta izin mikrofon…', true);
+
+  // Minta izin mikrofon secara eksplisit dulu. Di banyak Android/Chrome,
+  // memanggil recog.start() tanpa ini bisa gagal diam-diam.
+  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      stream.getTracks().forEach(t=>t.stop());
+    }catch(err){
+      micOn = false;
+      if(els.btnMic) els.btnMic.classList.remove('listening');
+      setVoiceHint('🎤 Izin mikrofon ditolak atau tidak tersedia di perangkat ini.', false);
+      return;
+    }
+  }
+
+  if(!micOn) return; // stopMic() mungkin dipanggil selagi menunggu izin
+  setVoiceHint('🎤 Mendengarkan… ucapkan kata, "flip", "ingat", "lupa", atau "gatau"', true);
+  reallyStartRecog();
+}
+function stopMic(){
+  if(!recog){ micOn=false; return; }
+  micOn = false;
+  micErrorStreak = 0;
+  if(els.btnMic) els.btnMic.classList.remove('listening');
+  setVoiceHint('🎤 Nonaktif · ketuk ikon mikrofon untuk kontrol suara', false);
+  try{ recog.stop(); }catch(err){}
+}
+
+if(SpeechRecognitionImpl){
+  recog = new SpeechRecognitionImpl();
+  recog.lang = 'id-ID';
+  recog.continuous = true;
+  recog.interimResults = false;
+  recog.maxAlternatives = 3;
+  recog.onresult = (e)=>{
+    micErrorStreak = 0;
+    for(let i=e.resultIndex; i<e.results.length; i++){
+      const res = e.results[i];
+      if(!res.isFinal) continue;
+      for(let j=0; j<res.length; j++){
+        handleVoiceCommand(res[j].transcript);
+      }
+    }
+  };
+  recog.onerror = (e)=>{
+    const msg = VOICE_ERROR_MSG[e.error] || ('🎤 Terjadi error pengenal suara: ' + e.error);
+    if(e.error==='not-allowed' || e.error==='service-not-allowed' || e.error==='audio-capture' || e.error==='language-not-supported'){
+      setVoiceHint(msg, false);
+      stopMic();
+      return;
+    }
+    // Error seperti 'network' atau 'aborted' bisa muncul berulang-ulang
+    // (terutama di perangkat tanpa Google Play Services). Jangan retry selamanya.
+    micErrorStreak++;
+    if(micErrorStreak >= 3){
+      setVoiceHint(msg, false);
+      stopMic();
+    } else {
+      setVoiceHint(msg + ' Mencoba lagi…', true);
+    }
+  };
+  recog.onend = ()=>{
+    if(micOn && micErrorStreak < 3){
+      setTimeout(()=>{ if(micOn) reallyStartRecog(); }, 250);
+    }
+  };
+  if(els.btnMic){
+    els.btnMic.addEventListener('click', ()=> micOn ? stopMic() : startMic());
+  }
+} else if(els.btnMic){
+  els.btnMic.style.display = 'none';
+  setVoiceHint('🎤 Kontrol suara tidak didukung di browser ini', false);
+}
+
+/* ==================== SUMMARY ==================== */
+function finishDeck(){
+  const {ingat,gatau,lupa} = state.stats;
+  const total = ingat+gatau+lupa;
+  const pct = total? Math.round(ingat/total*100) : 0;
+  const circumference = 2*Math.PI*74;
+  els.ringFg.style.stroke = state.cat.accent;
+  els.ringFg.setAttribute('stroke-dasharray', circumference.toFixed(1));
+  els.ringFg.setAttribute('stroke-dashoffset', (circumference*(1-pct/100)).toFixed(1));
+  els.ringPct.textContent = pct+'%';
+  els.summaryTitle.textContent = `Selesai — ${state.cat.name}`;
+  els.summarySub.textContent = total? `Kamu menyelesaikan ${total} kartu dari tema ${state.cat.jp}.` : 'Belum ada kartu yang diselesaikan.';
+  els.sumIngat.textContent = ingat+' ingat';
+  els.sumGatau.textContent = gatau+' belum tahu';
+  els.sumLupa.textContent = lupa+' lupa';
+  els.btnRetryHard.style.display = state.missed.length? '' : 'none';
+  show('summary');
+}
+
+els.btnRetryAll.addEventListener('click', ()=>{
+  state.deck = shuffle(VOCAB[state.cat.id]);
+  state.pos = 0; state.stats={ingat:0,gatau:0,lupa:0}; state.missed=[];
+  show('deck'); renderStage(); updateHud();
+});
+els.btnRetryHard.addEventListener('click', ()=>{
+  state.deck = shuffle(state.missed);
+  state.pos = 0; state.stats={ingat:0,gatau:0,lupa:0}; state.missed=[];
+  show('deck'); renderStage(); updateHud();
+});
+
+/* ==================== INIT ==================== */
+setTheme(HOME_THEME);
+renderHome();
+show('home');
+</script>
+</body>
+</html>
