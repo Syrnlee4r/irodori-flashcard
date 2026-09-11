@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kotoba Flashcard — Irodori A2.1</title>
+<style>
+  :root{
+    --bg1:#fdf6ec;
+    --bg2:#eef4f8;
+    --card-bg:#ffffff;
+    --ink:#2d2a26;
+    --sub:#7a746a;
+    --accent:#e8734a;
+    --accent2:#3f8f8a;
+    --accent3:#c94f4f;
+    --green:#4caf7d;
+    --amber:#e0a63c;
+    --blue:#4a86c9;
+    --border:#e7ded0;
+    --shadow: 0 10px 30px rgba(60,40,20,0.12);
+    --radius:22px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Hiragino Sans','Noto Sans JP','Segoe UI',system-ui,sans-serif;
+    background:
+      radial-gradient(circle at 10% 10%, #fdf1e0 0%, transparent 45%),
+      radial-gradient(circle at 90% 20%, #e3f1ef 0%, transparent 40%),
+      radial-gradient(circle at 50% 90%, #fbe9e7 0%, transparent 40%),
+      linear-gradient(160deg, var(--bg1), var(--bg2));
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:640px;
+    margin:0 auto;
+    padding:18px 16px 40px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  header.top{
+    text-align:center;
+    padding:10px 0 18px;
+  }
+  header.top h1{
+    font-size:1.5rem;
+    margin:0 0 4px;
+    letter-spacing:0.5px;
+    color:var(--accent3);
+  }
+  header.top h1 span.jp{
+    font-size:1.7rem;
+    display:block;
+    color:var(--ink);
+    font-weight:800;
+  }
+  header.top p{
+    margin:0;
+    color:var(--sub);
+    font-size:0.85rem;
+  }
+
+  .screen{ display:none; flex:1; flex-direction:column; }
+  .screen.active{ display:flex; }
+
+  /* ---------- SETUP SCREEN ---------- */
+  .panel{
+    background:var(--card-bg);
+    border-radius:var(--radius);
+    padding:20px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+  }
+  .panel + .panel{ margin-top:16px; }
+  .panel h2{
+    margin:0 0 12px;
+    font-size:1.05rem;
+    color:var(--accent3);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .mode-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .mode-btn{
+    border:2px solid var(--border);
+    background:#fffaf3;
+    border-radius:16px;
+    padding:14px 10px;
+    text-align:center;
+    cursor:pointer;
+    font-weight:700;
+    font-size:0.95rem;
+    color:var(--ink);
+    transition:all .15s ease;
+    user-select:none;
+  }
+  .mode-btn .emoji{ font-size:1.4rem; display:block; margin-bottom:4px;}
+  .mode-btn.selected{
+    border-color:var(--accent);
+    background:linear-gradient(135deg,#ffe6d5,#fff1e6);
+    box-shadow:0 4px 14px rgba(232,115,74,0.25);
+    transform:translateY(-1px);
+  }
+  .lesson-select-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+  }
+  .chip-btn{
+    border:2px solid var(--border);
+    background:#fff;
+    border-radius:999px;
+    padding:6px 14px;
+    font-size:0.8rem;
+    font-weight:700;
+    cursor:pointer;
+    color:var(--sub);
+  }
+  .chip-btn.active{
+    border-color:var(--accent2);
+    background:var(--accent2);
+    color:#fff;
+  }
+  .lesson-list{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    max-height:340px;
+    overflow-y:auto;
+    padding-right:4px;
+  }
+  .lesson-item{
+    border:2px solid var(--border);
+    border-radius:14px;
+    padding:10px 12px;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    background:#fffefb;
+    transition:all .15s ease;
+  }
+  .lesson-item.checked{
+    border-color:var(--accent);
+    background:#fff4ea;
+  }
+  .lesson-item .l-num{
+    font-size:0.7rem;
+    font-weight:800;
+    color:var(--accent2);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .lesson-item .l-title{
+    font-size:0.82rem;
+    color:var(--ink);
+    line-height:1.25;
+  }
+  .lesson-item .l-count{
+    font-size:0.72rem;
+    color:var(--sub);
+  }
+  .start-btn{
+    width:100%;
+    margin-top:18px;
+    padding:16px;
+    font-size:1.05rem;
+    font-weight:800;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(135deg,var(--accent),#f2926a);
+    color:#fff;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(232,115,74,0.35);
+    letter-spacing:0.5px;
+    transition:transform .12s ease;
+  }
+  .start-btn:active{ transform:scale(0.97); }
+  .start-btn:disabled{
+    background:#d8d2c6;
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .small-note{ font-size:0.75rem; color:var(--sub); margin-top:8px; text-align:center;}
+
+  /* ---------- STUDY SCREEN ---------- */
+  .study-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+    gap:10px;
+  }
+  .back-btn{
+    background:none;
+    border:none;
+    font-size:1.4rem;
+    cursor:pointer;
+    color:var(--sub);
+    padding:4px 8px;
+  }
+  .progress-wrap{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .progress-bar{
+    height:8px;
+    background:#e9e2d3;
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--accent2),var(--green));
+    width:0%;
+    transition:width .25s ease;
+  }
+  .progress-text{
+    font-size:0.72rem;
+    color:var(--sub);
+    display:flex;
+    justify-content:space-between;
+  }
+  .stat-pills{
+    display:flex;
+    gap:6px;
+  }
+  .pill{
+    font-size:0.7rem;
+    font-weight:800;
+    padding:3px 9px;
+    border-radius:999px;
+  }
+  .pill.remember{ background:#e3f6ea; color:#2f9e5e; }
+  .pill.forget{ background:#fdeceb; color:var(--accent3); }
+  .pill.newq{ background:#eaf1fb; color:var(--blue); }
+
+  .card-stage{
+    flex:1;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:400px;
+    perspective:1400px;
+    touch-action:none;
+  }
+  .card{
+    position:absolute;
+    width:100%;
+    max-width:460px;
+    height:390px;
+    border-radius:26px;
+    cursor:grab;
+    transform-style:preserve-3d;
+    transition:transform .35s cubic-bezier(.2,.8,.3,1), opacity .35s ease;
+    will-change:transform;
+    touch-action:none;
+  }
+  .card.dragging{ transition:none; cursor:grabbing; }
+  .card-face{
+    position:absolute;
+    inset:0;
+    border-radius:26px;
+    backface-visibility:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:28px 22px;
+    text-align:center;
+    box-shadow:0 18px 40px rgba(60,40,20,0.18);
+    border:1px solid rgba(255,255,255,0.6);
+  }
+  .card-front{
+    background:linear-gradient(155deg,#fffaf1,#fdeee0);
+  }
+  .card-back{
+    background:linear-gradient(155deg,#eefaf6,#e6f2fb);
+    transform:rotateY(180deg);
+  }
+  .card.flipped .card-front{ transform:rotateY(180deg); }
+  .card.flipped .card-back{ transform:rotateY(360deg); }
+
+  .badge-lesson{
+    position:absolute;
+    top:16px;
+    left:18px;
+    font-size:0.68rem;
+    font-weight:800;
+    color:var(--accent2);
+    background:rgba(255,255,255,0.7);
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  .badge-dir{
+    position:absolute;
+    top:16px;
+    right:18px;
+    font-size:0.68rem;
+    font-weight:800;
+    color:#fff;
+    background:var(--accent);
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  .card-word{
+    font-size:2.6rem;
+    font-weight:800;
+    line-height:1.25;
+    word-break:break-word;
+    color:var(--ink);
+  }
+  .card-word.id-text{
+    font-size:1.9rem;
+  }
+  .card-sub{
+    margin-top:10px;
+    font-size:1.15rem;
+    color:var(--accent2);
+    font-weight:700;
+  }
+  .card-hint{
+    position:absolute;
+    bottom:18px;
+    font-size:0.75rem;
+    color:var(--sub);
+    opacity:0.8;
+  }
+  .card-meaning{
+    margin-top:14px;
+    font-size:1.25rem;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .card-reading{
+    font-size:1.3rem;
+    color:var(--accent2);
+    font-weight:700;
+  }
+
+  .swipe-tag{
+    position:absolute;
+    top:26px;
+    font-weight:900;
+    font-size:1.3rem;
+    padding:6px 16px;
+    border-radius:12px;
+    border:4px solid;
+    opacity:0;
+    transform:scale(0.8) rotate(-8deg);
+    pointer-events:none;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .swipe-tag.right{ right:20px; color:var(--green); border-color:var(--green); }
+  .swipe-tag.left{ left:20px; color:var(--accent3); border-color:var(--accent3); }
+  .swipe-tag.down{ left:50%; transform:translateX(-50%) scale(0.8); bottom:26px; top:auto; color:var(--amber); border-color:var(--amber);}
+
+  .action-row{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin-top:18px;
+  }
+  .act-btn{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    border:none;
+    font-size:1.5rem;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 8px 18px rgba(0,0,0,0.15);
+    transition:transform .12s ease;
+  }
+  .act-btn:active{ transform:scale(0.9); }
+  .act-forget{ background:#fdeceb; color:var(--accent3); }
+  .act-new{ background:#fff3da; color:var(--amber); }
+  .act-remember{ background:#e3f6ea; color:var(--green); }
+  .act-flip{ background:#eaf1fb; color:var(--blue); width:48px; height:48px; font-size:1.2rem; align-self:center;}
+
+  .hint-row{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--sub);
+    margin-top:10px;
+  }
+
+  /* ---------- RESULT SCREEN ---------- */
+  .result-wrap{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:14px;
+  }
+  .result-ring{
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    background:conic-gradient(var(--green) calc(var(--pct) * 1%), #eee2cf 0);
+    box-shadow:var(--shadow);
+  }
+  .result-ring::before{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    background:var(--card-bg);
+    border-radius:50%;
+  }
+  .result-ring .pct-num{
+    position:relative;
+    font-size:2.4rem;
+    font-weight:900;
+    color:var(--ink);
+  }
+  .result-ring .pct-sign{
+    position:relative;
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--sub);
+    margin-left:2px;
+  }
+  .result-title{ font-size:1.3rem; font-weight:800; color:var(--accent3);}
+  .result-sub{ color:var(--sub); font-size:0.9rem; max-width:320px; }
+  .result-stats{
+    display:flex;
+    gap:14px;
+    margin-top:6px;
+  }
+  .rstat{
+    background:var(--card-bg);
+    border-radius:16px;
+    padding:12px 18px;
+    box-shadow:var(--shadow);
+    min-width:80px;
+  }
+  .rstat .num{ font-size:1.3rem; font-weight:900; }
+  .rstat .lbl{ font-size:0.68rem; color:var(--sub); font-weight:700; }
+  .rstat.g .num{ color:var(--green); }
+  .rstat.r .num{ color:var(--amber); }
+  .result-btns{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    width:100%;
+    max-width:340px;
+  }
+  .result-btns button{
+    flex:1;
+    padding:14px;
+    border-radius:16px;
+    border:none;
+    font-weight:800;
+    cursor:pointer;
+    font-size:0.9rem;
+  }
+  .btn-again{ background:var(--accent); color:#fff; box-shadow:0 8px 20px rgba(232,115,74,0.3);}
+  .btn-home{ background:#eee5d5; color:var(--ink); }
+
+  ::-webkit-scrollbar{ width:6px; }
+  ::-webkit-scrollbar-thumb{ background:#dccdb0; border-radius:6px; }
+
+  @media (max-width:380px){
+    .card{ height:360px; }
+    .card-word{ font-size:2.1rem; }
+  }
+
+  /* ---------- TABLET ---------- */
+  @media (min-width:700px){
+    .app{ max-width:760px; padding:24px 28px 50px; }
+    header.top h1{ font-size:1.7rem; }
+    header.top h1 span.jp{ font-size:2rem; }
+    .lesson-list{ grid-template-columns:1fr 1fr 1fr; }
+    .card{ max-width:520px; height:430px; }
+    .card-word{ font-size:2.9rem; }
+    .card-word.id-text{ font-size:2.1rem; }
+    .card-meaning{ font-size:1.4rem; }
+    .card-reading{ font-size:1.45rem; }
+  }
+
+  /* ---------- LAPTOP / DESKTOP ---------- */
+  @media (min-width:1024px){
+    body{ display:flex; justify-content:center; }
+    .app{ max-width:900px; padding:32px 36px 60px; }
+    header.top h1{ font-size:1.9rem; }
+    header.top h1 span.jp{ font-size:2.2rem; }
+    .panel{ padding:26px 28px; }
+    .lesson-list{ grid-template-columns:1fr 1fr 1fr; max-height:400px; }
+    .card{ max-width:560px; height:460px; }
+    .card-word{ font-size:3.1rem; }
+    .card-word.id-text{ font-size:2.3rem; }
+    .card-meaning{ font-size:1.5rem; }
+    .card-reading{ font-size:1.5rem; }
+    .act-btn{ width:66px; height:66px; font-size:1.65rem; }
+    .act-flip{ width:54px; height:54px; }
+    .start-btn{ font-size:1.1rem; padding:17px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <h1>ことばフラッシュカード<span class="jp">Kotoba Flashcard</span></h1>
+    <p>Irodori — Belajar kosakata Jepang dengan seru</p>
+  </header>
+
+  <!-- SETUP SCREEN -->
+  <section id="setupScreen" class="screen active">
+    <div class="panel">
+      <h2>🔀 1. Pilih Arah Belajar</h2>
+      <div class="mode-grid">
+        <div class="mode-btn selected" data-mode="jp-id">
+          <span class="emoji">🇯🇵→🇮🇩</span>
+          Jepang ke Indonesia
+        </div>
+        <div class="mode-btn" data-mode="id-jp">
+          <span class="emoji">🇮🇩→🇯🇵</span>
+          Indonesia ke Jepang
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>📚 2. Pilih Bab (Lesson)</h2>
+      <div class="lesson-select-row" id="bookTabRow">
+        <div class="chip-btn active" id="bookA21Btn">Irodori A2.1</div>
+        <div class="chip-btn" id="bookA22Btn">Irodori A2.2</div>
+      </div>
+      <div class="lesson-select-row">
+        <div class="chip-btn active" id="selAllBtn">Pilih Semua</div>
+        <div class="chip-btn" id="selNoneBtn">Hapus Semua</div>
+      </div>
+      <div class="lesson-list" id="lessonList"></div>
+    </div>
+
+    <button class="start-btn" id="startBtn">Mulai Belajar 🚀</button>
+    <p class="small-note" id="totalNote"></p>
+  </section>
+
+  <!-- STUDY SCREEN -->
+  <section id="studyScreen" class="screen">
+    <div class="study-header">
+      <button class="back-btn" id="quitBtn">←</button>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text">
+          <span id="progressLabel">0 / 0</span>
+          <span id="roundLabel">Ronde 1</span>
+        </div>
+      </div>
+      <div class="stat-pills">
+        <span class="pill remember" id="pillRemember">0</span>
+        <span class="pill forget" id="pillForget">0</span>
+        <span class="pill newq" id="pillNew">0</span>
+      </div>
+    </div>
+
+    <div class="card-stage" id="cardStage"></div>
+
+    <div class="action-row">
+      <button class="act-btn act-forget" id="btnForget" title="Lupa">✕</button>
+      <button class="act-btn act-flip" id="btnFlip" title="Balik kartu">⟲</button>
+      <button class="act-btn act-new" id="btnNew" title="Belum Pernah">?</button>
+      <button class="act-btn act-remember" id="btnRemember" title="Ingat">✓</button>
+    </div>
+    <p class="hint-row">Geser kanan = Ingat ✓ &nbsp;|&nbsp; Geser kiri = Lupa ✕ &nbsp;|&nbsp; Geser bawah = Belum Pernah ? &nbsp;|&nbsp; Ketuk kartu untuk membalik</p>
+  </section>
+
+  <!-- RESULT SCREEN -->
+  <section id="resultScreen" class="screen">
+    <div class="result-wrap">
+      <div class="result-title">🎉 Sesi Selesai!</div>
+      <div class="result-ring" id="resultRing" style="--pct:0">
+        <span class="pct-num" id="pctNum">0</span><span class="pct-sign">%</span>
+      </div>
+      <p class="result-sub" id="resultSub">Persentase kosakata yang berhasil kamu ingat.</p>
+      <div class="result-stats">
+        <div class="rstat g"><div class="num" id="statRemember">0</div><div class="lbl">INGAT</div></div>
+        <div class="rstat r"><div class="num" id="statRounds">0</div><div class="lbl">RONDE</div></div>
+      </div>
+      <div class="result-btns">
+        <button class="btn-home" id="btnHome">Menu Awal</button>
+        <button class="btn-again" id="btnAgain">Ulangi Sesi Ini</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const LESSONS = [{"id": 1, "title": "Lesson 1: レストランで働いています", "words": [{"k": "先輩", "r": "せんぱい", "a": "kakak tingkat; senior"}, {"k": "後輩", "r": "こうはい", "a": "adik tingkat; junior"}, {"k": "知り合い", "r": "しりあい", "a": "kenalan"}, {"k": "久しぶり", "r": "ひさしぶり", "a": "sudah lama tidak berjumpa"}, {"k": "元気（な）", "r": "げんき", "a": "sehat"}, {"k": "おかげさまで", "r": "おかげさまで", "a": "Terima kasih"}, {"k": "半年", "r": "はんとし", "a": "setengah tahun"}, {"k": "1年", "r": "いちねん", "a": "satu tahun"}, {"k": "先月", "r": "せんげつ", "a": "bulan lalu"}, {"k": "去年", "r": "きょねん", "a": "tahun lalu"}, {"k": "生活", "r": "せいかつ", "a": "kehidupan"}, {"k": "もう", "r": "もう", "a": "sudah"}, {"k": "慣れる", "r": "なれる", "a": "terbiasa; betah"}, {"k": "ちょうど", "r": "ちょうど", "a": "pas; tepat"}, {"k": "なんとか", "r": "なんとか", "a": "lumayan"}, {"k": "まだ", "r": "まだ", "a": "belum"}, {"k": "～になる", "r": "～になる", "a": "sudah ~tahun/bulan"}, {"k": "～か月", "r": "～かげつ", "a": "~bulan"}, {"k": "1か月", "r": "いっかげつ", "a": "satu bulan"}, {"k": "2か月", "r": "にかげつ", "a": "dua bulan"}, {"k": "3か月", "r": "さんかげつ", "a": "tiga bulan"}, {"k": "4か月", "r": "よんかげつ", "a": "empat bulan"}, {"k": "5か月", "r": "ごかげつ", "a": "lima bulan"}, {"k": "6か月", "r": "ろっかげつ", "a": "enam bulan"}, {"k": "7か月", "r": "ななかげつ", "a": "tujuh bulan"}, {"k": "8か月", "r": "はちかげつ", "a": "delapan bulan"}, {"k": "9か月", "r": "きゅうかげつ", "a": "sembilan bulan"}, {"k": "10か月", "r": "じゅっかげつ", "a": "sepuluh bulan"}, {"k": "11か月", "r": "じゅういっかげつ", "a": "sebelas bulan"}, {"k": "12か月", "r": "じゅうにかげつ", "a": "dua belas bulan"}, {"k": "～年", "r": "～ねん", "a": "~tahun"}, {"k": "2年", "r": "にねん", "a": "dua tahun"}, {"k": "3年", "r": "さんねん", "a": "tiga tahun"}, {"k": "4年", "r": "よねん", "a": "empat tahun"}, {"k": "5年", "r": "ごねん", "a": "lima tahun"}, {"k": "6年", "r": "ろくねん", "a": "enam tahun"}, {"k": "7年", "r": "ななねん／しちねん", "a": "tujuh tahun"}, {"k": "8年", "r": "はちねん", "a": "delapan tahun"}, {"k": "9年", "r": "きゅうねん", "a": "sembilan tahun"}, {"k": "10年", "r": "じゅうねん", "a": "sepuluh tahun"}, {"k": "先週", "r": "せんしゅう", "a": "minggu lalu"}, {"k": "仕事", "r": "しごと", "a": "pekerjaan"}, {"k": "レストラン", "r": "レストラン", "a": "restoran"}, {"k": "働く", "r": "はたらく", "a": "bekerja"}, {"k": "ホテル", "r": "ホテル", "a": "hotel"}, {"k": "工場", "r": "こうじょう", "a": "pabrik"}, {"k": "介護", "r": "かいご", "a": "pengasuhan; perawatan (lansia)"}, {"k": "仕事をする", "r": "しごとをする", "a": "bekerja"}, {"k": "建設", "r": "けんせつ", "a": "konstruksi"}, {"k": "野菜", "r": "やさい", "a": "sayur"}, {"k": "作る", "r": "つくる", "a": "menanam (sayur); membuat"}, {"k": "日本語学校", "r": "にほんごがっこう", "a": "Sekolah Bahasa Jepang"}, {"k": "勉強する", "r": "べんきょうする", "a": "belajar"}, {"k": "専門学校", "r": "せんもんがっこう", "a": "sekolah kejuruan"}, {"k": "通う", "r": "かよう", "a": "pergi; menjalani pendidikan (sekolah)"}, {"k": "主婦", "r": "しゅふ", "a": "ibu rumah tangga"}, {"k": "主夫", "r": "しゅふ", "a": "bapak rumah tangga"}, {"k": "忙しい", "r": "いそがしい", "a": "sibuk"}, {"k": "大変（な）", "r": "たいへん", "a": "sulit; berat"}, {"k": "疲れる", "r": "つかれる", "a": "capek; lelah"}, {"k": "まあまあ（な）", "r": "まあまあ", "a": "lumayan"}, {"k": "楽しい", "r": "たのしい", "a": "menyenangkan"}, {"k": "みんな", "r": "みんな", "a": "semua orang"}, {"k": "親切（な）", "r": "しんせつ", "a": "ramah; baik hati"}, {"k": "勉強になる", "r": "べんきょうになる", "a": "belajar banyak hal"}, {"k": "毎日", "r": "まいにち", "a": "setiap hari"}, {"k": "学生", "r": "がくせい", "a": "siswa"}, {"k": "プログラミング", "r": "プログラミング", "a": "pemrograman"}]}, {"id": 2, "title": "Lesson 2: ゲームをするのが好きです", "words": [{"k": "趣味", "r": "しゅみ", "a": "hobi"}, {"k": "音楽", "r": "おんがく", "a": "musik"}, {"k": "聞く", "r": "きく", "a": "mendengar"}, {"k": "本", "r": "ほん", "a": "buku"}, {"k": "読む", "r": "よむ", "a": "membaca"}, {"k": "もの", "r": "もの", "a": "makanan; sesuatu (yang enak)"}, {"k": "写真", "r": "しゃしん", "a": "foto"}, {"k": "撮る", "r": "とる", "a": "mengambil (foto; video)"}, {"k": "ピアノ", "r": "ピアノ", "a": "piano"}, {"k": "ギター", "r": "ギター", "a": "gitar"}, {"k": "弾く", "r": "ひく", "a": "bermain (alat musik)"}, {"k": "おしゃべり", "r": "おしゃべり", "a": "bincang-bincang; obrolan"}, {"k": "料理", "r": "りょうり", "a": "masak; masakan"}, {"k": "旅行", "r": "りょこう", "a": "perjalanan"}, {"k": "テニス", "r": "テニス", "a": "tenis"}, {"k": "いろいろ（な）", "r": "いろいろ", "a": "bermacam-macam"}, {"k": "こと", "r": "こと", "a": "hal; sesuatu (cth: hal yang disukai)"}, {"k": "人", "r": "ひと", "a": "orang"}, {"k": "話す", "r": "はなす", "a": "berbicara"}, {"k": "特にない", "r": "とくにない", "a": "tidak ada yang khusus"}, {"k": "野球", "r": "やきゅう", "a": "bisbol; kasti"}, {"k": "バドミントン", "r": "バドミントン", "a": "bulu tangkis"}, {"k": "アニメ", "r": "アニメ", "a": "anime (animasi)"}, {"k": "市", "r": "し", "a": "kota"}, {"k": "体育館", "r": "たいいくかん", "a": "gedung olahraga"}, {"k": "毎週", "r": "まいしゅう", "a": "setiap minggu"}, {"k": "夕方", "r": "ゆうがた", "a": "sore hari"}, {"k": "そのあと", "r": "そのあと", "a": "setelah itu; kemudian"}, {"k": "本当に", "r": "ほんとうに", "a": "sangat"}, {"k": "～の？", "r": "～の？", "a": "(bentuk ungkapan pertanyaan)"}, {"k": "ぼく", "r": "ぼく", "a": "aku (laki-laki)"}, {"k": "出かける", "r": "でかける", "a": "pergi"}, {"k": "特に", "r": "とくに", "a": "terutama"}, {"k": "キャッチボール", "r": "キャッチボール", "a": "permainan lempar-tangkap bola bisbol"}, {"k": "お子さん", "r": "おこさん", "a": "anak (orang lain)"}, {"k": "娘", "r": "むすめ", "a": "anak perempuan"}, {"k": "～人家族", "r": "～にんかぞく", "a": "keluarga dengan ~ anggota"}, {"k": "犬", "r": "いぬ", "a": "anjing"}, {"k": "キャンプ", "r": "キャンプ", "a": "berkemah"}, {"k": "つり", "r": "つり", "a": "memancing"}, {"k": "海", "r": "うみ", "a": "laut"}, {"k": "山", "r": "やま", "a": "gunung"}, {"k": "～語", "r": "～ご", "a": "bahasa ~"}, {"k": "ことば", "r": "ことば", "a": "bahasa"}, {"k": "アウトドア", "r": "アウトドア", "a": "outdoor; aktivitas luar ruangan"}, {"k": "サイクリング", "r": "サイクリング", "a": "bersepeda"}, {"k": "教える", "r": "おしえる", "a": "memberi tahu"}, {"k": "～人", "r": "～じん", "a": "orang ~ (kewarganegaraan)"}, {"k": "習う", "r": "ならう", "a": "mempelajari"}, {"k": "英語", "r": "えいご", "a": "bahasa Inggris"}, {"k": "できる", "r": "できる", "a": "sesuatu yang bisa dilakukan"}, {"k": "いけばな", "r": "いけばな", "a": "Ikebana (seni merangkai bunga)"}, {"k": "フィリピノ語", "r": "フィリピノご", "a": "bahasa Filipina"}, {"k": "スペイン語", "r": "スペインご", "a": "bahasa Spanyol"}, {"k": "～人", "r": "～にん", "a": "~ orang"}, {"k": "何人", "r": "なんにん", "a": "berapa (banyak) orang"}, {"k": "1人", "r": "ひとり", "a": "satu orang"}, {"k": "2人", "r": "ふたり", "a": "dua orang"}, {"k": "3人", "r": "さんにん", "a": "tiga orang"}, {"k": "4人", "r": "よにん", "a": "empat orang"}, {"k": "5人", "r": "ごにん", "a": "lima orang"}, {"k": "6人", "r": "ろくにん", "a": "enam orang"}, {"k": "7人", "r": "ななにん／しちにん", "a": "tujuh orang"}, {"k": "8人", "r": "はちにん", "a": "delapan orang"}, {"k": "9人", "r": "きゅうにん", "a": "sembilan orang"}, {"k": "10人", "r": "じゅうにん", "a": "sepuluh orang"}]}, {"id": 3, "title": "Lesson 3: 冬はとても寒くなります", "words": [{"k": "季節", "r": "きせつ", "a": "musim"}, {"k": "ことば", "r": "ことば", "a": "kata; kosakata"}, {"k": "暑い", "r": "あつい", "a": "panas"}, {"k": "すずしい", "r": "すずしい", "a": "sejuk"}, {"k": "寒い", "r": "さむい", "a": "dingin"}, {"k": "暖かい", "r": "あたたかい", "a": "hangat"}, {"k": "じめじめする", "r": "じめじめする", "a": "panas dan lembab"}, {"k": "蒸し暑い", "r": "むしあつい", "a": "panas dan pengap / gerah"}, {"k": "雨", "r": "あめ", "a": "hujan"}, {"k": "降る", "r": "ふる", "a": "turun (hujan, salju, dll.)"}, {"k": "雪", "r": "ゆき", "a": "salju"}, {"k": "桜", "r": "さくら", "a": "bunga sakura"}, {"k": "花", "r": "はな", "a": "bunga"}, {"k": "咲く", "r": "さく", "a": "mekar"}, {"k": "もみじ", "r": "もみじ", "a": "daun yang berubah warna musim gugur"}, {"k": "きれい（な）", "r": "きれい", "a": "indah; cantik"}, {"k": "セミ", "r": "セミ", "a": "tonggeret"}, {"k": "鳴く", "r": "なく", "a": "bersuara (hewan; serangga)"}, {"k": "春", "r": "はる", "a": "musim semi"}, {"k": "梅雨", "r": "つゆ", "a": "musim hujan sebelum musim panas di Jepang"}, {"k": "夏", "r": "なつ", "a": "musim panas"}, {"k": "秋", "r": "あき", "a": "musim gugur"}, {"k": "冬", "r": "ふゆ", "a": "musim dingin"}, {"k": "たくさん", "r": "たくさん", "a": "banyak"}, {"k": "学校", "r": "がっこう", "a": "sekolah"}, {"k": "なる", "r": "なる", "a": "menjadi (cth: menjadi hari libur)"}, {"k": "一年中", "r": "いちねんじゅう", "a": "sepanjang tahun"}, {"k": "長い", "r": "ながい", "a": "panjang"}, {"k": "ずっと", "r": "ずっと", "a": "sepanjang waktu; terus menerus"}, {"k": "雨季", "r": "うき", "a": "musim hujan"}, {"k": "乾季", "r": "かんき", "a": "musim kemarau"}, {"k": "四季", "r": "しき", "a": "empat musim"}, {"k": "同じ", "r": "おなじ", "a": "sama"}, {"k": "～度", "r": "～ど", "a": "~derajat"}, {"k": "マイナス", "r": "マイナス", "a": "minus"}, {"k": "短い", "r": "みじかい", "a": "pendek"}, {"k": "そうなんですか", "r": "そうなんですか", "a": "Oh, begitu"}, {"k": "果物", "r": "くだもの", "a": "buah-buahan"}, {"k": "おいしい", "r": "おいしい", "a": "enak; lezat"}, {"k": "景色", "r": "けしき", "a": "pemandangan"}, {"k": "山", "r": "やま", "a": "gunung"}, {"k": "遊ぶ", "r": "あそぶ", "a": "bermain"}, {"k": "好き（な）", "r": "すき", "a": "favorit"}, {"k": "苦手（な）", "r": "にがて", "a": "tidak suka"}, {"k": "いちばん", "r": "いちばん", "a": "paling"}, {"k": "どうして", "r": "どうして", "a": "mengapa"}, {"k": "どの", "r": "どの", "a": "yang mana (lebih dari tiga)"}, {"k": "～よね", "r": "～よね", "a": "~ya, kan?"}, {"k": "ぶどう", "r": "ぶどう", "a": "anggur"}, {"k": "梨", "r": "なし", "a": "pir"}]}, {"id": 4, "title": "Lesson 4: 昨日はすごい雨でしたね", "words": [{"k": "天気", "r": "てんき", "a": "cuaca"}, {"k": "晴れ", "r": "はれ", "a": "cerah; baik (cuaca)"}, {"k": "晴れる", "r": "はれる", "a": "cerah; menjadi cerah"}, {"k": "いい天気", "r": "いいてんき", "a": "cuacanya cerah"}, {"k": "くもり", "r": "くもり", "a": "berawan"}, {"k": "くもる", "r": "くもる", "a": "berawan; mendung"}, {"k": "雨", "r": "あめ", "a": "hujan"}, {"k": "降る", "r": "ふる", "a": "turun (hujan; salju dll.)"}, {"k": "風", "r": "かぜ", "a": "angin"}, {"k": "吹く", "r": "ふく", "a": "(angin) bertiup; meniup"}, {"k": "雷", "r": "かみなり", "a": "guntur"}, {"k": "鳴る", "r": "なる", "a": "(guntur) bergemuruh"}, {"k": "今", "r": "いま", "a": "sekarang"}, {"k": "昨日", "r": "きのう", "a": "kemarin"}, {"k": "だいぶ", "r": "だいぶ", "a": "banyak; cukup"}, {"k": "嫌になる", "r": "いやになる", "a": "mengganggu; mengesalkan"}, {"k": "ゆうべ", "r": "ゆうべ", "a": "tadi malam"}, {"k": "すごい", "r": "すごい", "a": "deras (hujan); hebat"}, {"k": "本当ですね", "r": "ほんとうですね", "a": "benar sekali"}, {"k": "夜中", "r": "よなか", "a": "tengah malam"}, {"k": "明日", "r": "あした", "a": "besok"}, {"k": "1日", "r": "いちにち", "a": "sepanjang hari"}, {"k": "やむ", "r": "やむ", "a": "berhenti"}, {"k": "ただ", "r": "ただ", "a": "tapi"}, {"k": "強い", "r": "つよい", "a": "kuat"}, {"k": "服装", "r": "ふくそう", "a": "pakaian"}, {"k": "お出かけください", "r": "おでかけください", "a": "silakan bepergian"}, {"k": "台風", "r": "たいふう", "a": "topan"}, {"k": "外", "r": "そと", "a": "di luar"}, {"k": "死ぬ", "r": "しぬ", "a": "mati"}, {"k": "気温", "r": "きおん", "a": "suhu udara"}, {"k": "アイス", "r": "アイス", "a": "es krim"}, {"k": "町", "r": "まち", "a": "kota"}, {"k": "触る", "r": "さわる", "a": "menyentuh"}, {"k": "冷たい", "r": "つめたい", "a": "dingin"}, {"k": "まっしろ（な）", "r": "まっしろ", "a": "putih bersih"}, {"k": "とっても", "r": "とっても", "a": "sangat; banget"}, {"k": "まだ", "r": "まだ", "a": "belum"}, {"k": "遅れる", "r": "おくれる", "a": "terlambat"}]}, {"id": 5, "title": "Lesson 5: とてもにぎやかで便利です", "words": [{"k": "どんな", "r": "どんな", "a": "bagaimana"}, {"k": "町", "r": "まち", "a": "kota"}, {"k": "便利（な）", "r": "べんり", "a": "praktis"}, {"k": "不便（な）", "r": "ふべん", "a": "tidak praktis"}, {"k": "にぎやか（な）", "r": "にぎやか", "a": "ramai"}, {"k": "緑", "r": "みどり", "a": "pepohonan; tanaman hijau"}, {"k": "多い", "r": "おおい", "a": "banyak"}, {"k": "少ない", "r": "すくない", "a": "sedikit"}, {"k": "人", "r": "ひと", "a": "orang"}, {"k": "やさしい", "r": "やさしい", "a": "ramah"}, {"k": "親切（な）", "r": "しんせつ", "a": "baik hati"}, {"k": "冷たい", "r": "つめたい", "a": "dingin (sikap); tidak peduli"}, {"k": "田舎", "r": "いなか", "a": "desa; pedesaan"}, {"k": "都会", "r": "とかい", "a": "kota"}, {"k": "きれい（な）", "r": "きれい", "a": "indah"}, {"k": "確かに", "r": "たしかに", "a": "pastinya"}, {"k": "住みやすい", "r": "すみやすい", "a": "nyaman"}, {"k": "店", "r": "みせ", "a": "toko / restoran"}, {"k": "安い", "r": "やすい", "a": "murah"}, {"k": "おもしろい", "r": "おもしろい", "a": "menarik"}, {"k": "遠い", "r": "とおい", "a": "jauh"}, {"k": "どこか", "r": "どこか", "a": "suatu tempat"}, {"k": "ところ", "r": "ところ", "a": "tempat"}, {"k": "スポーツセンター", "r": "スポーツセンター", "a": "sports center; pusat olahraga"}, {"k": "建物", "r": "たてもの", "a": "bangunan"}, {"k": "ショッピングモール", "r": "ショッピングモール", "a": "pusat perbelanjaan"}, {"k": "一度", "r": "いちど", "a": "sekali; satu kali"}, {"k": "行ってみる", "r": "いってみる", "a": "mencoba pergi"}, {"k": "場所", "r": "ばしょ", "a": "tempat"}, {"k": "ぜひ", "r": "ぜひ", "a": "pastikan; jangan sampai tidak"}, {"k": "おすすめ", "r": "おすすめ", "a": "direkomendasikan"}, {"k": "知っている", "r": "しっている", "a": "mengetahui"}, {"k": "知る", "r": "しる", "a": "mengetahui"}, {"k": "休憩所", "r": "きゅうけいじょ", "a": "tempat istirahat"}, {"k": "そうね……", "r": "そうね", "a": "Hmm (sedang berpikir)"}, {"k": "そうだなあ", "r": "そうだなあ", "a": "Hmm apa ya (sedang berpikir)"}, {"k": "美しい", "r": "うつくしい", "a": "indah"}, {"k": "砂浜", "r": "すなはま", "a": "pantai berpasir"}, {"k": "有名（な）", "r": "ゆうめい", "a": "terkenal"}, {"k": "泳ぐ", "r": "およぐ", "a": "berenang"}, {"k": "丘", "r": "おか", "a": "bukit"}, {"k": "見渡す", "r": "みわたす", "a": "memandang/melihat sekeliling"}, {"k": "夕日", "r": "ゆうひ", "a": "matahari terbenam"}, {"k": "タウンマップ", "r": "タウンマップ", "a": "peta kota"}, {"k": "名物", "r": "めいぶつ", "a": "makanan khas lokal"}, {"k": "評判", "r": "ひょうばん", "a": "reputasi"}, {"k": "～ha", "r": "～ヘクタール", "a": "~ha (hektar)"}, {"k": "バーベキュー場", "r": "バーベキューじょう", "a": "area barbeku (BBQ)"}, {"k": "サイクリングコース", "r": "サイクリングコース", "a": "jalur sepeda"}, {"k": "人気", "r": "にんき", "a": "populer"}, {"k": "ビーチ", "r": "ビーチ", "a": "pantai"}, {"k": "展望台", "r": "てんぼうだい", "a": "observatorium"}]}, {"id": 6, "title": "Lesson 6: 郵便局はどう行ったらいいですか？", "words": [{"k": "ある", "r": "ある", "a": "ada (hal di kota)"}, {"k": "もの", "r": "もの", "a": "hal / sesuatu; benda"}, {"k": "信号", "r": "しんごう", "a": "lampu lalu lintas"}, {"k": "横断歩道", "r": "おうだんほどう", "a": "penyeberangan pejalan kaki"}, {"k": "角", "r": "かど", "a": "sudut"}, {"k": "交差点", "r": "こうさてん", "a": "persimpangan"}, {"k": "道", "r": "みち", "a": "jalan"}, {"k": "橋", "r": "はし", "a": "jembatan"}, {"k": "道案内", "r": "みちあんない", "a": "petunjuk arah"}, {"k": "まっすぐ", "r": "まっすぐ", "a": "lurus"}, {"k": "左", "r": "ひだり", "a": "kiri"}, {"k": "曲がる", "r": "まがる", "a": "belok; berbelok"}, {"k": "右", "r": "みぎ", "a": "kanan"}, {"k": "渡る", "r": "わたる", "a": "menyeberang"}, {"k": "～つ目", "r": "～つめ", "a": "yang~ (urutan)"}, {"k": "1つ目", "r": "ひとつめ", "a": "pertama"}, {"k": "2つ目", "r": "ふたつめ", "a": "kedua"}, {"k": "バス停", "r": "バスてい", "a": "halte bus"}, {"k": "郵便局", "r": "ゆうびんきょく", "a": "kantor pos"}, {"k": "デパート", "r": "デパート", "a": "toserba"}, {"k": "科学", "r": "かがく", "a": "ilmu pengetahuan"}, {"k": "博物館", "r": "はくぶつかん", "a": "museum"}, {"k": "ずっと", "r": "ずっと", "a": "(lurus) terus"}, {"k": "市立", "r": "しりつ", "a": "(milik) kota"}, {"k": "すぐ", "r": "すぐ", "a": "langsung; tepat"}, {"k": "曲がったところ", "r": "まがったところ", "a": "setelah berbelok"}, {"k": "銀行", "r": "ぎんこう", "a": "bank"}, {"k": "神社", "r": "じんじゃ", "a": "kuil Shinto"}, {"k": "駐車場", "r": "ちゅうしゃじょう", "a": "tempat parkir"}, {"k": "交番", "r": "こうばん", "a": "pos polisi"}, {"k": "病院", "r": "びょういん", "a": "rumah sakit"}, {"k": "黒い", "r": "くろい", "a": "hitam"}, {"k": "白い", "r": "しろい", "a": "putih"}, {"k": "青い", "r": "あおい", "a": "biru"}, {"k": "ビル", "r": "ビル", "a": "bangunan"}, {"k": "アジア食材", "r": "アジアしょくざい", "a": "bahan makanan khas Asia"}, {"k": "そちら", "r": "そちら", "a": "di situ"}, {"k": "北口", "r": "きたぐち", "a": "pintu utara"}, {"k": "間", "r": "あいだ", "a": "di antara ~ dan ~"}, {"k": "そうすると", "r": "そうすると", "a": "setelah itu"}, {"k": "見える", "r": "みえる", "a": "terlihat"}, {"k": "お待ちしております", "r": "おまちしております", "a": "kami menantikan kedatangan Anda"}, {"k": "帰る", "r": "かえる", "a": "pulang"}, {"k": "～町", "r": "～ちょう", "a": "Kota~"}, {"k": "高校", "r": "こうこう", "a": "SMA"}, {"k": "送る", "r": "おくる", "a": "mengantar (orang)"}, {"k": "大きな", "r": "おおきな", "a": "besar"}, {"k": "入る", "r": "はいる", "a": "masuk; berbelok"}, {"k": "どの辺？", "r": "どのへん", "a": "Di daerah mana?"}, {"k": "ここでいいです", "r": "ここでいいです", "a": "Di sini saja"}]}, {"id": 7, "title": "Lesson 7: 道に迷ってちょっと遅れます", "words": [{"k": "駅", "r": "えき", "a": "stasiun"}, {"k": "受付", "r": "うけつけ", "a": "resepsionis; meja informasi"}, {"k": "ホール", "r": "ホール", "a": "aula"}, {"k": "会社", "r": "かいしゃ", "a": "perusahaan"}, {"k": "門", "r": "もん", "a": "gerbang"}, {"k": "集合（する）", "r": "しゅうごう", "a": "berkumpul"}, {"k": "では", "r": "では", "a": "jadi"}, {"k": "案内する", "r": "あんないする", "a": "memandu"}, {"k": "待ち合わせ", "r": "まちあわせ", "a": "janjian bertemu"}, {"k": "イベント", "r": "イベント", "a": "acara"}, {"k": "始まる", "r": "はじまる", "a": "mulai"}, {"k": "スタッフ", "r": "スタッフ", "a": "staf"}, {"k": "～前", "r": "～まえ", "a": "~sebelum (30 menit sebelum)"}, {"k": "待ち合わせする", "r": "まちあわせする", "a": "bertemu (satu sama lain)"}, {"k": "平和", "r": "へいわ", "a": "perdamaian"}, {"k": "鳥", "r": "とり", "a": "burung"}, {"k": "像", "r": "ぞう", "a": "patung"}, {"k": "それ、何ですか？", "r": "それ、なんですか", "a": "Apa itu?"}, {"k": "事故", "r": "じこ", "a": "kecelakaan"}, {"k": "止まる", "r": "とまる", "a": "berhenti"}, {"k": "連絡する", "r": "れんらくする", "a": "menghubungi"}, {"k": "ねぼうする", "r": "ねぼうする", "a": "terlambat bangun; kesiangan"}, {"k": "今から", "r": "いまから", "a": "dari sekarang"}, {"k": "急ぐ", "r": "いそぐ", "a": "bergegas"}, {"k": "先に", "r": "さきに", "a": "lebih dulu"}, {"k": "始める", "r": "はじめる", "a": "mulai; memulai"}, {"k": "道に迷う", "r": "みちにまよう", "a": "tersesat di jalan"}, {"k": "遅れる", "r": "おくれる", "a": "terlambat"}, {"k": "着く", "r": "つく", "a": "tiba"}, {"k": "大丈夫（な）", "r": "だいじょうぶ", "a": "tidak apa-apa"}, {"k": "時間", "r": "じかん", "a": "waktu"}, {"k": "まちがえる", "r": "まちがえる", "a": "salah (salah paham)"}, {"k": "待つ", "r": "まつ", "a": "menunggu"}, {"k": "カフェ", "r": "カフェ", "a": "kafe"}]}, {"id": 8, "title": "Lesson 8: 野球、したことありますか？", "words": [{"k": "動物園", "r": "どうぶつえん", "a": "kebun binatang"}, {"k": "お城", "r": "おしろ", "a": "istana"}, {"k": "レストラン", "r": "レストラン", "a": "restoran"}, {"k": "博物館", "r": "はくぶつかん", "a": "museum"}, {"k": "アウトレットモール", "r": "アウトレットモール", "a": "outlet mall"}, {"k": "プロレス", "r": "プロレス", "a": "gulat profesional"}, {"k": "タワー", "r": "タワー", "a": "menara"}, {"k": "野球", "r": "やきゅう", "a": "bisbol"}, {"k": "もう", "r": "もう", "a": "sudah"}, {"k": "まだ", "r": "まだ", "a": "belum"}, {"k": "アジア", "r": "アジア", "a": "Asia"}, {"k": "すごく", "r": "すごく", "a": "sangat"}, {"k": "市民体育館", "r": "しみんたいいくかん", "a": "gimnasium publik"}, {"k": "試合", "r": "しあい", "a": "pertandingan"}, {"k": "やる", "r": "やる", "a": "melakukan"}, {"k": "メンバー", "r": "メンバー", "a": "anggota"}, {"k": "足りない", "r": "たりない", "a": "tidak cukup; kurang"}, {"k": "無理（な）", "r": "むり", "a": "tidak mungkin"}, {"k": "わかる", "r": "わかる", "a": "mengerti"}, {"k": "お金", "r": "おかね", "a": "uang"}, {"k": "おろす", "r": "おろす", "a": "menarik / mengambil (uang)"}, {"k": "食事", "r": "しょくじ", "a": "makan"}, {"k": "ちょっと", "r": "ちょっと", "a": "sedikit"}, {"k": "休む", "r": "やすむ", "a": "istirahat"}, {"k": "ジョギングシューズ", "r": "ジョギングシューズ", "a": "sepatu joging"}, {"k": "ATM", "r": "エーティーエム", "a": "ATM"}, {"k": "ゲームコーナー", "r": "ゲームコーナー", "a": "game arcade"}, {"k": "フードコート", "r": "フードコート", "a": "food court"}, {"k": "カフェ", "r": "カフェ", "a": "kafe"}, {"k": "映画館", "r": "えいがかん", "a": "bioskop"}, {"k": "スポーツ店", "r": "スポーツてん", "a": "toko peralatan olahraga"}, {"k": "このあと", "r": "このあと", "a": "setelah ini; kemudian"}, {"k": "お腹がすく", "r": "おなかがすく", "a": "merasa lapar"}, {"k": "何か", "r": "なにか", "a": "sesuatu"}, {"k": "その前に", "r": "そのまえに", "a": "sebelum itu"}, {"k": "すばらしい", "r": "すばらしい", "a": "bagus"}, {"k": "難しい", "r": "むずかしい", "a": "sukar; sulit"}, {"k": "感動する", "r": "かんどうする", "a": "terkesan"}, {"k": "かわいい", "r": "かわいい", "a": "lucu; manis"}, {"k": "展覧会", "r": "てんらんかい", "a": "pameran"}, {"k": "パンダ", "r": "パンダ", "a": "panda"}, {"k": "サル", "r": "サル", "a": "kera"}, {"k": "現代", "r": "げんだい", "a": "modern"}, {"k": "作品", "r": "さくひん", "a": "karya seni"}, {"k": "ホラー映画", "r": "ホラーえいが", "a": "film horor"}, {"k": "つまらない", "r": "つまらない", "a": "bosan; membosankan"}, {"k": "退屈（な）", "r": "たいくつ", "a": "bosan; membosankan"}, {"k": "いまいち（な）", "r": "いまいち", "a": "tidak cukup bagus"}]}, {"id": 9, "title": "Lesson 9: 読み方を教えてもらえませんか？", "words": [{"k": "日本語学校", "r": "にほんごがっこう", "a": "Sekolah bahasa Jepang"}, {"k": "高校", "r": "こうこう", "a": "SMA"}, {"k": "どれぐらい", "r": "どれぐらい", "a": "berapa lama"}, {"k": "上手（な）", "r": "じょうず", "a": "pandai / terampil"}, {"k": "～間", "r": "～かん", "a": "selama ~"}, {"k": "自分で", "r": "じぶんで", "a": "melakukan sendiri"}, {"k": "まだまだです", "r": "まだまだです", "a": "masih belum begitu mahir"}, {"k": "そんなことないです", "r": "そんなことないです", "a": "tidak juga"}, {"k": "大学", "r": "だいがく", "a": "universitas"}, {"k": "ラジオ", "r": "ラジオ", "a": "radio"}, {"k": "ネット", "r": "ネット", "a": "internet"}, {"k": "アプリ", "r": "アプリ", "a": "aplikasi"}, {"k": "日本語", "r": "にほんご", "a": "Bahasa Jepang"}, {"k": "勉強", "r": "べんきょう", "a": "belajar"}, {"k": "簡単（な）", "r": "かんたん", "a": "mudah; gampang"}, {"k": "難しい", "r": "むずかしい", "a": "susah; sulit"}, {"k": "似ている", "r": "にている", "a": "serupa; mirip"}, {"k": "違う", "r": "ちがう", "a": "berbeda"}, {"k": "得意（な）", "r": "とくい", "a": "mahir; pandai"}, {"k": "苦手（な）", "r": "にがて", "a": "tidak mahir; tidak pandai"}, {"k": "文法", "r": "ぶんぽう", "a": "tata bahasa"}, {"k": "発音", "r": "はつおん", "a": "pelafalan; pengucapan"}, {"k": "文字", "r": "もじ", "a": "huruf"}, {"k": "ひらがな", "r": "ひらがな", "a": "hiragana"}, {"k": "カタカナ", "r": "カタカナ", "a": "katakana"}, {"k": "漢字", "r": "かんじ", "a": "kanji"}, {"k": "会話", "r": "かいわ", "a": "percakapan"}, {"k": "モンゴル語", "r": "モンゴルご", "a": "bahasa Mongolia"}, {"k": "ベトナム語", "r": "ベトナムご", "a": "bahasa Vietnam"}, {"k": "覚える", "r": "おぼえる", "a": "menghafal"}, {"k": "教える", "r": "おしえる", "a": "mengajar"}, {"k": "辞書", "r": "じしょ", "a": "kamus"}, {"k": "貸す", "r": "かす", "a": "meminjamkan"}, {"k": "見せる", "r": "みせる", "a": "memperlihatkan"}, {"k": "チェックする", "r": "チェックする", "a": "memeriksa"}, {"k": "説明する", "r": "せつめいする", "a": "menjelaskan"}, {"k": "紙", "r": "かみ", "a": "kertas"}, {"k": "書く", "r": "かく", "a": "menulis"}, {"k": "言う", "r": "いう", "a": "mengatakan; mengucapkan"}, {"k": "ゆっくり", "r": "ゆっくり", "a": "pelan-pelan"}, {"k": "～方", "r": "～かた", "a": "cara~ (cara membaca)"}, {"k": "メール", "r": "メール", "a": "surel"}, {"k": "書類", "r": "しょるい", "a": "dokumen"}, {"k": "教科書", "r": "きょうかしょ", "a": "buku pelajaran"}, {"k": "自信がありません", "r": "じしんがありません", "a": "tidak percaya diri"}, {"k": "練習", "r": "れんしゅう", "a": "latihan"}, {"k": "探す", "r": "さがす", "a": "mencari"}, {"k": "何回も", "r": "なんかいも", "a": "berulang kali; berkali-kali"}, {"k": "教室", "r": "きょうしつ", "a": "ruang kelas"}, {"k": "無料", "r": "むりょう", "a": "gratis"}, {"k": "先生", "r": "せんせい", "a": "guru"}, {"k": "知恵", "r": "ちえ", "a": "kebijaksanaan"}, {"k": "拝借する", "r": "はいしゃくする", "a": "meminjam"}, {"k": "サイト", "r": "サイト", "a": "situs web"}, {"k": "トップ", "r": "トップ", "a": "(halaman) utama"}, {"k": "カテゴリー", "r": "カテゴリー", "a": "kategori"}, {"k": "ランキング", "r": "ランキング", "a": "peringkat"}, {"k": "わし", "r": "わし", "a": "Saya (lansia)"}, {"k": "検索", "r": "けんさく", "a": "pencarian"}, {"k": "質問", "r": "しつもん", "a": "pertanyaan"}, {"k": "相談", "r": "そうだん", "a": "konsultasi"}, {"k": "おしゃべりする", "r": "おしゃべりする", "a": "berbincang"}, {"k": "シャドーイングする", "r": "シャドーイングする", "a": "latihan shadowing"}, {"k": "ボランティア", "r": "ボランティア", "a": "sukarelawan"}]}, {"id": 10, "title": "Lesson 10: 日本語教室に参加したいんですが…", "words": [{"k": "曜日", "r": "ようび", "a": "hari"}, {"k": "時間", "r": "じかん", "a": "waktu; jam"}, {"k": "費用", "r": "ひよう", "a": "biaya"}, {"k": "毎月", "r": "まいつき", "a": "setiap bulan"}, {"k": "第～", "r": "だい～", "a": "ke~ (urutan)"}, {"k": "公民館", "r": "こうみんかん", "a": "balai kegiatan publik"}, {"k": "問い合わせ", "r": "といあわせ", "a": "informasi lebih lanjut"}, {"k": "スタート", "r": "スタート", "a": "mulai"}, {"k": "旬", "r": "しゅん", "a": "masakan; makanan musiman"}, {"k": "味わう", "r": "あじわう", "a": "merasakan; mencicipi"}, {"k": "全～回", "r": "ぜん～かい", "a": "total sebanyak ~ kali"}, {"k": "調理室", "r": "ちょうりしつ", "a": "dapur"}, {"k": "各", "r": "かく", "a": "setiap; masing-masing"}, {"k": "先着", "r": "せんちゃく", "a": "pendaftaran sesuai urutan waktu"}, {"k": "書道", "r": "しょどう", "a": "kaligrafi Jepang"}, {"k": "日時", "r": "にちじ", "a": "tanggal, hari dan waktu"}, {"k": "～代", "r": "～だい", "a": "biaya~"}, {"k": "外国人向け", "r": "がいこくじんむけ", "a": "bagi orang asing"}, {"k": "体験教室", "r": "たいけんきょうしつ", "a": "kelas percobaan"}, {"k": "身につける", "r": "みにつける", "a": "mempelajari"}, {"k": "月", "r": "つき", "a": "bulan"}, {"k": "テキスト", "r": "テキスト", "a": "buku pelajaran"}, {"k": "道具", "r": "どうぐ", "a": "alat"}, {"k": "各自", "r": "かくじ", "a": "setiap orang"}, {"k": "見学", "r": "けんがく", "a": "pengamatan; observasi"}, {"k": "申し込み", "r": "もうしこみ", "a": "pendaftaran"}, {"k": "お持ちください", "r": "おもちください", "a": "silakan membawa"}, {"k": "参加されています", "r": "さんかされています", "a": "ikut serta; berpartisipasi"}, {"k": "いらしてください", "r": "いらしてください", "a": "silakan datang"}, {"k": "かかる", "r": "かかる", "a": "dikenakan (biaya)"}, {"k": "合気道", "r": "あいきどう", "a": "Aikido"}, {"k": "～回完結", "r": "～かいかんけつ", "a": "selesai dalam ~ pertemuan"}, {"k": "体育室", "r": "たいいくしつ", "a": "ruang olahraga"}, {"k": "動きやすい", "r": "うごきやすい", "a": "mudah untuk bergerak"}, {"k": "道着", "r": "どうぎ", "a": "dougi (seragam bela diri)"}, {"k": "かまいません", "r": "かまいません", "a": "tidak apa-apa"}, {"k": "必要ありません", "r": "ひつようありません", "a": "tidak perlu"}, {"k": "参加する", "r": "さんかする", "a": "ikut serta; berpartisipasi"}, {"k": "クラス", "r": "クラス", "a": "kelas; kursus"}, {"k": "必要（な）", "r": "ひつよう", "a": "perlu"}, {"k": "最初", "r": "さいしょ", "a": "awalnya"}, {"k": "あとは", "r": "あとは", "a": "setelah itu"}, {"k": "聞く", "r": "きく", "a": "bertanya; menanyakan"}, {"k": "まだ空いていますか？", "r": "まだあいていますか", "a": "Apakah masih ada tempat?"}, {"k": "払う", "r": "はらう", "a": "membayar"}, {"k": "もういっぱいです", "r": "もういっぱいです", "a": "Sudah penuh"}, {"k": "少々お待ちください", "r": "しょうしょうおまちください", "a": "Mohon menunggu sebentar"}, {"k": "興味がある", "r": "きょうみがある", "a": "tertarik"}, {"k": "それとも", "r": "それとも", "a": "atau"}, {"k": "コース", "r": "コース", "a": "kursus; program"}, {"k": "全部", "r": "ぜんぶ", "a": "semua"}, {"k": "用意する", "r": "よういする", "a": "menyediakan"}, {"k": "もっと", "r": "もっと", "a": "lebih"}, {"k": "週", "r": "しゅう", "a": "pekan; minggu"}, {"k": "何回", "r": "なんかい", "a": "berapa kali"}, {"k": "～回", "r": "～かい", "a": "~ kali"}, {"k": "ただ", "r": "ただ", "a": "gratis"}, {"k": "チラシ", "r": "チラシ", "a": "selebaran"}, {"k": "持って来る", "r": "もってくる", "a": "membawakan; membawa"}, {"k": "ちょっといいですか？", "r": "ちょっといいですか", "a": "Bisa minta waktu sebentar?"}, {"k": "きびしい", "r": "きびしい", "a": "tegas; ketat"}, {"k": "申込書", "r": "もうしこみしょ", "a": "formulir pendaftaran"}, {"k": "紹介する", "r": "しょうかいする", "a": "memperkenalkan"}, {"k": "母語", "r": "ぼご", "a": "bahasa ibu"}, {"k": "どういう", "r": "どういう", "a": "apa"}, {"k": "意味", "r": "いみ", "a": "arti; makna"}, {"k": "使う", "r": "つかう", "a": "menggunakan"}, {"k": "前に", "r": "まえに", "a": "sebelum; sebelumnya"}, {"k": "どんなこと", "r": "どんなこと", "a": "hal seperti apa"}]}, {"id": 11, "title": "Lesson 11: 肉と野菜は私が買って行きます", "words": [{"k": "バーベキュー", "r": "バーベキュー", "a": "barbeku; BBQ"}, {"k": "肉", "r": "にく", "a": "daging"}, {"k": "牛肉", "r": "ぎゅうにく", "a": "daging sapi"}, {"k": "豚肉", "r": "ぶたにく", "a": "daging babi"}, {"k": "鶏肉", "r": "とりにく", "a": "daging ayam"}, {"k": "ソーセージ", "r": "ソーセージ", "a": "sosis"}, {"k": "シーフード", "r": "シーフード", "a": "makanan laut"}, {"k": "魚", "r": "さかな", "a": "ikan"}, {"k": "エビ", "r": "エビ", "a": "udang"}, {"k": "イカ", "r": "イカ", "a": "cumi-cumi"}, {"k": "ホタテ", "r": "ホタテ", "a": "kerang; simping"}, {"k": "りんご", "r": "りんご", "a": "apel"}, {"k": "バナナ", "r": "バナナ", "a": "pisang"}, {"k": "焼きそば", "r": "やきそば", "a": "yakisoba (mie goreng)"}, {"k": "おにぎり", "r": "おにぎり", "a": "onigiri (nasi kepal)"}, {"k": "焼肉", "r": "やきにく", "a": "yakiniku"}, {"k": "たれ", "r": "たれ", "a": "tare (saus celup)"}, {"k": "ソース", "r": "ソース", "a": "saus"}, {"k": "お菓子", "r": "おかし", "a": "kue"}, {"k": "ソフトドリンク", "r": "ソフトドリンク", "a": "minuman ringan"}, {"k": "お茶", "r": "おちゃ", "a": "teh"}, {"k": "ジュース", "r": "ジュース", "a": "jus"}, {"k": "お酒", "r": "おさけ", "a": "alkohol"}, {"k": "ビール", "r": "ビール", "a": "bir"}, {"k": "ワイン", "r": "ワイン", "a": "anggur"}, {"k": "日本酒", "r": "にほんしゅ", "a": "sake"}, {"k": "焼酎", "r": "しょうちゅう", "a": "shochu"}, {"k": "コップ", "r": "コップ", "a": "cangkir"}, {"k": "お皿", "r": "おさら", "a": "piring"}, {"k": "わりばし", "r": "わりばし", "a": "sumpit kayu sekali pakai"}, {"k": "ごみ袋", "r": "ごみぶくろ", "a": "kantong sampah"}, {"k": "準備", "r": "じゅんび", "a": "persiapan"}, {"k": "持って行く", "r": "もっていく", "a": "membawa; pergi dengan membawa"}, {"k": "手伝う", "r": "てつだう", "a": "membantu"}, {"k": "飲み物", "r": "のみもの", "a": "minuman"}, {"k": "バーベキュー場", "r": "バーベキューじょう", "a": "area pesta barbeku"}, {"k": "デザート", "r": "デザート", "a": "makanan pencuci mulut"}, {"k": "焼く", "r": "やく", "a": "bakar; panggang"}, {"k": "からあげ", "r": "からあげ", "a": "karaage"}, {"k": "焼き鳥", "r": "やきとり", "a": "yakitori"}, {"k": "塩", "r": "しお", "a": "garam"}, {"k": "紅茶", "r": "こうちゃ", "a": "teh hitam"}, {"k": "ウーロン茶", "r": "ウーロンちゃ", "a": "teh oolong"}, {"k": "チョコレートケーキ", "r": "チョコレートケーキ", "a": "kue cokelat"}, {"k": "チーズケーキ", "r": "チーズケーキ", "a": "kue keju"}, {"k": "どっち", "r": "どっち", "a": "yang mana (2 pilihan)"}, {"k": "どれ", "r": "どれ", "a": "yang mana (3+ pilihan)"}, {"k": "売る", "r": "うる", "a": "menjual"}, {"k": "両方", "r": "りょうほう", "a": "keduanya"}, {"k": "アレルギー", "r": "アレルギー", "a": "alergi"}, {"k": "エビ", "r": "エビ", "a": "udang"}, {"k": "カニ", "r": "カニ", "a": "kepiting"}, {"k": "卵", "r": "たまご", "a": "telur"}, {"k": "ピーナッツ", "r": "ピーナッツ", "a": "kacang-kacangan"}, {"k": "落花生", "r": "らっかせい", "a": "kacang tanah"}, {"k": "そば粉", "r": "そばこ", "a": "tepung soba"}, {"k": "小麦", "r": "こむぎ", "a": "gandum"}, {"k": "小麦粉", "r": "こむぎこ", "a": "tepung terigu"}, {"k": "乳製品", "r": "にゅうせいひん", "a": "produk susu"}, {"k": "牛乳", "r": "ぎゅうにゅう", "a": "susu"}, {"k": "バター", "r": "バター", "a": "mentega"}, {"k": "チーズ", "r": "チーズ", "a": "keju"}, {"k": "ヨーグルト", "r": "ヨーグルト", "a": "yoghurt"}, {"k": "材料", "r": "ざいりょう", "a": "bahan"}, {"k": "ハラル", "r": "ハラル", "a": "halal"}, {"k": "消費期限", "r": "しょうひきげん", "a": "tanggal kedaluwarsa"}, {"k": "ピザ", "r": "ピザ", "a": "piza"}, {"k": "入っている", "r": "はいっている", "a": "mengandung"}, {"k": "よかったら", "r": "よかったら", "a": "kalau (Anda) mau"}, {"k": "もつ", "r": "もつ", "a": "tahan, awet"}, {"k": "今日中に", "r": "きょうじゅうに", "a": "hari ini"}, {"k": "コーナー", "r": "コーナー", "a": "bagian; pojok"}, {"k": "商品", "r": "しょうひん", "a": "produk"}, {"k": "すべて", "r": "すべて", "a": "semua"}, {"k": "レトルト", "r": "レトルト", "a": "makanan siap santap"}, {"k": "乳成分", "r": "にゅうせいぶん", "a": "kandungan susu"}, {"k": "大豆", "r": "だいず", "a": "kedelai"}, {"k": "名称", "r": "めいしょう", "a": "nama"}, {"k": "原材料名", "r": "げんざいりょうめい", "a": "bahan baku"}, {"k": "殺菌方法", "r": "さっきんほうほう", "a": "cara sterilisasi"}, {"k": "内容量", "r": "ないようりょう", "a": "berat bersih"}, {"k": "賞味期限", "r": "しょうみきげん", "a": "tanggal layak konsumsi"}, {"k": "保存方法", "r": "ほぞんほうほう", "a": "cara menyimpan"}, {"k": "販売者", "r": "はんばいしゃ", "a": "penjual"}, {"k": "本品", "r": "ほんぴん", "a": "produk ini"}, {"k": "含まれる", "r": "ふくまれる", "a": "terkandung"}, {"k": "アレルギー物質", "r": "アレルギーぶっしつ", "a": "alergen"}, {"k": "おにぎり", "r": "おにぎり", "a": "onigiri"}, {"k": "エビピラフ", "r": "エビピラフ", "a": "pilaf udang"}, {"k": "製造者", "r": "せいぞうしゃ", "a": "pembuat; produsen"}, {"k": "チョコレート", "r": "チョコレート", "a": "cokelat"}, {"k": "～品目", "r": "～ひんもく", "a": "~bahan"}]}, {"id": 12, "title": "Lesson 12: お弁当、おいしそうですね", "words": [{"k": "味", "r": "あじ", "a": "rasa"}, {"k": "甘い", "r": "あまい", "a": "manis"}, {"k": "辛い", "r": "からい", "a": "pedas"}, {"k": "すっぱい", "r": "すっぱい", "a": "asam"}, {"k": "しょっぱい", "r": "しょっぱい", "a": "asin"}, {"k": "苦い", "r": "にがい", "a": "pahit"}, {"k": "こい", "r": "こい", "a": "kental; kuat (rasa)"}, {"k": "うすい", "r": "うすい", "a": "hambar"}, {"k": "まずい", "r": "まずい", "a": "tidak enak; tidak lezat"}, {"k": "お弁当", "r": "おべんとう", "a": "bekal"}, {"k": "チョコレートバニラクリームラテ", "r": "チョコレートバニラクリームラテ", "a": "minuman chocolate vanilla latte"}, {"k": "みかん", "r": "みかん", "a": "jeruk"}, {"k": "庭", "r": "にわ", "a": "halaman; pekarangan; taman"}, {"k": "とれる", "r": "とれる", "a": "petik; memetik"}, {"k": "そんなことない", "r": "そんなことない", "a": "sebenarnya tidak begitu"}, {"k": "卵焼き", "r": "たまごやき", "a": "telur dadar gulung"}, {"k": "お好み焼き", "r": "おこのみやき", "a": "okonomiyaki"}, {"k": "梅干し", "r": "うめぼし", "a": "umeboshi"}, {"k": "すき焼き", "r": "すきやき", "a": "sukiyaki"}, {"k": "生", "r": "なま", "a": "mentah"}, {"k": "もう1つ", "r": "もうひとつ", "a": "satu lagi"}, {"k": "バインセオ", "r": "バインセオ", "a": "banh xeo"}, {"k": "お腹がいっぱい（な）", "r": "おなかがいっぱい", "a": "kenyang"}, {"k": "苦手（な）", "r": "にがて", "a": "tidak suka"}, {"k": "どんどん", "r": "どんどん", "a": "tambah lagi"}, {"k": "茶碗蒸し", "r": "ちゃわんむし", "a": "chawanmushi"}, {"k": "プリン", "r": "プリン", "a": "puding"}, {"k": "だし", "r": "だし", "a": "dashi (kaldu)"}, {"k": "まあ", "r": "まあ", "a": "(hmm) ya mungkin"}, {"k": "スープ", "r": "スープ", "a": "sup"}, {"k": "きのこ", "r": "きのこ", "a": "jamur"}, {"k": "銀杏", "r": "ぎんなん", "a": "kacang gingko"}, {"k": "入れる", "r": "いれる", "a": "memasukkan"}, {"k": "いいにおい", "r": "いいにおい", "a": "aroma yang lezat"}, {"k": "調理方法", "r": "ちょうりほうほう", "a": "cara memasak"}, {"k": "フタ", "r": "フタ", "a": "tutup"}, {"k": "取り出す", "r": "とりだす", "a": "mengeluarkan"}, {"k": "めん", "r": "めん", "a": "mie"}, {"k": "熱湯", "r": "ねっとう", "a": "air mendidih"}, {"k": "注ぐ", "r": "そそぐ", "a": "menuangkan"}, {"k": "お湯", "r": "おゆ", "a": "air panas"}, {"k": "捨てる", "r": "すてる", "a": "membuang"}, {"k": "かける", "r": "かける", "a": "menaburkan"}, {"k": "混ぜる", "r": "まぜる", "a": "mengaduk"}, {"k": "はがす", "r": "はがす", "a": "melepas"}, {"k": "かやく", "r": "かやく", "a": "bahan pelengkap"}, {"k": "ふりかけ", "r": "ふりかけ", "a": "taburan kering"}, {"k": "あける", "r": "あける", "a": "mengosongkan isi"}, {"k": "内側", "r": "うちがわ", "a": "bagian dalam"}, {"k": "線", "r": "せん", "a": "garis"}, {"k": "フタをする", "r": "フタをする", "a": "menutup (penutup)"}, {"k": "湯切り口", "r": "ゆきりぐち", "a": "lubang buang air panas"}, {"k": "できあがり", "r": "できあがり", "a": "selesai; siap disantap"}]}, {"id": 13, "title": "Lesson 13: あと10分ぐらいで終わりそうです", "words": [{"k": "電気", "r": "でんき", "a": "lampu; listrik"}, {"k": "つく", "r": "つく", "a": "menyala"}, {"k": "変（な）", "r": "へん", "a": "aneh"}, {"k": "音", "r": "おと", "a": "bunyi"}, {"k": "音がする", "r": "おとがする", "a": "berbunyi"}, {"k": "動く", "r": "うごく", "a": "bergerak; beroperasi"}, {"k": "トイレットペーパー", "r": "トイレットペーパー", "a": "tisu toilet"}, {"k": "なくなる", "r": "なくなる", "a": "habis"}, {"k": "業者", "r": "ぎょうしゃ", "a": "dealer; vendor"}, {"k": "電話する", "r": "でんわする", "a": "menelepon"}, {"k": "再起動する", "r": "さいきどうする", "a": "memulai ulang"}, {"k": "管理室", "r": "かんりしつ", "a": "ruang manajemen"}, {"k": "連絡する", "r": "れんらくする", "a": "menghubungi"}, {"k": "倉庫", "r": "そうこ", "a": "gudang"}, {"k": "取って来る", "r": "とってくる", "a": "mengambil (lalu kembali)"}, {"k": "コーヒーマシーン", "r": "コーヒーマシーン", "a": "mesin pembuat kopi"}, {"k": "パソコン", "r": "パソコン", "a": "PC; komputer"}, {"k": "とりあえず", "r": "とりあえず", "a": "untuk saat ini"}, {"k": "やり方", "r": "やりかた", "a": "cara melakukan (sesuatu)"}, {"k": "終わる", "r": "おわる", "a": "selesai"}, {"k": "もうすぐ", "r": "もうすぐ", "a": "segera; sebentar lagi"}, {"k": "できる", "r": "できる", "a": "selesai; rampung"}, {"k": "コピー機", "r": "コピーき", "a": "mesin fotokopi"}, {"k": "原稿", "r": "げんこう", "a": "naskah; dokumen"}, {"k": "セットする", "r": "セットする", "a": "mengeset"}, {"k": "枚数", "r": "まいすう", "a": "jumlah lembar"}, {"k": "数字", "r": "すうじ", "a": "bilangan; angka"}, {"k": "入れる", "r": "いれる", "a": "memasukkan"}, {"k": "スタート", "r": "スタート", "a": "mulai"}, {"k": "ボタン", "r": "ボタン", "a": "tombol"}, {"k": "押す", "r": "おす", "a": "menekan"}, {"k": "両面", "r": "りょうめん", "a": "dua sisi"}, {"k": "片面", "r": "かためん", "a": "satu sisi"}, {"k": "カラー", "r": "カラー", "a": "berwarna"}, {"k": "できるだけ", "r": "できるだけ", "a": "sedapat mungkin"}, {"k": "白黒", "r": "しろくろ", "a": "hitam putih"}, {"k": "スキャナ", "r": "スキャナ", "a": "pemindai"}, {"k": "ファックス", "r": "ファックス", "a": "faks"}, {"k": "自動選択", "r": "じどうせんたく", "a": "pemilihan otomatis"}, {"k": "フルカラー", "r": "フルカラー", "a": "full color"}, {"k": "2色", "r": "にしょく", "a": "dua warna"}, {"k": "単色", "r": "たんしょく", "a": "monokrom"}, {"k": "自動濃度", "r": "じどうのうど", "a": "saturasi warna otomatis"}, {"k": "用紙", "r": "ようし", "a": "kertas"}, {"k": "手差し", "r": "てざし", "a": "memasukkan kertas manual"}, {"k": "倍率", "r": "ばいりつ", "a": "pengaturan skala"}, {"k": "等倍", "r": "とうばい", "a": "ukuran sama"}, {"k": "変倍", "r": "へんばい", "a": "ukuran berbeda"}, {"k": "拡大", "r": "かくだい", "a": "pembesaran"}, {"k": "縮小", "r": "しゅくしょう", "a": "pengecilan"}, {"k": "ソート", "r": "ソート", "a": "susunan; urutan"}, {"k": "ホチキス止め", "r": "ホチキスどめ", "a": "staples"}, {"k": "資料", "r": "しりょう", "a": "dokumen"}, {"k": "キャビネット", "r": "キャビネット", "a": "lemari dokumen"}, {"k": "戻す", "r": "もどす", "a": "mengembalikan"}, {"k": "扉", "r": "とびら", "a": "pintu"}, {"k": "開ける", "r": "あける", "a": "membuka"}, {"k": "棚", "r": "たな", "a": "rak"}, {"k": "並べる", "r": "ならべる", "a": "menata; menyusun"}, {"k": "丸い", "r": "まるい", "a": "bundar"}, {"k": "出す", "r": "だす", "a": "mengeluarkan"}, {"k": "～列", "r": "～れつ", "a": "~baris"}, {"k": "後ろ", "r": "うしろ", "a": "belakang"}, {"k": "スペース", "r": "スペース", "a": "ruang; jarak"}, {"k": "あける", "r": "あける", "a": "menyediakan ruang"}, {"k": "入口", "r": "いりぐち", "a": "pintu masuk"}, {"k": "四角い", "r": "しかくい", "a": "persegi empat"}, {"k": "置く", "r": "おく", "a": "meletakkan; menaruh"}, {"k": "会議", "r": "かいぎ", "a": "rapat"}, {"k": "セッティング", "r": "セッティング", "a": "penataan"}, {"k": "コの字", "r": "コのじ", "a": "berbentuk huruf-U"}, {"k": "準備する", "r": "じゅんびする", "a": "mempersiapkan"}, {"k": "人数分", "r": "にんずうぶん", "a": "sebanyak jumlah orang"}, {"k": "～部", "r": "～ぶ", "a": "~bundel fotokopi"}, {"k": "頼む", "r": "たのむ", "a": "meminta; memesan"}, {"k": "いいです", "r": "いいです", "a": "tidak usah; tidak perlu"}, {"k": "件名", "r": "けんめい", "a": "perihal"}, {"k": "変更", "r": "へんこう", "a": "perubahan"}, {"k": "お知らせ", "r": "おしらせ", "a": "pemberitahuan"}, {"k": "都合が悪い", "r": "つごうがわるい", "a": "berhalangan"}, {"k": "注意（する）", "r": "ちゅうい", "a": "memperhatikan"}, {"k": "社内メール", "r": "しゃないメール", "a": "surel internal perusahaan"}, {"k": "打ち合わせ", "r": "うちあわせ", "a": "pertemuan; rapat"}, {"k": "日程", "r": "にってい", "a": "jadwal"}, {"k": "差出人", "r": "さしだしにん", "a": "pengirim"}, {"k": "日付", "r": "ひづけ", "a": "tanggal"}, {"k": "皆様", "r": "みなさま", "a": "Anda sekalian"}, {"k": "なお", "r": "なお", "a": "untuk itu; oleh karena itu"}, {"k": "お知らせします", "r": "おしらせします", "a": "menyampaikan pemberitahuan"}, {"k": "ご連絡ください", "r": "ごれんらくください", "a": "Mohon hubungi~"}, {"k": "ご注意ください", "r": "ごちゅういください", "a": "Mohon perhatikan~"}]}, {"id": 14, "title": "Lesson 14: 休みを取ってもいいでしょうか？", "words": [{"k": "混んでいる", "r": "こんでいる", "a": "macet"}, {"k": "せき", "r": "せき", "a": "batuk"}, {"k": "ひどい", "r": "ひどい", "a": "parah"}, {"k": "熱", "r": "ねつ", "a": "demam"}, {"k": "熱がある", "r": "ねつがある", "a": "demam"}, {"k": "財布", "r": "さいふ", "a": "dompet"}, {"k": "忘れる", "r": "わすれる", "a": "lupa"}, {"k": "病院", "r": "びょういん", "a": "rumah sakit"}, {"k": "家", "r": "いえ", "a": "rumah"}, {"k": "帰る", "r": "かえる", "a": "pulang"}, {"k": "これから", "r": "これから", "a": "sekarang; setelah ini"}, {"k": "取る", "r": "とる", "a": "mengambil"}, {"k": "それで", "r": "それで", "a": "oleh karena itu"}, {"k": "遅くなる", "r": "おそくなる", "a": "terlambat"}, {"k": "みなさん", "r": "みなさん", "a": "semua orang"}, {"k": "伝える", "r": "つたえる", "a": "menyampaikan"}, {"k": "遅刻する", "r": "ちこくする", "a": "terlambat"}, {"k": "あとで", "r": "あとで", "a": "nanti"}, {"k": "休む", "r": "やすむ", "a": "cuti; tidak masuk kerja"}, {"k": "申し訳ありません", "r": "もうしわけありません", "a": "Saya mohon maaf"}, {"k": "具合が悪い", "r": "ぐあいがわるい", "a": "kurang fit; tidak enak badan"}, {"k": "お祈り", "r": "おいのり", "a": "sembahyang; doa"}, {"k": "たばこ", "r": "たばこ", "a": "rokok"}, {"k": "吸う", "r": "すう", "a": "merokok"}, {"k": "行って来る", "r": "いってくる", "a": "pergi (lalu kembali)"}, {"k": "休憩（する）", "r": "きゅうけい", "a": "rehat; istirahat sejenak"}, {"k": "戻る", "r": "もどる", "a": "kembali"}, {"k": "早退する", "r": "そうたいする", "a": "pulang lebih awal"}, {"k": "休みを取る", "r": "やすみをとる", "a": "mengambil cuti"}, {"k": "社長", "r": "しゃちょう", "a": "direktur utama"}, {"k": "役所", "r": "やくしょ", "a": "balai kota"}, {"k": "早く", "r": "はやく", "a": "lebih awal"}, {"k": "用事", "r": "ようじ", "a": "urusan"}, {"k": "済む", "r": "すむ", "a": "selesai"}, {"k": "主任", "r": "しゅにん", "a": "kepala; ketua (staf)"}, {"k": "来月", "r": "らいげつ", "a": "bulan depan"}, {"k": "できたら", "r": "できたら", "a": "kalau memungkinkan"}, {"k": "ちょっと、いいでしょうか？", "r": "ちょっと、いいでしょうか", "a": "Maaf, bisa minta waktunya sebentar?"}, {"k": "別にかまいません", "r": "べつにかまいません", "a": "Tidak masalah"}, {"k": "休暇届", "r": "きゅうかとどけ", "a": "formulir cuti"}, {"k": "出す", "r": "だす", "a": "mengumpulkan; menyerahkan"}, {"k": "フォーム", "r": "フォーム", "a": "formulir"}, {"k": "所属", "r": "しょぞく", "a": "tempat kerja; bagian"}, {"k": "チーム", "r": "チーム", "a": "tim"}, {"k": "総務", "r": "そうむ", "a": "bagian umum"}, {"k": "氏名", "r": "しめい", "a": "nama lengkap"}, {"k": "ハンコ", "r": "ハンコ", "a": "stempel"}, {"k": "持っている", "r": "もっている", "a": "memiliki"}, {"k": "持つ", "r": "もつ", "a": "memiliki"}, {"k": "で", "r": "で", "a": "maka; jadi"}, {"k": "期間", "r": "きかん", "a": "durasi waktu"}, {"k": "理由", "r": "りゆう", "a": "alasan"}, {"k": "普通", "r": "ふつう", "a": "biasa"}, {"k": "私用", "r": "しよう", "a": "urusan pribadi"}, {"k": "～中", "r": "～ちゅう", "a": "sedang ~"}, {"k": "連絡先", "r": "れんらくさき", "a": "alamat yang dapat dihubungi"}, {"k": "備考", "r": "びこう", "a": "catatan"}, {"k": "いる", "r": "いる", "a": "perlu"}, {"k": "承認印", "r": "しょうにんいん", "a": "stempel konfirmasi"}, {"k": "事前に", "r": "じぜんに", "a": "sebelumnya"}, {"k": "提出する", "r": "ていしゅつする", "a": "menyerahkan"}]}, {"id": 15, "title": "Lesson 15: 熱があってのどが痛いんです", "words": [{"k": "症状", "r": "しょうじょう", "a": "gejala penyakit"}, {"k": "のど", "r": "のど", "a": "tenggorokan"}, {"k": "痛い", "r": "いたい", "a": "sakit"}, {"k": "お腹", "r": "おなか", "a": "perut"}, {"k": "熱", "r": "ねつ", "a": "demam"}, {"k": "せき", "r": "せき", "a": "batuk"}, {"k": "出る", "r": "でる", "a": "keluar (batuk/pilek)"}, {"k": "鼻水", "r": "はなみず", "a": "ingus"}, {"k": "吐き気", "r": "はきけ", "a": "mual"}, {"k": "吐き気がする", "r": "はきけがする", "a": "merasa mual"}, {"k": "食欲", "r": "しょくよく", "a": "nafsu makan"}, {"k": "目", "r": "め", "a": "mata"}, {"k": "かゆい", "r": "かゆい", "a": "gatal"}, {"k": "足", "r": "あし", "a": "kaki"}, {"k": "くじく", "r": "くじく", "a": "keseleo"}, {"k": "頭", "r": "あたま", "a": "kepala"}, {"k": "ぶつける", "r": "ぶつける", "a": "terantuk; terbentur"}, {"k": "おととい", "r": "おととい", "a": "kemarin lusa"}, {"k": "転ぶ", "r": "ころぶ", "a": "jatuh"}, {"k": "こう", "r": "こう", "a": "begini; seperti ini"}, {"k": "レントゲン", "r": "レントゲン", "a": "rontgen"}, {"k": "～週間", "r": "～しゅうかん", "a": "~minggu / pekan"}, {"k": "花粉症", "r": "かふんしょう", "a": "alergi polen"}, {"k": "どうしましたか？", "r": "どうしましたか", "a": "Kenapa? Ada masalah apa?"}, {"k": "どうされましたか？", "r": "どうされましたか", "a": "Kenapa? (bentuk sopan)"}, {"k": "保険証", "r": "ほけんしょう", "a": "kartu asuransi kesehatan"}, {"k": "問診票", "r": "もんしんひょう", "a": "kuesioner pemeriksaan"}, {"k": "薬", "r": "くすり", "a": "obat"}, {"k": "飲む", "r": "のむ", "a": "minum obat"}, {"k": "会う", "r": "あう", "a": "bertemu"}, {"k": "やわらかい", "r": "やわらかい", "a": "empuk; lunak"}, {"k": "辛い", "r": "からい", "a": "pedas"}, {"k": "診察券", "r": "しんさつけん", "a": "kartu registrasi pasien"}, {"k": "処方せん", "r": "しょほうせん", "a": "resep obat"}, {"k": "記入する", "r": "きにゅうする", "a": "mengisi"}, {"k": "医者", "r": "いしゃ", "a": "dokter"}, {"k": "～度～分", "r": "～ど～ぶ", "a": "~derajat"}, {"k": "口", "r": "くち", "a": "mulut"}, {"k": "インフルエンザ", "r": "インフルエンザ", "a": "influenza"}, {"k": "検査する", "r": "けんさする", "a": "memeriksa"}, {"k": "A型", "r": "エーがた", "a": "tipe A"}, {"k": "下がる", "r": "さがる", "a": "turun (demam turun)"}, {"k": "おかゆ", "r": "おかゆ", "a": "bubur nasi"}, {"k": "薬局", "r": "やっきょく", "a": "apotek"}, {"k": "もらう", "r": "もらう", "a": "menerima"}, {"k": "お大事に", "r": "おだいじに", "a": "Semoga lekas sembuh"}, {"k": "お持ちですか？", "r": "おもちですか", "a": "Apakah Anda membawa~?"}, {"k": "フリガナ", "r": "フリガナ", "a": "cara baca hiragana/katakana"}, {"k": "性別", "r": "せいべつ", "a": "jenis kelamin"}, {"k": "病気にかかる", "r": "びょうきにかかる", "a": "menderita penyakit"}, {"k": "現在", "r": "げんざい", "a": "saat ini"}, {"k": "女性", "r": "じょせい", "a": "wanita"}, {"k": "妊娠する", "r": "にんしんする", "a": "hamil"}, {"k": "記入例", "r": "きにゅうれい", "a": "contoh pengisian"}, {"k": "記入日", "r": "きにゅうび", "a": "tanggal pengisian"}, {"k": "大正／大", "r": "たいしょう", "a": "Taisho (nama era di Jepang)"}, {"k": "昭和／昭", "r": "しょうわ", "a": "Showa (nama era di Jepang)"}, {"k": "平成／平", "r": "へいせい", "a": "Heisei (nama era di Jepang)"}, {"k": "令和／令", "r": "れいわ", "a": "Reiwa (nama era di Jepang)"}, {"k": "～才", "r": "～さい", "a": "~tahun (umur)"}, {"k": "今までに", "r": "いままでに", "a": "sejauh ini"}, {"k": "病気", "r": "びょうき", "a": "sakit; penyakit"}, {"k": "病名", "r": "びょうめい", "a": "nama penyakit"}, {"k": "～本", "r": "～ほん", "a": "~botol"}, {"k": "～の方", "r": "～のかた", "a": "orang (bentuk sopan)"}, {"k": "答える", "r": "こたえる", "a": "menjawab"}, {"k": "～週目", "r": "～しゅうめ", "a": "minggu ke~"}, {"k": "お答えください", "r": "おこたえください", "a": "Mohon dijawab"}, {"k": "下げる", "r": "さげる", "a": "menurunkan (demam)"}, {"k": "抑える", "r": "おさえる", "a": "meredakan"}, {"k": "痛み止め", "r": "いたみどめ", "a": "obat penghilang rasa sakit"}, {"k": "くしゃみ", "r": "くしゃみ", "a": "bersin"}, {"k": "つらい", "r": "つらい", "a": "merasa berat; payah"}, {"k": "がまんする", "r": "がまんする", "a": "bertahan; menahan diri"}, {"k": "がまんできない", "r": "がまんできない", "a": "tidak mampu bertahan"}, {"k": "間をあける", "r": "あいだをあける", "a": "berselang; memberi jarak"}, {"k": "～以上", "r": "～いじょう", "a": "~atau lebih"}, {"k": "胃", "r": "い", "a": "lambung"}, {"k": "守る", "r": "まもる", "a": "melindungi"}, {"k": "運転する", "r": "うんてんする", "a": "berkendara; mengemudi"}, {"k": "食後", "r": "しょくご", "a": "sesudah makan"}, {"k": "眠い", "r": "ねむい", "a": "mengantuk"}, {"k": "解熱剤", "r": "げねつざい", "a": "obat penurun panas"}, {"k": "熱が高い", "r": "ねつがたかい", "a": "demam tinggi"}, {"k": "それと", "r": "それと", "a": "dan"}, {"k": "こっち", "r": "こっち", "a": "ini; yang ini"}, {"k": "夕方／夕", "r": "ゆうがた", "a": "sore; sore hari"}, {"k": "寝る前／寝前", "r": "ねるまえ", "a": "sebelum tidur"}, {"k": "用法", "r": "ようほう", "a": "cara penggunaan"}, {"k": "用量", "r": "ようりょう", "a": "dosis"}, {"k": "説明書", "r": "せつめいしょ", "a": "instruksi; deskripsi"}, {"k": "効能", "r": "こうのう", "a": "efek"}, {"k": "注意事項", "r": "ちゅういじこう", "a": "peringatan; catatan"}, {"k": "夕食後", "r": "ゆうしょくご", "a": "sesudah makan malam"}, {"k": "～錠", "r": "～じょう", "a": "~butir"}, {"k": "～日分", "r": "～にちぶん", "a": "untuk ~ hari"}, {"k": "毎食後", "r": "まいしょくご", "a": "setiap sehabis makan"}]}, {"id": 16, "title": "Lesson 16: 食べすぎないようにしています", "words": [{"k": "顔", "r": "かお", "a": "muka; wajah"}, {"k": "体", "r": "からだ", "a": "badan"}, {"k": "頭", "r": "あたま", "a": "kepala"}, {"k": "鼻", "r": "はな", "a": "hidung"}, {"k": "歯", "r": "は", "a": "gigi"}, {"k": "首", "r": "くび", "a": "leher"}, {"k": "目", "r": "め", "a": "mata"}, {"k": "耳", "r": "みみ", "a": "telinga"}, {"k": "口", "r": "くち", "a": "mulut"}, {"k": "肩", "r": "かた", "a": "bahu"}, {"k": "胸", "r": "むね", "a": "dada"}, {"k": "お腹", "r": "おなか", "a": "perut"}, {"k": "足", "r": "あし", "a": "kaki"}, {"k": "背中", "r": "せなか", "a": "punggung"}, {"k": "腰", "r": "こし", "a": "pinggang"}, {"k": "腕", "r": "うで", "a": "lengan"}, {"k": "手", "r": "て", "a": "tangan"}, {"k": "指", "r": "ゆび", "a": "jari"}, {"k": "肩がこる", "r": "かたがこる", "a": "bahu kaku"}, {"k": "だるい", "r": "だるい", "a": "lemas; terlalu letih"}, {"k": "痛い", "r": "いたい", "a": "sakit"}, {"k": "胃", "r": "い", "a": "lambung"}, {"k": "調子が悪い", "r": "ちょうしがわるい", "a": "dalam kondisi tidak baik"}, {"k": "二日酔い", "r": "ふつかよい", "a": "keadaan tidak nyaman setelah minum alkohol"}, {"k": "眠れない", "r": "ねむれない", "a": "tidak bisa tidur"}, {"k": "お風呂に入る", "r": "おふろにはいる", "a": "mandi"}, {"k": "温める", "r": "あたためる", "a": "menghangatkan"}, {"k": "温かい", "r": "あたたかい", "a": "hangat"}, {"k": "飲む", "r": "のむ", "a": "minum"}, {"k": "マッサージする", "r": "マッサージする", "a": "memijat"}, {"k": "薬", "r": "くすり", "a": "obat"}, {"k": "飲む", "r": "のむ", "a": "minum obat"}, {"k": "最近", "r": "さいきん", "a": "akhir-akhir ini"}, {"k": "ぬるい", "r": "ぬるい", "a": "hangat; suam kuku"}, {"k": "試す", "r": "ためす", "a": "mencoba"}, {"k": "飲みすぎ", "r": "のみすぎ", "a": "kebanyakan minum"}, {"k": "けっこう", "r": "けっこう", "a": "cukup"}, {"k": "それはいけませんね", "r": "それはいけませんね", "a": "Itu tidak baik"}, {"k": "どうしていますか？", "r": "どうしていますか", "a": "Bagaimana menanganinya?"}, {"k": "疲れている", "r": "つかれている", "a": "lelah"}, {"k": "寝不足", "r": "ねぶそく", "a": "kurang tidur"}, {"k": "健康", "r": "けんこう", "a": "kesehatan"}, {"k": "運動", "r": "うんどう", "a": "olahraga"}, {"k": "ジム", "r": "ジム", "a": "gimnasium"}, {"k": "ジョギングする", "r": "ジョギングする", "a": "joging"}, {"k": "走る", "r": "はしる", "a": "lari; berlari"}, {"k": "ウォーキングする", "r": "ウォーキングする", "a": "jalan santai"}, {"k": "歩く", "r": "あるく", "a": "berjalan"}, {"k": "プール", "r": "プール", "a": "kolam renang"}, {"k": "泳ぐ", "r": "およぐ", "a": "berenang"}, {"k": "ヨガ", "r": "ヨガ", "a": "yoga"}, {"k": "食生活", "r": "しょくせいかつ", "a": "kebiasaan makan/minum"}, {"k": "食べすぎる", "r": "たべすぎる", "a": "terlalu banyak makan"}, {"k": "睡眠", "r": "すいみん", "a": "tidur"}, {"k": "早く", "r": "はやく", "a": "cepat; awal"}, {"k": "起きる", "r": "おきる", "a": "bangun"}, {"k": "だいたい", "r": "だいたい", "a": "kira-kira"}, {"k": "チキンサラダ", "r": "チキンサラダ", "a": "selada ayam"}, {"k": "トマトジュース", "r": "トマトジュース", "a": "jus tomat"}, {"k": "ダイエットする", "r": "ダイエットする", "a": "melakukan diet"}, {"k": "気をつける", "r": "きをつける", "a": "berhati-hati"}, {"k": "なるほど", "r": "なるほど", "a": "Oh, begitu"}, {"k": "ノロウイルス", "r": "ノロウイルス", "a": "norovirus"}, {"k": "食中毒", "r": "しょくちゅうどく", "a": "keracunan makanan"}, {"k": "原因", "r": "げんいん", "a": "penyebab"}, {"k": "症状", "r": "しょうじょう", "a": "gejala penyakit"}, {"k": "予防法", "r": "よぼうほう", "a": "cara pencegahan"}, {"k": "腹痛", "r": "ふくつう", "a": "sakit perut"}, {"k": "おう吐", "r": "おうと", "a": "muntah"}, {"k": "下痢", "r": "げり", "a": "diare"}, {"k": "手洗い", "r": "てあらい", "a": "cuci tangan"}, {"k": "加熱（する）", "r": "かねつ", "a": "memanaskan"}, {"k": "増える", "r": "ふえる", "a": "bertambah"}, {"k": "発生する", "r": "はっせいする", "a": "muncul; terjadi"}, {"k": "貝", "r": "かい", "a": "kerang"}, {"k": "感染する", "r": "かんせんする", "a": "terinfeksi; tertular"}, {"k": "調理（する）", "r": "ちょうり", "a": "memasak"}, {"k": "予防する", "r": "よぼうする", "a": "mencegah"}, {"k": "急増", "r": "きゅうぞう", "a": "bertambah dengan cepat"}, {"k": "県内", "r": "けんない", "a": "dalam prefektur"}, {"k": "話題", "r": "わだい", "a": "topik"}, {"k": "汚染された", "r": "おせんされた", "a": "terkontaminasi"}, {"k": "カキ", "r": "カキ", "a": "tiram"}, {"k": "十分に", "r": "じゅうぶんに", "a": "dengan cukup"}, {"k": "ウイルス", "r": "ウイルス", "a": "virus"}, {"k": "つく", "r": "つく", "a": "menempel (virus)"}, {"k": "起こす", "r": "おこす", "a": "menyebabkan"}, {"k": "どうしたら", "r": "どうしたら", "a": "bagaimana"}, {"k": "ポイント", "r": "ポイント", "a": "poin; hal penting"}, {"k": "十分（な）", "r": "じゅうぶん", "a": "cukup"}, {"k": "食事前", "r": "しょくじまえ", "a": "sebelum makan"}, {"k": "前後", "r": "ぜんご", "a": "sebelum dan sesudah"}, {"k": "洗う", "r": "あらう", "a": "mencuci"}, {"k": "中心部", "r": "ちゅうしんぶ", "a": "bagian dalam; pusat"}, {"k": "うつす", "r": "うつす", "a": "menularkan"}, {"k": "マスク", "r": "マスク", "a": "masker"}, {"k": "うがい", "r": "うがい", "a": "berkumur"}, {"k": "予防接種", "r": "よぼうせっしゅ", "a": "vaksinasi"}, {"k": "発熱", "r": "はつねつ", "a": "demam"}, {"k": "全身", "r": "ぜんしん", "a": "seluruh badan"}, {"k": "だるさ", "r": "だるさ", "a": "kelelahan"}, {"k": "関節痛", "r": "かんせつつう", "a": "nyeri sendi"}, {"k": "痛み", "r": "いたみ", "a": "sakit"}, {"k": "気持ち", "r": "きもち", "a": "sikap; perasaan"}, {"k": "大切（な）", "r": "たいせつ", "a": "penting"}, {"k": "こまめに", "r": "こまめに", "a": "sering"}, {"k": "しっかりと", "r": "しっかりと", "a": "dengan tepat"}, {"k": "外出先", "r": "がいしゅつさき", "a": "tempat yang dikunjungi saat keluar"}, {"k": "帰宅する", "r": "きたくする", "a": "pulang ke rumah"}, {"k": "流行する", "r": "りゅうこうする", "a": "mewabah"}, {"k": "受ける", "r": "うける", "a": "menerima"}, {"k": "予約", "r": "よやく", "a": "memesan"}, {"k": "受付中", "r": "うけつけちゅう", "a": "sedang menerima; melayani"}, {"k": "クリニック", "r": "クリニック", "a": "klinik"}]}, {"id": 17, "title": "Lesson 17: 兄がくれたお守りです", "words": [{"k": "上がる", "r": "あがる", "a": "masuk ke rumah"}, {"k": "うちの", "r": "うちの", "a": "~saya"}, {"k": "奥さん", "r": "おくさん", "a": "istri"}, {"k": "息子", "r": "むすこ", "a": "putra; anak laki-laki"}, {"k": "お茶", "r": "おちゃ", "a": "teh"}, {"k": "足をくずす", "r": "あしをくずす", "a": "duduk lebih rileks"}, {"k": "楽にする", "r": "らくにする", "a": "anggap seperti di rumah sendiri"}, {"k": "遊びに来る", "r": "あそびにくる", "a": "datang berkunjung"}, {"k": "ごめんください", "r": "ごめんください", "a": "Permisi"}, {"k": "いらっしゃい", "r": "いらっしゃい", "a": "Selamat datang"}, {"k": "ようこそ", "r": "ようこそ", "a": "Selamat datang"}, {"k": "おじゃまします", "r": "おじゃまします", "a": "Permisi, mohon maaf mengganggu"}, {"k": "お世話になっています", "r": "おせわになっています", "a": "Terima kasih untuk bantuannya"}, {"k": "こちらこそ", "r": "こちらこそ", "a": "Sama-sama"}, {"k": "ごちそうさまでした", "r": "ごちそうさまでした", "a": "Terima kasih untuk hidangannya"}, {"k": "おじゃましました", "r": "おじゃましました", "a": "Maaf telah mengganggu"}, {"k": "お土産", "r": "おみやげ", "a": "oleh-oleh; cendera mata"}, {"k": "コーヒー", "r": "コーヒー", "a": "kopi"}, {"k": "調味料", "r": "ちょうみりょう", "a": "bumbu"}, {"k": "カップ", "r": "カップ", "a": "cangkir"}, {"k": "キーホルダー", "r": "キーホルダー", "a": "gantungan kunci"}, {"k": "ペン", "r": "ペン", "a": "pena"}, {"k": "お守り", "r": "おまもり", "a": "omamori (azimat)"}, {"k": "絵葉書", "r": "えはがき", "a": "kartu pos bergambar"}, {"k": "写真集", "r": "しゃしんしゅう", "a": "album foto"}, {"k": "飾り", "r": "かざり", "a": "dekorasi; hiasan"}, {"k": "人形", "r": "にんぎょう", "a": "boneka"}, {"k": "かばん", "r": "かばん", "a": "tas"}, {"k": "バッグ", "r": "バッグ", "a": "tas"}, {"k": "魔よけ", "r": "まよけ", "a": "azimat"}, {"k": "ネパール", "r": "ネパール", "a": "Nepal"}, {"k": "ナンプラー", "r": "ナンプラー", "a": "nam pla (bumbu Thailand)"}, {"k": "タイ", "r": "タイ", "a": "Thailand"}, {"k": "トゥロン", "r": "トゥロン", "a": "turon (penganan Filipina)"}, {"k": "フィリピン", "r": "フィリピン", "a": "Filipina"}, {"k": "スラーソー", "r": "スラーソー", "a": "sra sor (minuman Kamboja)"}, {"k": "カンボジア", "r": "カンボジア", "a": "Kamboja"}, {"k": "壁", "r": "かべ", "a": "dinding"}, {"k": "かける", "r": "かける", "a": "menggantung (di dinding)"}, {"k": "入って来る", "r": "はいってくる", "a": "memasuki"}, {"k": "悪い", "r": "わるい", "a": "buruk; jahat"}, {"k": "かける", "r": "かける", "a": "menyiram"}, {"k": "～といいます", "r": "～といいます", "a": "disebut~; dinamakan~"}, {"k": "プレゼント", "r": "プレゼント", "a": "hadiah"}, {"k": "米／お米", "r": "こめ", "a": "beras"}, {"k": "強い", "r": "つよい", "a": "kuat"}, {"k": "ピアス", "r": "ピアス", "a": "anting-anting"}, {"k": "マグカップ", "r": "マグカップ", "a": "cangkir"}, {"k": "帽子", "r": "ぼうし", "a": "topi"}, {"k": "お母さん", "r": "おかあさん", "a": "ibu (orang lain)"}, {"k": "お兄さん", "r": "おにいさん", "a": "kakak laki-laki (orang lain)"}, {"k": "誕生日", "r": "たんじょうび", "a": "hari ulang tahun"}, {"k": "もらう", "r": "もらう", "a": "mendapatkan; menerima"}, {"k": "おしゃれ（な）", "r": "おしゃれ", "a": "keren; stylish"}, {"k": "すてき（な）", "r": "すてき", "a": "indah; bagus; cantik"}, {"k": "くれる", "r": "くれる", "a": "menerima (dari orang lain)"}, {"k": "両親", "r": "りょうしん", "a": "orang tua"}, {"k": "いいでしょう？", "r": "いいでしょう", "a": "Bagus / indah, kan?"}, {"k": "バリ", "r": "バリ", "a": "Bali"}, {"k": "お父さん", "r": "おとうさん", "a": "ayah (orang lain)"}, {"k": "お姉さん", "r": "おねえさん", "a": "kakak perempuan (orang lain)"}, {"k": "弟さん", "r": "おとうとさん", "a": "adik laki-laki (orang lain)"}, {"k": "妹さん", "r": "いもうとさん", "a": "adik perempuan (orang lain)"}, {"k": "お子さん", "r": "おこさん", "a": "anak (orang lain)"}, {"k": "息子さん", "r": "むすこさん", "a": "anak laki-laki (orang lain)"}, {"k": "娘さん", "r": "むすめさん", "a": "anak perempuan (orang lain)"}, {"k": "お宅", "r": "おたく", "a": "rumah; kediaman"}, {"k": "おじゃまする", "r": "おじゃまする", "a": "mengunjungi"}, {"k": "経験", "r": "けいけん", "a": "pengalaman"}, {"k": "よろしくお伝えください", "r": "よろしくおつたえください", "a": "Tolong sampaikan salam saya"}]}, {"id": 18, "title": "Lesson 18: 何かプレゼントをあげませんか？", "words": [{"k": "結婚（する）", "r": "けっこん", "a": "menikah"}, {"k": "出産", "r": "しゅっさん", "a": "melahirkan"}, {"k": "生まれる", "r": "うまれる", "a": "lahir"}, {"k": "合格（する）", "r": "ごうかく", "a": "lulus"}, {"k": "男の子", "r": "おとこのこ", "a": "anak laki-laki"}, {"k": "女の子", "r": "おんなのこ", "a": "anak perempuan"}, {"k": "決める", "r": "きめる", "a": "memutuskan"}, {"k": "考える", "r": "かんがえる", "a": "berpikir"}, {"k": "ご結婚", "r": "ごけっこん", "a": "pernikahan"}, {"k": "私たち", "r": "わたしたち", "a": "kami; kita"}, {"k": "うれしい", "r": "うれしい", "a": "senang"}, {"k": "相手", "r": "あいて", "a": "pasangan; suami/istri"}, {"k": "お祝い", "r": "おいわい", "a": "perayaan; hadiah"}, {"k": "ごちそうする", "r": "ごちそうする", "a": "menjamu; mentraktir"}, {"k": "きっと", "r": "きっと", "a": "pasti"}, {"k": "あげる", "r": "あげる", "a": "memberi"}, {"k": "楽しみですね", "r": "たのしみですね", "a": "Wah, menyenangkan ya"}, {"k": "おめでとう（ございます）", "r": "おめでとう", "a": "Selamat"}, {"k": "お幸せに", "r": "おしあわせに", "a": "Semoga bahagia"}, {"k": "JLPT", "r": "ジェーエルピーティー", "a": "JLPT"}, {"k": "フォトフレーム", "r": "フォトフレーム", "a": "bingkai foto"}, {"k": "時計", "r": "とけい", "a": "jam"}, {"k": "ネクタイ", "r": "ネクタイ", "a": "dasi"}, {"k": "アクセサリー", "r": "アクセサリー", "a": "aksesori"}, {"k": "ハンカチ", "r": "ハンカチ", "a": "saputangan"}, {"k": "ケーキ", "r": "ケーキ", "a": "kue"}, {"k": "ギフトカード", "r": "ギフトカード", "a": "kartu diskon"}, {"k": "帰国（する）", "r": "きこく", "a": "pulang ke negara asal"}, {"k": "さびしい", "r": "さびしい", "a": "sepi (dirindukan)"}, {"k": "送別会", "r": "そうべつかい", "a": "pesta perpisahan"}, {"k": "呼ぶ", "r": "よぶ", "a": "memanggil; mengundang"}, {"k": "予約する", "r": "よやくする", "a": "memesan"}, {"k": "思い出", "r": "おもいで", "a": "kenangan"}, {"k": "残る", "r": "のこる", "a": "tetap tinggal; tetap ada"}, {"k": "思う", "r": "おもう", "a": "mengira; berpikir"}, {"k": "予算", "r": "よさん", "a": "anggaran"}, {"k": "参加者", "r": "さんかしゃ", "a": "peserta"}, {"k": "それなら", "r": "それなら", "a": "kalau begitu"}, {"k": "デジタルフォトフレーム", "r": "デジタルフォトフレーム", "a": "bingkai foto digital"}, {"k": "選ぶ", "r": "えらぶ", "a": "memilih"}, {"k": "それでは", "r": "それでは", "a": "sekarang"}, {"k": "あいさつ", "r": "あいさつ", "a": "sambutan; salam"}, {"k": "はじめ", "r": "はじめ", "a": "pertama-tama"}, {"k": "友だちができる", "r": "ともだちができる", "a": "mendapat teman"}, {"k": "大切にする", "r": "たいせつにする", "a": "jaga; rawat dengan baik"}, {"k": "飾る", "r": "かざる", "a": "memajang"}, {"k": "～のこと", "r": "～のこと", "a": "tentang ~"}, {"k": "忘れる", "r": "わすれる", "a": "lupa"}, {"k": "お元気で", "r": "おげんきで", "a": "Jaga diri baik-baik"}, {"k": "乾杯", "r": "かんぱい", "a": "Bersulang"}, {"k": "お世話になりました", "r": "おせわになりました", "a": "Terima kasih untuk segala bantuannya"}, {"k": "元気でいてください", "r": "げんきでいてください", "a": "Semoga sehat selalu"}, {"k": "メッセージ", "r": "メッセージ", "a": "pesan"}, {"k": "とうとう", "r": "とうとう", "a": "akhirnya"}, {"k": "～代", "r": "～だい", "a": "~an (usia)"}, {"k": "歌う", "r": "うたう", "a": "menyanyi"}, {"k": "踊る", "r": "おどる", "a": "menari"}, {"k": "サービス", "r": "サービス", "a": "layanan"}, {"k": "あたたかい", "r": "あたたかい", "a": "hangat"}, {"k": "カラオケ", "r": "カラオケ", "a": "karaoke"}, {"k": "幸せ（な）", "r": "しあわせ", "a": "bahagia"}, {"k": "素敵（な）", "r": "すてき", "a": "istimewa; indah"}, {"k": "～ますように", "r": "～ますように", "a": "Semoga~"}, {"k": "家庭", "r": "かてい", "a": "rumah tangga; keluarga"}, {"k": "いつまでも", "r": "いつまでも", "a": "selamanya"}, {"k": "築く", "r": "きずく", "a": "membangun"}, {"k": "末永く", "r": "すえながく", "a": "selamanya"}, {"k": "いなくなる", "r": "いなくなる", "a": "pergi meninggalkan"}, {"k": "がんばってください", "r": "がんばってください", "a": "Sukses selalu dan tetap semangat"}, {"k": "これまで", "r": "これまで", "a": "sampai saat ini"}, {"k": "活躍", "r": "かつやく", "a": "keberhasilan"}, {"k": "期待する", "r": "きたいする", "a": "berharap"}]}, {"id": 19, "title": "Lesson 19: 先週、日本に来たばかりです", "words": [{"k": "主任", "r": "しゅにん○", "a": "ketua; kepala"}, {"k": "パート", "r": "パート○／パ↓ート", "a": "pekerja paruh waktu"}, {"k": "いちばん", "r": "いちばん○", "a": "paling"}, {"k": "長い", "r": "なが↓い", "a": "lama; panjang (waktu)"}, {"k": "～出身", "r": "～しゅっしん", "a": "berasal dari ~ (cth : berasal dari Tiongkok)"}, {"k": "手続き", "r": "てつ↓づき", "a": "prosedur"}, {"k": "生活", "r": "せいかつ○", "a": "kehidupan"}, {"k": "いろいろ（な）", "r": "いろいろ（な）○", "a": "bermacam-macam; berbagai"}, {"k": "何でも", "r": "なんでも○／な↓んでも", "a": "apapun"}, {"k": "～でよかったら", "r": "～でよ↓かったら", "a": "jika~ berkenan / tidak masalah (cth : jika saya diperkenankan)"}, {"k": "いつでも", "r": "い↓つでも／いつでも○", "a": "kapanpun"}, {"k": "担当", "r": "たんとう○", "a": "bertanggung jawab; penanggung jawab"}, {"k": "申す", "r": "も↓うす", "a": "bernama; dipanggil sebagai (nama)"}, {"k": "呼ぶ", "r": "よぶ○", "a": "memanggil"}, {"k": "一生懸命", "r": "いっしょうけ↓んめい", "a": "bekerja keras"}, {"k": "がんばる", "r": "がんば↓る", "a": "berusaha; bekerja keras"}, {"k": "J-POP", "r": "ジェーポ↓ップ", "a": "musik pop Jepang; japanese pop music"}, {"k": "がんばります", "r": "がんばりま↓す", "a": "Saya akan berusaha / bekerja keras sebaik mungkin"}, {"k": "Perfume", "r": "パ↓フューム", "a": "Perfume (kelompok musik pop Jepang beraliran techno-pop yang terdiri dari 3 orang penyanyi wanita)"}, {"k": "初級", "r": "2 Daftar Kosakata", "a": "L1 - 1 ©The Japan Foundation"}, {"k": "方角", "r": "ほうがく○", "a": "arah"}, {"k": "北", "r": "きた○", "a": "utara"}, {"k": "東", "r": "ひがし○", "a": "timur"}, {"k": "南", "r": "みなみ○", "a": "selatan"}, {"k": "西", "r": "にし○", "a": "barat"}, {"k": "自然", "r": "しぜん○", "a": "alam"}, {"k": "川", "r": "かわ↓", "a": "sungai"}, {"k": "島", "r": "しま↓", "a": "pulau"}, {"k": "森", "r": "もり○", "a": "hutan"}, {"k": "ジャングル", "r": "ジャ↓ングル", "a": "hutan rimba; hutan belantara"}, {"k": "草原", "r": "そうげん○", "a": "padang rumput"}, {"k": "砂漠", "r": "さばく○", "a": "padang pasir"}, {"k": "高原", "r": "こうげん○", "a": "dataran tinggi"}, {"k": "首都", "r": "しゅ↓と", "a": "ibu kota"}, {"k": "観光地", "r": "かんこ↓うち", "a": "destinasi wisata; tempat wisata"}, {"k": "モンゴル", "r": "モ↓ンゴル", "a": "Mongolia"}, {"k": "のんびりしている", "r": "のんび↓りしている", "a": "santai; bersantai"}, {"k": "都会", "r": "とかい○", "a": "kota"}, {"k": "畑", "r": "はたけ○", "a": "ladang"}, {"k": "観光客", "r": "かんこ↓うきゃく", "a": "turis; wisatawan"}, {"k": "大勢", "r": "おおぜい○", "a": "banyak"}, {"k": "お客さん", "r": "おきゃくさん○", "a": "tamu; pengunjung"}, {"k": "テント", "r": "テ↓ント", "a": "tenda"}, {"k": "違います", "r": "ちがいま↓す", "a": "berbeda"}, {"k": "セブ", "r": "セ↓ブ", "a": "Cebu (Kota di Filipina)"}, {"k": "ウランバートル", "r": "ウランバ↓ートル", "a": "Ulan Bator (Ibu kota Mongolia)"}, {"k": "ホーチミン", "r": "ホーチ↓ミン", "a": "Ho Chi Minh (Kota di Vietnam)"}, {"k": "ウォノソボ", "r": "ウォノソボ○", "a": "Wonosobo (Kota di Jawa Tengah)"}, {"k": "セブ島", "r": "セブとう○", "a": "Pulau Cebu"}, {"k": "自己紹介", "r": "じこしょ↓うかい", "a": "perkenalan diri"}, {"k": "猫", "r": "ね↓こ", "a": "kucing"}, {"k": "グループ", "r": "グル↓ープ", "a": "grup; kelompok"}, {"k": "コミュニケーションする", "r": "コミュニケ↓ーションする", "a": "berkomunikasi"}, {"k": "インド料理", "r": "インドりょ↓うり", "a": "masakan khas India"}, {"k": "食べ歩き", "r": "たべあるき○", "a": "wisata kuliner (di berbagai daerah & tempat)"}, {"k": "ニックネーム", "r": "ニックネ↓ーム", "a": "nama panggilan"}, {"k": "バンコク", "r": "バ↓ンコク", "a": "Bangkok (Ibu kota Thailand)"}, {"k": "アニソン", "r": "アニソン○", "a": "ani-son (anime song); lagu film animasi"}]}, {"id": 20, "title": "Lesson 20: まじめそうな人ですね", "words": [{"k": "髪", "r": "かみ↓", "a": "rambut"}, {"k": "髪が長い", "r": "かみ↓が なが↓い", "a": "rambut panjang"}, {"k": "髪が短い", "r": "かみ↓が みじか↓い", "a": "rambut pendek"}, {"k": "背", "r": "せ↓", "a": "tinggi badan"}, {"k": "背が高い", "r": "せ↓が たか↓い", "a": "(badan) tinggi"}, {"k": "座る", "r": "すわる○", "a": "duduk"}, {"k": "立つ", "r": "た↓つ", "a": "berdiri"}, {"k": "かぶる", "r": "かぶ↓る", "a": "memakai; mengenakan (cth : memakai topi)"}, {"k": "ピアス", "r": "ピ↓アス", "a": "anting-anting memakai; mengenakan"}, {"k": "する", "r": "する○", "a": "(cth : mengenakan anting-anting)"}, {"k": "ワンピース", "r": "ワンピ↓ース", "a": "baju terusan"}, {"k": "着る", "r": "きる○", "a": "memakai; mengenakan (pakaian)"}, {"k": "はく", "r": "はく○", "a": "memakai; mengenakan (cth : memakai sepatu)"}, {"k": "めがね", "r": "め↓がね", "a": "kacamata"}, {"k": "かける", "r": "かけ↓る", "a": "memakai; mengenakan (cth : memakai kacamata)"}, {"k": "ひげ", "r": "ひげ○", "a": "jenggot"}, {"k": "はやす", "r": "はや↓す", "a": "menumbuhkan (cth : menumbuhkan jenggot)"}, {"k": "シャツ", "r": "シャ↓ツ", "a": "kemeja"}, {"k": "ズボン", "r": "ズボ↓ン／ズ↓ボン", "a": "celana panjang"}, {"k": "赤い", "r": "あかい○／あか↓い", "a": "merah"}, {"k": "白い", "r": "しろ↓い", "a": "putih"}, {"k": "黄色い", "r": "きいろい○／きいろ↓い", "a": "kuning"}, {"k": "青い", "r": "あお↓い", "a": "biru"}, {"k": "黒い", "r": "くろ↓い", "a": "hitam"}, {"k": "男の人", "r": "おとこのひと↓", "a": "pria"}, {"k": "ジャンパー", "r": "ジャ↓ンパー", "a": "jaket"}, {"k": "ほら", "r": "ほ↓ら", "a": "Lihat (lah).."}, {"k": "やさしい", "r": "やさしい○／やさし↓い", "a": "baik hati"}, {"k": "きびしい", "r": "きびし↓い", "a": "tegas"}, {"k": "こわい", "r": "こわ↓い", "a": "seram"}, {"k": "忙しい", "r": "いそがし↓い", "a": "sibuk"}, {"k": "まじめ（な）", "r": "まじめ（な）○", "a": "rajin"}, {"k": "元気（な）", "r": "げ↓んき（な）", "a": "energik; bersemangat"}, {"k": "恋人", "r": "こいびと○", "a": "pacar; kekasih"}, {"k": "孫", "r": "まご↓", "a": "cucu"}, {"k": "この間", "r": "このあいだ○", "a": "beberapa waktu lalu"}, {"k": "赤ちゃん", "r": "あ↓かちゃん", "a": "bayi"}, {"k": "泣く", "r": "なく○", "a": "menangis"}, {"k": "今度", "r": "こ↓んど", "a": "kali ini"}, {"k": "見た目", "r": "みため○", "a": "penampilan"}, {"k": "遅くまで", "r": "おそく↓まで", "a": "sampai larut malam"}, {"k": "心配（な）", "r": "しんぱい（な）○", "a": "khawatir"}, {"k": "かっこいい", "r": "かっこい↓い", "a": "keren"}, {"k": "歌", "r": "うた↓", "a": "menyanyi"}, {"k": "演技", "r": "え↓んぎ", "a": "berakting"}, {"k": "ダンス", "r": "ダ↓ンス", "a": "berdansa; menari"}, {"k": "上手（な）", "r": "じょうず↓（な）", "a": "mahir; pandai"}, {"k": "歌手", "r": "か↓しゅ", "a": "penyanyi"}, {"k": "だれか", "r": "だ↓れか", "a": "seseorang"}, {"k": "引退する", "r": "いんたいする○", "a": "pensiun"}, {"k": "今でも", "r": "い↓までも", "a": "bahkan sekarang"}, {"k": "俳優", "r": "はいゆう○", "a": "aktor"}, {"k": "そんな", "r": "そんな○", "a": "seperti itu hal yang memicu /mendorong /"}, {"k": "きっかけ", "r": "きっかけ○", "a": "membuat jadi (suka)"}, {"k": "映画祭", "r": "えいがさい○／えいが↓さい", "a": "festival film"}, {"k": "世界中", "r": "せかいじゅう○", "a": "seluruh dunia"}, {"k": "ファン", "r": "ファ↓ン", "a": "fan; penggemar"}, {"k": "安室奈美恵", "r": "あむろなみえ○", "a": "Amuro Namie (penyanyi berkebangsaan Jepang)"}, {"k": "三船敏郎", "r": "みふねとしろう○", "a": "Mifune Toshiro (aktor berkebangsaan Jepang)"}, {"k": "七人の侍", "r": "しち↓にんのさむらい", "a": "Seven Samurai (sebuah film karya sutradara Kurosawa Akira)"}, {"k": "まず", "r": "ま↓ず", "a": "mula-mula"}, {"k": "金色", "r": "きんいろ○", "a": "warna keemasan"}, {"k": "驚く", "r": "おどろ↓く", "a": "terkejut"}, {"k": "明るい", "r": "あかるい○／あかる↓い", "a": "terang"}, {"k": "びっくりする", "r": "びっく↓りする", "a": "kaget"}, {"k": "ハイキング", "r": "ハ↓イキング", "a": "hiking"}, {"k": "できれば", "r": "でき↓れば", "a": "bila memungkinkan"}, {"k": "シリーズ", "r": "シリ↓ーズ", "a": "seri; rangkaian"}, {"k": "おとなりさん", "r": "おとなりさん○", "a": "tetangga"}, {"k": "簡単に", "r": "かんたんに○", "a": "dengan mudah"}, {"k": "ヤンゴン", "r": "ヤ↓ンゴン", "a": "Yangon"}, {"k": "パゴダ", "r": "パ↓ゴダ", "a": "pagoda"}, {"k": "増える", "r": "ふえ↓る", "a": "bertambah"}, {"k": "交流協会", "r": "こうりゅうきょ↓うかい", "a": "asosiasi pertukaran"}]}, {"id": 21, "title": "Lesson 21: アレルギーがあるので、食べられないんです", "words": [{"k": "定食", "r": "ていしょく○", "a": "menu paket"}, {"k": "日替わり", "r": "ひがわり○", "a": "(menu) spesial harian"}, {"k": "大盛り", "r": "おおもり○", "a": "porsi besar"}, {"k": "おかわり自由", "r": "おか↓わり△じゆ↓う", "a": "bebas tambah porsi"}, {"k": "平日", "r": "へいじつ○", "a": "hari kerja"}, {"k": "～のみ", "r": "～の↓み", "a": "hanya ~ (cth : hanya pada hari kerja)"}, {"k": "ホット", "r": "ホ↓ット", "a": "hot; panas; hangat"}, {"k": "アイス", "r": "ア↓イス", "a": "iced; dingin (menggunakan es)"}, {"k": "焼き魚", "r": "やきざ↓かな", "a": "ikan panggang"}, {"k": "ハンバーグ", "r": "ハンバ↓ーグ", "a": "hamburger steak; steak daging"}, {"k": "カレーライス", "r": "カレーラ↓イス", "a": "nasi kare khas Jepang"}, {"k": "かつ丼", "r": "かつどん○", "a": "katsu-don (semangkuk nasi khas Jepang yang disajikan dengan potongan daging babi)"}, {"k": "親子丼", "r": "おやこどん○", "a": "oyako-don (semangkuk nasi khas Jepang yang disajikan dengan potongan daging ayam dan telur)"}, {"k": "つく", "r": "つ↓く", "a": "disajikan beserta ~ (cth : disajikan beserta sup miso)"}, {"k": "だめ（な）", "r": "だめ↓（な）", "a": "tidak dapat; tidak bisa (mengonsumsi)"}, {"k": "材料", "r": "ざいりょ↓う", "a": "bahan"}, {"k": "豚肉", "r": "ぶたにく○", "a": "daging babi"}, {"k": "牛肉", "r": "ぎゅうにく○", "a": "daging sapi"}, {"k": "カニ", "r": "カニ○", "a": "kepiting"}, {"k": "ナッツ", "r": "ナ↓ッツ", "a": "kacang-kacangan"}, {"k": "わさび", "r": "わ↓さび", "a": "wasabi (semacam lobak khas Jepang)"}, {"k": "ねぎ", "r": "ね↓ぎ", "a": "daun bawang"}, {"k": "みりん", "r": "みりん○", "a": "mirin (sake manis untuk keperluan memasak)"}, {"k": "宗教", "r": "しゅ↓うきょう", "a": "agama"}, {"k": "～上", "r": "～じょう", "a": "dalam hal~ (cth : karena (dalam hal) agama saya)"}, {"k": "理由", "r": "りゆう○", "a": "alasan"}, {"k": "アレルギー", "r": "アレ↓ルギー", "a": "alergi"}, {"k": "自転車", "r": "じてんしゃ○／じて↓んしゃ", "a": "sepeda"}, {"k": "来る", "r": "く↓る", "a": "datang"}, {"k": "ベジタリアン", "r": "ベジタ↓リアン", "a": "vegetarian"}, {"k": "豆腐", "r": "とうふ○", "a": "tofu (tahu khas Jepang)"}, {"k": "注文する", "r": "ちゅうもんする○", "a": "memesan"}, {"k": "飲める", "r": "のめ↓る", "a": "dapat meminum"}, {"k": "メニュー", "r": "メ↓ニュー", "a": "menu"}, {"k": "食べられる", "r": "たべられ↓る", "a": "dapat memakan; dapat mengonsumsi"}, {"k": "ほかの", "r": "ほかの○", "a": "lainnya"}, {"k": "～抜き", "r": "～ぬ↓き", "a": "tanpa ~ (cth : tanpa wasabi)"}, {"k": "そっか", "r": "そ↓っか", "a": "Gitu ya. (bentuk informasi dari そうですか)"}, {"k": "かしこまりました", "r": "かしこまりま↓した", "a": "Saya mengerti; dimengerti (ungkapan bentuk sopan)"}, {"k": "カウンター", "r": "カウンター○", "a": "meja bar restoran"}, {"k": "座敷", "r": "ざしき↓", "a": "zashiki / ruang tatami (ruang untuk duduk berlesehan)"}, {"k": "テーブル", "r": "テーブル○", "a": "meja"}, {"k": "会計／お会計", "r": "かいけい○／おかいけい○", "a": "kasir; pembayaran"}, {"k": "レジ", "r": "レ↓ジ", "a": "kasir; mesin kasir"}, {"k": "禁煙", "r": "きんえん○", "a": "larangan merokok"}, {"k": "～名", "r": "～めい", "a": "~ orang (cth : 2 orang)"}, {"k": "当店", "r": "と↓うてん", "a": "restoran kami; restoran ini"}, {"k": "全面", "r": "ぜんめん○", "a": "secara keseluruhan"}, {"k": "決まる", "r": "きまる○", "a": "memutuskan"}, {"k": "おすすめ", "r": "おすすめ○", "a": "rekomendasi"}, {"k": "人気がある", "r": "にんきがあ↓る", "a": "populer"}, {"k": "フライ", "r": "フライ○", "a": "furai (lauk berupa gorengan)"}, {"k": "ミックスフライ", "r": "ミックスフ↓ライ", "a": "aneka lauk goreng"}, {"k": "量", "r": "りょ↓う", "a": "porsi"}, {"k": "普通", "r": "ふつう○", "a": "biasa"}, {"k": "先に", "r": "さきに○", "a": "terlebih dulu"}, {"k": "別々", "r": "べつべつ○", "a": "bayar masing-masing"}, {"k": "クーポン", "r": "ク↓ーポン", "a": "voucer, kupon"}, {"k": "次回", "r": "じ↓かい", "a": "lain kali; kedatangan berikutnya"}, {"k": "それにします", "r": "それにしま↓す", "a": "Saya memilih / memesan yang itu."}, {"k": "お会計、お願いします", "r": "おかいけい○、おねがいしま↓す", "a": "Bisakah kami meminta bon / tagihannya?"}, {"k": "別々でお願いします", "r": "べつべつでおねがいしま↓す", "a": "Kami ingin membayarnya masing-masing."}, {"k": "お客様", "r": "おきゃくさ↓ま", "a": "Pak / Bu; Tuan / Nyonya (ungkapan bentuk sopan untuk menyebut tamu / pelanggan)"}, {"k": "何名様", "r": "な↓んめいさま", "a": "Berapa orang? (ungkapan bentuk sopan)"}, {"k": "～名様", "r": "～めいさま", "a": "~ orang (cth : 2 orang) (ungkapan bentuk sopan)"}, {"k": "ご注文", "r": "ごちゅうもん○", "a": "pesanan (ungkapan bentuk sopan)"}, {"k": "いかが", "r": "いか↓が", "a": "bagaimana ~ (ungkapan bentuk sopan dari どう)"}, {"k": "ごいっしょ", "r": "ごいっしょ○", "a": "bersama-sama (ungkapan bentuk sopan)"}, {"k": "よろしいですか？", "r": "よろし↓いですか？", "a": "Apakah sudah benar? (ungkapan bentuk sopan)"}, {"k": "～がございます", "r": "～がございま↓す", "a": "Ada / tersedia ~ (ungkapan bentuk sopan)"}, {"k": "お決まりですか？", "r": "おきまりで↓すか？", "a": "Apakah Anda sudah memutuskan? (ungkapan bentuk sopan)"}, {"k": "いかがですか？", "r": "いか↓がですか？", "a": "(ungkapan bentuk sopan)"}, {"k": "どうなさいますか？", "r": "ど↓うなさいま↓すか？", "a": "Bagaimana? / Berapa banyak yang Anda inginkan? (ungkapan bentuk sopan) Apakah (pesanannya) sudah semuanya?"}, {"k": "以上でよろしいですか？", "r": "い↓じょうで よろし↓いですか？", "a": "(ungkapan bentuk sopan)"}, {"k": "お使いください", "r": "おつかいくださ↓い", "a": "Silakan gunakan. (ungkapan bentuk sopan)"}, {"k": "少なめ", "r": "すくなめ○", "a": "porsi kecil"}, {"k": "食後に", "r": "しょくごに○", "a": "setelah (makan) hidangan utama"}, {"k": "日にち／お日にち", "r": "ひにち○／おひにち○", "a": "tanggal"}, {"k": "まちがい", "r": "まちが↓い", "a": "kesalahan"}, {"k": "失礼しました", "r": "しつ↓れいしま↓した", "a": "Saya mohon maaf."}, {"k": "お電話", "r": "おで↓んわ", "a": "telepon (ungkapan bentuk sopan)"}, {"k": "ご予約", "r": "ごよやく○", "a": "reservasi (ungkapan bentuk sopan)"}, {"k": "お時間", "r": "おじ↓かん", "a": "jam; waktu (ungkapan bentuk sopan)"}, {"k": "お電話番号", "r": "おでんわば↓んごう", "a": "nomor telepon (ungkapan bentuk sopan)"}, {"k": "～様", "r": "～さま", "a": "Bapak ~ / Ibu ~ / Tuan ~ / Nyonya ~ (ungkapan bentuk sopan dari ～さん )"}, {"k": "おまちがいないでしょう", "r": "おまちがいな↓いでしょうか？", "a": "Apakah sudah benar? / Apakah tidak ada kesalahan? (ungkapan bentuk sopan)"}, {"k": "半額", "r": "はんがく○", "a": "separuh harga"}, {"k": "有効期限", "r": "ゆうこうき↓げん", "a": "masa berlaku"}, {"k": "ドリンクバー", "r": "ドリンクバ↓ー", "a": "drink bar (layanan mandiri / self service berupa bar minuman soft drink bagi pengunjung)"}, {"k": "おこさま", "r": "おこさま○", "a": "anak kecil (ungkapan bentuk sopan) saat melakukan pemesanan"}, {"k": "ご注文時", "r": "ごちゅうも↓んじ", "a": "(ungkapan bentuk sopan)"}, {"k": "本券", "r": "ほ↓んけん", "a": "kupon / voucer ini"}, {"k": "使用", "r": "しよう○", "a": "penggunaan; pemakaian"}, {"k": "時間帯", "r": "じかんたい○", "a": "selama periode waktu Silakan tunjukkan / perlihatkan ~"}, {"k": "ご提示ください", "r": "ごていじくださ↓い", "a": "(ungkapan bentuk sopan)"}, {"k": "ご利用できません", "r": "ごりようできませ↓ん", "a": "Anda tidak dapat menggunakan / memakai ~ (ungkapan bentuk sopan)"}, {"k": "ご飲食代", "r": "ごいんしょくだい○", "a": "(ungkapan bentuk sopan)"}, {"k": "会計時", "r": "かいけ↓いじ", "a": "saat melakukan pembayaran"}, {"k": "利用可能（な）", "r": "りようかのう（な）○", "a": "dapat digunakan"}, {"k": "～限り", "r": "～か↓ぎり", "a": "hanya ~ (hanya 1 kali)"}, {"k": "有効（な）", "r": "ゆうこう（な）○", "a": "berlaku; valid"}, {"k": "他の", "r": "た↓の", "a": "lainnya"}, {"k": "併用", "r": "へいよう○", "a": "digunakan bersama dengan ~"}, {"k": "お見せください", "r": "おみせくださ↓い", "a": "Silakan tunjukkan / perlihatkan ~ (ungkapan bentuk sopan)"}]}, {"id": 22, "title": "Lesson 22: しょうゆをつけないで食べてください", "words": [{"k": "本物", "r": "ほんもの○", "a": "asli; autentik"}, {"k": "量", "r": "りょ↓う", "a": "jumlah; porsi"}, {"k": "とり", "r": "とり○", "a": "ayam"}, {"k": "彼女", "r": "か↓のじょ", "a": "pacar; kekasih (perempuan)"}, {"k": "食事", "r": "しょくじ○", "a": "makan"}, {"k": "ベトナム料理", "r": "ベトナムりょ↓うり", "a": "masakan khas Vietnam"}, {"k": "土地", "r": "とち○", "a": "lokal"}, {"k": "おれ", "r": "おれ○", "a": "aku (umumnya digunakan pria)"}, {"k": "看板", "r": "かんばん○", "a": "papan nama"}, {"k": "この辺", "r": "このへん○", "a": "sekitar sini"}, {"k": "新しく", "r": "あたらし↓く", "a": "baru"}, {"k": "できる", "r": "でき↓る", "a": "dibuka; rampung (cth : tokonya telah dibuka)"}, {"k": "地図", "r": "ち↓ず", "a": "peta"}, {"k": "送る", "r": "おくる○", "a": "mengirim"}, {"k": "このあたり", "r": "このあ↓たり", "a": "sekitar; dekat sini"}, {"k": "夫婦", "r": "ふ↓うふ", "a": "pasangan suami istri"}, {"k": "知りませんでした", "r": "しりませ↓んでした", "a": "Saya tidak mengetahui sebelumnya. (karena baru saja mendengarnya)"}, {"k": "食べ方", "r": "たべか↓た", "a": "cara makan"}, {"k": "つける", "r": "つけ↓る", "a": "mencelupkan (cth : mencelupkan ke saus)"}, {"k": "混ぜる", "r": "まぜ↓る", "a": "mencampurkan"}, {"k": "かける", "r": "かけ↓る", "a": "(cth : menuangkan saus)"}, {"k": "入れる", "r": "いれる○", "a": "memasukkan; menambahkan"}, {"k": "巻く", "r": "まく○", "a": "menggulung"}, {"k": "のせる", "r": "のせる○", "a": "menambahkan; menaruh (di atas sesuatu)"}, {"k": "むく", "r": "むく○", "a": "mengupas"}, {"k": "混ぜそば", "r": "まぜそば○", "a": "mixed soba (hidangan mie kering yang dibuat dengan saus kecap dan lemak babi)"}, {"k": "シュウマイ", "r": "シュウマイ○", "a": "shumai (hidangan pangsit daging khas Tiongkok)"}, {"k": "天ぷら", "r": "てんぷら○", "a": "tempura"}, {"k": "トマト", "r": "ト↓マト", "a": "tomat"}, {"k": "手巻きずし", "r": "てまき↓ずし", "a": "temaki-zushi (sushi gulung)"}, {"k": "焼きいも", "r": "やきいも○", "a": "yaki-imo (ubi manis panggang)"}, {"k": "味がついている", "r": "あじがつ↓いている", "a": "berbumbu"}, {"k": "しょうゆ", "r": "しょうゆ○", "a": "kecap asin khas Jepang"}, {"k": "つゆ", "r": "つ↓ゆ", "a": "saus kaldu (saus celup)"}, {"k": "そのまま", "r": "そのまま○", "a": "begitu saja"}, {"k": "のり", "r": "のり↓", "a": "rumput laut"}, {"k": "皮", "r": "かわ↓", "a": "kulit (cth : kulit tomat)"}, {"k": "お待たせしました", "r": "おまたせしま↓した", "a": "Terima kasih telah menunggu."}, {"k": "一度に", "r": "いちど↓に", "a": "sekaligus"}, {"k": "そんなに", "r": "そんなに○", "a": "sebegitu (banyak)"}, {"k": "しゃぶしゃぶ", "r": "しゃぶしゃぶ○", "a": "shabu-shabu (hidangan khas Jepang)"}, {"k": "こうやって", "r": "こうやって○", "a": "seperti ini"}, {"k": "味がない", "r": "あじがな↓い", "a": "tidak ada rasa"}, {"k": "ポン酢", "r": "ポンず○", "a": "cuka ponzu (saus berbasis lemon)"}, {"k": "ごまだれ", "r": "ごまだれ○", "a": "saus wijen"}, {"k": "白菜", "r": "はく↓さい", "a": "sawi putih"}, {"k": "調味料", "r": "ちょうみ↓りょう", "a": "bumbu; rempah"}, {"k": "砂糖", "r": "さと↓う", "a": "gula"}, {"k": "こしょう", "r": "こしょ↓う", "a": "lada"}, {"k": "スパイス", "r": "スパ↓イス", "a": "rempah-rempah"}, {"k": "ソース", "r": "ソ↓ース", "a": "saus"}, {"k": "たれ", "r": "たれ↓", "a": "tare (saus celup; saus cocol)"}, {"k": "油", "r": "あぶら○", "a": "minyak"}, {"k": "調理方法", "r": "ちょうりほ↓うほう", "a": "cara memasak"}, {"k": "切る", "r": "き↓る", "a": "memotong"}, {"k": "焼く", "r": "やく○", "a": "memanggang"}, {"k": "煮る", "r": "にる○", "a": "menggodok; merebus"}, {"k": "ゆでる", "r": "ゆで↓る", "a": "merebus"}, {"k": "蒸す", "r": "む↓す", "a": "mengukus"}, {"k": "いためる", "r": "いため↓る", "a": "menumis"}, {"k": "揚げる", "r": "あげる○", "a": "menggoreng"}, {"k": "サラダ", "r": "サ↓ラダ", "a": "selada"}, {"k": "餃子", "r": "ぎょうざ○", "a": "pangsit khas Jepang"}, {"k": "家庭料理", "r": "かていりょ↓うり", "a": "masakan rumahan"}, {"k": "フェイジョアーダ", "r": "フェイジョア↓ーダ", "a": "feijoada (masakan khas Brazil)"}, {"k": "モモ", "r": "モ↓モ", "a": "momo (masakan khas Nepal)"}, {"k": "ガドガド", "r": "ガドガド○", "a": "gado-gado (masakan khas Indonesia)"}, {"k": "麻花", "r": "マーホア○", "a": "mahua (penganan / kudapan khas Tiongkok)"}, {"k": "中国", "r": "ちゅ↓うごく", "a": "Cina; Tiongkok"}, {"k": "豆", "r": "まめ↓", "a": "kacang"}, {"k": "小麦粉", "r": "こむぎこ○", "a": "tepung gandum; tepung terigu"}, {"k": "ピーナッツソース", "r": "ピーナッツソ↓ース", "a": "saus kacang"}, {"k": "皮", "r": "かわ↓", "a": "kulit pembungkus (cth : kulit gyoza / pangsit khas Jepang)"}, {"k": "ゆで卵", "r": "ゆでた↓まご", "a": "telur rebus"}, {"k": "～など", "r": "～な↓ど", "a": "～ dan lain-lain"}, {"k": "甘辛い", "r": "あまから↓い", "a": "pedas manis"}, {"k": "固い", "r": "かたい○／かた↓い", "a": "keras"}, {"k": "どれも", "r": "ど↓れも／どれも○", "a": "yang mana pun"}, {"k": "～屋", "r": "～や", "a": "～ toko / restoran (cth : restoran yang khusus menyediakan menu paket khas Jepang)"}, {"k": "ボリューム", "r": "ボリューム○", "a": "porsi (banyaknya)"}, {"k": "満足（な）", "r": "ま↓んぞく（な）", "a": "puas"}, {"k": "おばちゃん", "r": "おばちゃん○", "a": "wanita paruh baya"}, {"k": "リーズナブル（な）", "r": "リ↓ーズナブル（な）", "a": "masuk akal"}, {"k": "頼む", "r": "たの↓む", "a": "memesan"}, {"k": "煮込みハンバーグ", "r": "にこみハンバ↓ーグ", "a": "stewed hamburger steak (semur bistik hamburger)"}, {"k": "～前", "r": "～まえ", "a": "sebelum～ (cth : sebelum jam 12)"}, {"k": "おすすめする", "r": "おすすめする○", "a": "merekomendasikan"}, {"k": "やっている", "r": "やっている○", "a": "menjalankan (sebuah toko)"}, {"k": "時間がかかる", "r": "じかんがかか↓る", "a": "memerlukan waktu"}, {"k": "値段", "r": "ねだん○", "a": "harga"}, {"k": "その他", "r": "その↓た", "a": "lainnya"}]}, {"id": 23, "title": "Lesson 23: 早く予約したほうがいいですよ", "words": [{"k": "自然", "r": "しぜん○", "a": "kekayaan alam"}, {"k": "豊か（な）", "r": "ゆ↓たか（な）", "a": "melimpah"}, {"k": "暖かい", "r": "あたたか↓い", "a": "hangat"}, {"k": "混んでいる", "r": "こ↓んでいる", "a": "penuh sesak"}, {"k": "遊ぶ", "r": "あそぶ○", "a": "bermain; bersenang-senang"}, {"k": "海外", "r": "か↓いがい", "a": "luar negeri"}, {"k": "観光客", "r": "かんこ↓うきゃく", "a": "turis; wisatawan"}, {"k": "人気がある", "r": "にんきがあ↓る", "a": "populer"}, {"k": "北海道", "r": "ほっか↓いどう", "a": "Hokkaido"}, {"k": "沖縄", "r": "おきなわ○", "a": "Okinawa"}, {"k": "一日中", "r": "いちにちじゅう○", "a": "seharian penuh"}, {"k": "新鮮（な）", "r": "しんせん（な）○", "a": "segar"}, {"k": "ウニ", "r": "ウ↓ニ", "a": "landak lauk / bulu babi"}, {"k": "シュノーケリング", "r": "シュノーケリング○", "a": "snorkeling (selam permukaan)"}, {"k": "番組", "r": "ばんぐみ○", "a": "acara TV"}, {"k": "いつか", "r": "い↓つか", "a": "suatu hari nanti"}, {"k": "やっぱり", "r": "やっぱ↓り", "a": "ternyata (sesuai dugaan)"}, {"k": "ラッシュ", "r": "ラ↓ッシュ", "a": "jam sibuk"}, {"k": "水族館", "r": "すいぞく↓かん", "a": "akuarium raksasa; sea world"}, {"k": "ボート", "r": "ボ↓ート", "a": "perahu"}, {"k": "サイクリング", "r": "サ↓イクリング", "a": "bersepeda"}, {"k": "遊園地", "r": "ゆうえ↓んち", "a": "taman hiburan"}, {"k": "温泉", "r": "おんせん○", "a": "pemandian air panas"}, {"k": "行き先", "r": "いきさき○", "a": "tujuan / tempat tujuan"}, {"k": "湖", "r": "みず↓うみ", "a": "danau"}, {"k": "レンタサイクル", "r": "レンタサ↓イクル", "a": "rental / persewaan sepeda"}, {"k": "先輩", "r": "せんぱい○", "a": "senior; rekan kerja senior"}, {"k": "出発する", "r": "しゅっぱつする○", "a": "berangkat"}, {"k": "ごめんなさい", "r": "ごめんなさ↓い／ごめんなさい○", "a": "Maaf."}, {"k": "旅行", "r": "りょこう○", "a": "wisata"}, {"k": "泊まる", "r": "とまる○", "a": "menginap"}, {"k": "ホテル", "r": "ホ↓テル", "a": "hotel"}, {"k": "旅館", "r": "りょかん○", "a": "penginapan ala Jepang penginapan kecil; losmen"}, {"k": "民宿", "r": "みんしゅく○", "a": "(akomodasi yang dikelola oleh suatu keluarga)"}, {"k": "交通手段", "r": "こうつうしゅ↓だん", "a": "alat transportasi"}, {"k": "バス", "r": "バ↓ス", "a": "bus"}, {"k": "電車", "r": "でんしゃ○／で↓んしゃ", "a": "kereta"}, {"k": "船", "r": "ふ↓ね", "a": "kapal"}, {"k": "飛行機", "r": "ひこ↓うき", "a": "pesawat"}, {"k": "車", "r": "くるま○", "a": "mobil"}, {"k": "準備する", "r": "じゅ↓んびする", "a": "mempersiapkan"}, {"k": "スキー板", "r": "スキ↓ーいた／スキーい↓た", "a": "papan ski"}, {"k": "スキーウェア", "r": "スキーウェ↓ア", "a": "pakaian ski"}, {"k": "手袋", "r": "てぶ↓くろ", "a": "sarung tangan"}, {"k": "サングラス", "r": "サング↓ラス", "a": "sunglasses; kacamata hitam"}, {"k": "水着", "r": "みずぎ○", "a": "pakaian renang"}, {"k": "日光", "r": "に↓っこう", "a": "Nikko"}, {"k": "紅葉", "r": "こうよう○", "a": "daun maple yang memerah"}, {"k": "かなり", "r": "か↓なり", "a": "cukup"}, {"k": "厚い", "r": "あつい○／あつ↓い", "a": "tebal / berat"}, {"k": "上着", "r": "うわぎ○", "a": "jaket"}, {"k": "奈良", "r": "な↓ら", "a": "Nara"}, {"k": "小さな", "r": "ち↓いさな", "a": "kecil; mungil"}, {"k": "宿", "r": "や↓ど", "a": "penginapan"}, {"k": "時期", "r": "じ↓き", "a": "musim"}, {"k": "混む", "r": "こ↓む", "a": "ramai; penuh"}, {"k": "計画", "r": "けいかく○", "a": "rencana"}, {"k": "立てる", "r": "たて↓る", "a": "membuat rencana"}, {"k": "調べる", "r": "しらべ↓る", "a": "mengecek; mencari tahu"}, {"k": "富山", "r": "と↓やま", "a": "Toyama"}, {"k": "くわしい", "r": "くわし↓い", "a": "rinci, mendetail"}, {"k": "回転ずし", "r": "かいて↓んずし", "a": "restoran sushi modern dengan meja konveyor"}, {"k": "並ぶ", "r": "ならぶ○", "a": "berbaris, mengantri"}, {"k": "長野", "r": "な↓がの", "a": "Nagano"}, {"k": "日焼けする", "r": "ひやけする○", "a": "berjemur"}, {"k": "スキー", "r": "スキ↓ー", "a": "ski"}, {"k": "スキー場", "r": "スキーじょう○", "a": "tempat ski; resor ski"}, {"k": "こっち", "r": "こっち↓", "a": "di sini (bentuk informal dari こちら)"}, {"k": "撮る", "r": "と↓る", "a": "mengambil (foto, video)"}, {"k": "オルゴール", "r": "オルゴ↓ール", "a": "kotak musik"}, {"k": "美術館", "r": "びじゅつ↓かん", "a": "museum seni"}, {"k": "ロープウェイ", "r": "ロープウェ↓イ", "a": "kereta gantung"}, {"k": "湖", "r": "みず↓うみ", "a": "danau"}, {"k": "そば", "r": "そ↓ば", "a": "di sebelah (cth : di sebelah danau)"}, {"k": "露天風呂", "r": "ろてんぶ↓ろ／ろてんぶろ○", "a": "pemandian air panas di alam terbuka"}, {"k": "日帰り", "r": "ひがえり○", "a": "perjalanan sehari"}, {"k": "まったく～ない", "r": "まったく○～ない", "a": "sama sekali tidak ~"}, {"k": "寄る", "r": "よる○", "a": "mampir; singgah"}, {"k": "意外に", "r": "いがいに○", "a": "di luar dugaan"}, {"k": "楽しむ", "r": "たのし↓む", "a": "menikmati"}, {"k": "宿泊", "r": "しゅくはく○", "a": "akomodasi; penginapan"}, {"k": "観光", "r": "かんこう○", "a": "wisata"}, {"k": "グルメ", "r": "グ↓ルメ", "a": "kuliner"}, {"k": "旅券", "r": "りょけん○", "a": "tiket transportasi"}, {"k": "口コミ", "r": "くちコミ○", "a": "(ulasan) dari mulut ke mulut"}, {"k": "投稿する", "r": "とうこうする○", "a": "membuat posting"}, {"k": "～のまわり", "r": "～のまわり○", "a": "sekitar ～ (cth : sekitar danau)"}, {"k": "帰り", "r": "かえり↓", "a": "perjalanan pulang"}]}, {"id": 24, "title": "Lesson 24: いろいろなところに行けて、よかったです", "words": [{"k": "～発", "r": "～は↓つ", "a": "berangkat pada ~"}, {"k": "～着", "r": "～ちゃ↓く", "a": "tiba di ~"}, {"k": "～号", "r": "～ごう", "a": "nomor ~"}, {"k": "～号車", "r": "～ご↓うしゃ", "a": "gerbong nomor ~"}, {"k": "～席", "r": "～せき", "a": "tempat duduk nomor ~"}, {"k": "特急券", "r": "とっきゅ↓うけん", "a": "tiket kereta jenis ekspres (limited express)"}, {"k": "秋田", "r": "あ↓きた", "a": "Akita"}, {"k": "こまち", "r": "こ↓まち", "a": "Komachi (salah satu jenis kereta Shinkansen)"}, {"k": "通路側", "r": "つうろがわ○", "a": "tempat duduk dekat lorong"}, {"k": "窓側", "r": "まどがわ○", "a": "tempat duduk dekat jendela"}, {"k": "遅れ", "r": "おくれ○", "a": "terlambat"}, {"k": "約", "r": "や↓く", "a": "sekitar ~ / kira-kira ~ (cth : kira-kira 10 menit)"}, {"k": "～両編成", "r": "～りょうへ↓んせい", "a": "terdiri dari ~ gerbong (cth : terdiri dari 10 gerbong kereta)"}, {"k": "運転見合わせ", "r": "うんてんみあわせ○", "a": "dihentikan sementara waktu; ditunda"}, {"k": "お知らせ", "r": "おしらせ○", "a": "pengumuman"}, {"k": "台風～号", "r": "たいふ↓う ～ごう", "a": "angin topan nomor ～"}, {"k": "接近", "r": "せっきん○", "a": "mendekat"}, {"k": "～に伴い", "r": "～にともな↓い", "a": "sebagai akibat dari ～"}, {"k": "見合わせる", "r": "みあわせる○", "a": "menunda"}, {"k": "ゆば", "r": "ゆ↓ば", "a": "yuba (kulit tahu khas Jepang)"}, {"k": "外国", "r": "がいこく○", "a": "luar negeri menginap ～ malam"}, {"k": "～泊", "r": "～はく", "a": "(cth : menginap semalam / 1 malam)"}, {"k": "名物", "r": "め↓いぶつ", "a": "kuliner khas lokal"}, {"k": "東照宮", "r": "とうしょ↓うぐう", "a": "Kuil Toshogu"}, {"k": "中禅寺湖", "r": "ちゅうぜんじ↓こ", "a": "Danau Chuzenji"}, {"k": "指定席", "r": "して↓いせき", "a": "tempat duduk sesuai pesanan"}, {"k": "自由席", "r": "じゆ↓うせき", "a": "tempat duduk bebas"}, {"k": "～番乗り場", "r": "～ばんの↓りば", "a": "peron nomor ~"}, {"k": "～番線", "r": "～ばんせん○", "a": "jalur nomor ~"}, {"k": "～行き", "r": "～いき○／ゆき○", "a": "tujuan (ke) ～"}, {"k": "～線", "r": "～せん○", "a": "jalur ～"}, {"k": "～方面", "r": "～ほ↓うめん", "a": "arah ～"}, {"k": "発車する", "r": "はっしゃする○", "a": "berangkat"}, {"k": "到着する", "r": "とうちゃくする○", "a": "tiba"}, {"k": "乗り換える", "r": "のりかえる○／のりか↓える", "a": "berpindah; transfer"}, {"k": "特急", "r": "とっきゅう○", "a": "kereta ekspres (limited express)"}, {"k": "～両", "r": "～りょう", "a": "～ gerbong (cth : sembilan gerbong)"}, {"k": "順", "r": "じゅん○", "a": "urutan"}, {"k": "グリーン車", "r": "グリー↓ンしゃ", "a": "green car (gerbong eksekutif; gerbong kelas utama)"}, {"k": "金沢", "r": "かな↓ざわ", "a": "Kanazawa"}, {"k": "列車", "r": "れっしゃ○", "a": "kereta"}, {"k": "乗車／ご乗車", "r": "じょうしゃ○／ごじょうしゃ○", "a": "naik ke kereta"}, {"k": "～ほど", "r": "～ほど", "a": "sekitar ~ / kira-kira ~ (cth : kira-kira 3 menit)"}, {"k": "岡山", "r": "おか↓やま", "a": "Okayama"}, {"k": "お出口", "r": "おで↓ぐち", "a": "pintu keluar (ungkapan bentuk sopan)"}, {"k": "左側", "r": "ひだりがわ○", "a": "sisi kiri"}, {"k": "各駅", "r": "か↓くえき", "a": "setiap stasiun"}, {"k": "向かい側", "r": "むかいがわ○", "a": "sisi berlawanan"}, {"k": "中ほど", "r": "なかほど○", "a": "tengah Berikut adalah pengumuman."}, {"k": "ご案内をいたします", "r": "ごあんないをいたしま↓す", "a": "(ungkapan bentuk sopan)"}, {"k": "お越しください", "r": "おこしくださ↓い", "a": "Silakan menuju ke ～ (ungkapan bentuk sopan)"}, {"k": "事故", "r": "じ↓こ", "a": "kecelakaan"}, {"k": "壊れる", "r": "こわれ↓る", "a": "rusak"}, {"k": "信号", "r": "しんごう○", "a": "lampu lalu lintas"}, {"k": "信号故障", "r": "しんごうこ↓しょう", "a": "kerusakan lampu lalu lintas"}, {"k": "アナウンス", "r": "アナ↓ウンス", "a": "pengumuman"}, {"k": "困る", "r": "こま↓る", "a": "menyulitkan; membuat susah / jengkel"}, {"k": "何て言ってましたか？", "r": "な↓んていってま↓したか？", "a": "Apa katanya?"}, {"k": "当駅", "r": "と↓うえき", "a": "stasiun ini"}, {"k": "～のため", "r": "～のため", "a": "karena ～"}, {"k": "運転", "r": "うんてん○", "a": "pengoperasian (kereta) dalam keadaan terburu-buru"}, {"k": "お急ぎのところ", "r": "おいそぎのところ○", "a": "(ungkapan bentuk sopan) Berikut adalah pengumuman."}, {"k": "お知らせいたします", "r": "おしらせいたしま↓す", "a": "(ungkapan bentuk sopan)"}, {"k": "行っております", "r": "おこなっておりま↓す", "a": "melakukan ～ (ungkapan bentuk sopan untuk しています ) Mohon maaf atas ketidaknyamanannya."}, {"k": "ご迷惑をおかけします", "r": "ごめ↓いわくをおかけしま↓す", "a": "(ungkapan bentuk sopan)"}, {"k": "人身事故", "r": "じんしんじ↓こ", "a": "kecelakaan fatal / serius"}, {"k": "影響", "r": "えいきょう○", "a": "dampak"}, {"k": "全線", "r": "ぜ↓んせん", "a": "seluruh jalur"}, {"k": "お越し", "r": "おこし○", "a": "menuju (ungkapan bentuk sopan)"}, {"k": "ご利用ください", "r": "ごりようくださ↓い", "a": "Silakan gunakan (ungkapan bentuk sopan)"}, {"k": "感動する", "r": "かんどうする○", "a": "menjadi tersentuh"}, {"k": "気持ちいい", "r": "きもちい↓い", "a": "menyegarkan perasaan / suasana hati"}, {"k": "残念（な）", "r": "ざんね↓ん（な）", "a": "mengecewakan"}, {"k": "疲れる", "r": "つかれ↓る", "a": "lelah; capek / capai"}, {"k": "びっくりする", "r": "びっく↓りする", "a": "kaget; terkejut"}, {"k": "驚く", "r": "おどろ↓く", "a": "kaget; terkejut"}, {"k": "こわい", "r": "こわ↓い", "a": "takut"}, {"k": "よかった", "r": "よ↓かった", "a": "bagus"}, {"k": "大阪", "r": "おおさか○", "a": "Osaka"}, {"k": "串カツ", "r": "くしカツ○", "a": "kushi-katsu (masakan campuran daging, sayuran dan seafood yang ditusukkan seperti sate)"}, {"k": "たこ焼き", "r": "たこやき○", "a": "takoyaki (masakan dengan isian gurita yang dipanggang berbentuk bola-bola)"}, {"k": "登る", "r": "のぼる○", "a": "naik"}, {"k": "あべのハルカス", "r": "あべのハ↓ルカス", "a": "Abeno Harukas (nama gedung pencakar langit di Osaka)"}, {"k": "大阪城", "r": "おおさか↓じょう", "a": "Kastel Osaka"}, {"k": "通天閣", "r": "つうて↓んかく", "a": "Menara Tsutenkaku"}, {"k": "鳥", "r": "とり○", "a": "burung"}, {"k": "あげる", "r": "あげる○", "a": "memberi"}, {"k": "つり", "r": "つり○", "a": "memancing"}, {"k": "空", "r": "そ↓ら", "a": "langit"}, {"k": "ウミネコ", "r": "ウミネコ○", "a": "camar ekor hitam"}, {"k": "あの辺", "r": "あのへん○", "a": "sekitar sana"}, {"k": "浄土ヶ浜", "r": "じょうどが↓はま", "a": "Pantai Jodogahama"}, {"k": "ケーブルカー", "r": "ケーブル↓カー", "a": "kereta gantung"}, {"k": "歩く", "r": "ある↓く", "a": "berjalan"}, {"k": "リス", "r": "リ↓ス", "a": "tupai"}, {"k": "だから", "r": "だ↓から", "a": "karena itulah"}, {"k": "あきらめる", "r": "あきらめ↓る", "a": "menyerah"}, {"k": "頂上", "r": "ちょうじょ↓う", "a": "puncak"}, {"k": "高尾山", "r": "たかお↓さん", "a": "Gunung Takao"}, {"k": "町並み", "r": "まちなみ○", "a": "pemandangan kota"}, {"k": "花畑", "r": "はなば↓たけ", "a": "ladang bunga"}, {"k": "イルミネーション", "r": "イルミネ↓ーション", "a": "iluminasi (penerangan dengan lampu hias)"}, {"k": "ショー", "r": "ショ↓ー", "a": "pertunjukan"}, {"k": "泊まる", "r": "とまる○", "a": "menginap"}, {"k": "滝", "r": "たき○", "a": "air terjun"}, {"k": "きらきら", "r": "き↓らきら", "a": "kilauan"}, {"k": "光る", "r": "ひか↓る", "a": "bercahaya"}, {"k": "ハウステンボス", "r": "ハウステ↓ンボス", "a": "Huis Ten Bosch (taman rekreasi di Prefektur Nagasaki)"}, {"k": "オランダ", "r": "オランダ○", "a": "Belanda"}, {"k": "インスタントラーメン", "r": "インスタントラ↓ーメン", "a": "mi instan"}, {"k": "描く", "r": "か↓く", "a": "menggambar; melukis"}, {"k": "カップラーメン", "r": "カップラ↓ーメン", "a": "mi instan dalam kemasan cup"}, {"k": "絵", "r": "え↓", "a": "gambar"}, {"k": "トッピング", "r": "トッピング○", "a": "topping; taburan"}]}, {"id": 25, "title": "Lesson 25: 雨が降ったら、ホールでやります", "words": [{"k": "おみこし", "r": "おみ↓こし", "a": "kuil portabel (semacam kuil yang bisa dibawa dan dipindahkan)"}, {"k": "かつぐ", "r": "かつ↓ぐ", "a": "mengusung (di bahu / pundak)"}, {"k": "海岸", "r": "かいがん○", "a": "pantai"}, {"k": "ごみ", "r": "ごみ↓", "a": "sampah"}, {"k": "拾う", "r": "ひろう○", "a": "memungut"}, {"k": "出る", "r": "で↓る", "a": "mengalir (cth : air mengalir)"}, {"k": "地震", "r": "じしん○", "a": "gempa bumi"}, {"k": "火事", "r": "か↓じ", "a": "kebakaran"}, {"k": "訓練", "r": "く↓んれん", "a": "latihan"}, {"k": "断水（する）", "r": "だんすい（する）○", "a": "pemadaman air"}, {"k": "水道工事", "r": "すいどうこ↓うじ", "a": "pekerjaan perbaikan saluran air"}, {"k": "濁る", "r": "にご↓る", "a": "keruh (cth : airnya keruh)"}, {"k": "使用する", "r": "しようする○", "a": "menggunakan"}, {"k": "お知らせ", "r": "おしらせ○", "a": "pengumuman"}, {"k": "下記のとおり", "r": "か↓きのと↓おり", "a": "sebagai berikut"}, {"k": "しばらく", "r": "しば↓らく", "a": "sebentar"}, {"k": "出す", "r": "だ↓す", "a": "mengalirkan (cth : mengalirkan air)"}, {"k": "迷惑／ご迷惑", "r": "め↓いわく／ごめ↓いわく", "a": "ketidaknyamanan"}, {"k": "ご協力お願いいたします", "r": "ごきょうりょくおねがいいたしま↓", "a": "Kami mohon kerja sama Anda. (ungkapan bentuk sopan)"}, {"k": "防災", "r": "ぼうさい○", "a": "pencegahan bencana"}, {"k": "小学校", "r": "しょうが↓っこう", "a": "Sekolah Dasar (SD)"}, {"k": "校庭", "r": "こうてい○", "a": "halaman sekolah"}, {"k": "雨天", "r": "うてん○／う↓てん", "a": "hujan"}, {"k": "場合", "r": "ばあい○", "a": "apabila"}, {"k": "内容", "r": "ないよう○", "a": "isi"}, {"k": "通報訓練", "r": "つうほうく↓んれん", "a": "pelatihan pelaporan bencana"}, {"k": "避難訓練", "r": "ひなんく↓んれん", "a": "pelatihan evakuasi"}, {"k": "消火訓練", "r": "しょうかく↓んれん", "a": "pelatihan pemadaman kebakaran pelatihan penyelamatan dasar menggunakan"}, {"k": "AED訓練", "r": "エーイーディーく↓んれん", "a": "AED (Automated External Defibrillator)"}, {"k": "隣近所の人", "r": "となりき↓んじょのひと↓", "a": "tetangga"}, {"k": "声をかけあう", "r": "こ↓えを かけあ↓う", "a": "saling berbicara / menyampaikan satu sama lain"}, {"k": "条件", "r": "じょうけ↓ん", "a": "kondisi; syarat"}, {"k": "運動靴", "r": "うんど↓うぐつ", "a": "sepatu olahraga"}, {"k": "動きやすい", "r": "うごきやす↓い", "a": "mudah bergerak"}, {"k": "はっぴ", "r": "はっぴ○", "a": "rompi happi"}, {"k": "貸し出し", "r": "かしだし○", "a": "rental"}, {"k": "希望", "r": "きぼう○", "a": "harapan; keinginan"}, {"k": "申し込む", "r": "もうしこ↓む", "a": "mendaftarkan diri"}, {"k": "集合", "r": "しゅうごう○", "a": "berkumpul"}, {"k": "ジーンズ", "r": "ジ↓ーンズ", "a": "celana jin (jeans)"}, {"k": "当日", "r": "とうじつ○", "a": "pada hari itu (Hari-H)"}, {"k": "おいでください", "r": "おいでくださ↓い", "a": "Silakan datang. (ungkapan bentuk sopan)"}, {"k": "延期する", "r": "えんきする○", "a": "ditunda; diundur"}, {"k": "持ち物", "r": "もち↓もの／もちも↓の", "a": "bawaan (barang yang perlu dibawa)"}, {"k": "汚れる", "r": "よごれる○", "a": "menjadi kotor"}, {"k": "軍手", "r": "ぐんて○", "a": "sarung tangan kerja"}, {"k": "～程度", "r": "～て↓いど", "a": "sekitar ～ (cth : sekitar 2 jam)"}, {"k": "作業", "r": "さ↓ぎょう", "a": "pekerjaan"}, {"k": "世話役", "r": "せわやく○", "a": "fasilitator"}, {"k": "会", "r": "か↓い", "a": "kelompok; grup (cth : grup sukarelawan)"}, {"k": "ガス", "r": "ガ↓ス", "a": "gas"}, {"k": "点検", "r": "てんけん○", "a": "inspeksi; pengecekan"}, {"k": "フリーマーケット", "r": "フリーマ↓ーケット", "a": "flea market (semacam pasar kaget; pasar loak)"}, {"k": "祭り／お祭り", "r": "まつり○／おまつり○", "a": "festival"}, {"k": "寄付", "r": "き↓ふ", "a": "donasi"}, {"k": "お願い", "r": "おねがい○", "a": "permintaan"}, {"k": "花火大会", "r": "はなびた↓いかい", "a": "pesta kembang api"}, {"k": "今月", "r": "こんげつ○", "a": "bulan ini"}, {"k": "来月", "r": "ら↓いげつ", "a": "bulan depan"}, {"k": "ポスト", "r": "ポ↓スト", "a": "kotak pos"}, {"k": "ガス会社", "r": "ガスが↓いしゃ", "a": "perusahaan gas"}, {"k": "間", "r": "あいだ○ （じゅうよ↓じから", "a": "antara (cth : antara pukul 14:00 - 15:00)"}, {"k": "封筒", "r": "ふうとう○", "a": "amplop"}, {"k": "手紙", "r": "てがみ○", "a": "surat"}, {"k": "～だけ", "r": "～だけ↓", "a": "hanya ～"}, {"k": "中止", "r": "ちゅうし○", "a": "batal"}, {"k": "広場", "r": "ひ↓ろば", "a": "lapangan"}, {"k": "～回目", "r": "～かいめ↓", "a": "(yang) ke～ (cth : yang ke-2 / kedua)"}, {"k": "食器", "r": "しょっき○", "a": "alat makan"}, {"k": "おもちゃ", "r": "おも↓ちゃ", "a": "mainan"}, {"k": "コンサート", "r": "コ↓ンサート", "a": "konser"}, {"k": "販売会", "r": "はんば↓いかい", "a": "acara pemasaran / penjualan"}, {"k": "カラオケ大会", "r": "カラオケた↓いかい", "a": "kompetisi karaoke"}, {"k": "ブラスバンド", "r": "ブラスバ↓ンド", "a": "orkes alat musik tiup (brass band)"}, {"k": "演奏", "r": "えんそう○", "a": "pertunjukan musik"}, {"k": "踊り", "r": "おどり○", "a": "tarian"}, {"k": "練習", "r": "れんしゅう○", "a": "latihan"}, {"k": "道の駅", "r": "みちのえ↓き", "a": "Michi-no-eki (stasiun tepi jalan)"}, {"k": "公民館", "r": "こうみ↓んかん", "a": "pusat / aula komunitas lokal"}, {"k": "市民センター", "r": "しみんセ↓ンター", "a": "balai warga"}, {"k": "～において", "r": "～にお↓いて", "a": "di ～"}, {"k": "開催する", "r": "かいさいする○", "a": "mengadakan"}, {"k": "入場券", "r": "にゅうじょ↓うけん", "a": "tiket masuk"}, {"k": "販売中", "r": "はんばいちゅう○", "a": "sedang dijual; dalam masa penjualan"}, {"k": "ピアノの夕べ", "r": "ピアノのゆうべ↓", "a": "malam musik piano"}, {"k": "および", "r": "お↓よび", "a": "dan"}, {"k": "～からお知らせします", "r": "～からおしらせしま↓す", "a": "(Berikut ini adalah) pengumuman dari ～ . (ungkapan bentuk sopan)"}, {"k": "皆様のご来場をお待ちし", "r": "みな↓さまの ごらいじょう○を", "a": "Kami menantikan kehadiran / kedatangan Anda. (ungkapan betuk sopan)"}, {"k": "明日", "r": "あす○／あす↓", "a": "besok"}, {"k": "行う", "r": "おこなう○", "a": "menyelenggarakan"}, {"k": "見学（する）", "r": "けんがくする○", "a": "mengamati; mengobservasi; meninjau"}, {"k": "どなたでも", "r": "ど↓なたで↓も／どなたでも○", "a": "siapapun (ungkapan bentuk sopan)"}, {"k": "～からのお知らせです", "r": "～から↓のおしらせです", "a": "(Berikut ini adalah) pengumuman dari ～ . (ungkapan bentuk sopan)"}, {"k": "お気軽にお越しください", "r": "おきがるにおこしくださ↓い", "a": "Silakan mampir / berkunjung. (ungkapan bentuk sopan) tentang; mengenai"}, {"k": "本日", "r": "ほ↓んじつ", "a": "hari ini"}, {"k": "開く", "r": "ひら↓く", "a": "mengadakan"}, {"k": "予定する", "r": "よていする○", "a": "dijadwalkan"}, {"k": "～についてお知らせしま", "r": "～につ↓いておしらせしま↓す", "a": "Kami mengumumkan tentang ～ . (ungkapan bentuk sopan)"}, {"k": "お誘い合わせの上、お出", "r": "おさそいあわせのうえ○、おでかけ", "a": "Silakan hadiri acara kami bersama teman dan keluarga Anda. (ungkapan bentuk sopan)"}, {"k": "地元", "r": "じもと○", "a": "lokal"}, {"k": "農家", "r": "の↓うか", "a": "petani"}, {"k": "生産する", "r": "せいさんする○", "a": "memproduksi"}, {"k": "町役場", "r": "まちや↓くば", "a": "balai kota"}, {"k": "盆踊り", "r": "ぼんお↓どり", "a": "tarian Bon Odori"}, {"k": "輪になる", "r": "わ↓にな↓る", "a": "membuat lingkaran"}, {"k": "～に合わせて", "r": "～にあわ↓せて", "a": "mengikuti ～ (cth : mengikuti iringan musik)"}, {"k": "だれでも", "r": "だ↓れでも／だれでも○", "a": "siapapun pengungkapan jamak dari orang / manusia"}, {"k": "～たち", "r": "～たち", "a": "(cth : putri-putriku)"}]}, {"id": 26, "title": "Lesson 26: 屋台はどこかわかりますか？", "words": [{"k": "イベント会場", "r": "イベントか↓いじょう", "a": "tempat acara / kegiatan"}, {"k": "屋台", "r": "や↓たい", "a": "warung; pedagang kaki lima (PKL)"}, {"k": "ステージ", "r": "ステ↓ージ", "a": "panggung"}, {"k": "パフォーマンス", "r": "パフォ↓ーマンス", "a": "penampilan"}, {"k": "観光紹介", "r": "かんこうしょ↓うかい", "a": "gerai / konter informasi wisata"}, {"k": "～コーナー", "r": "～コ↓ーナー", "a": "gerai / konter ～"}, {"k": "スピーチコンテスト", "r": "スピーチコ↓ンテスト", "a": "kontes / lomba pidato"}, {"k": "～コンテスト", "r": "～コ↓ンテスト", "a": "kontes / lomba ～"}, {"k": "カラオケ", "r": "カラオケ○", "a": "karaoke"}, {"k": "～大会", "r": "～た↓いかい", "a": "kompetisi ～"}, {"k": "合気道", "r": "あいき↓どう", "a": "aikido"}, {"k": "～デモンストレーション", "r": "～デモンストレ↓ーション", "a": "peragaan ～"}, {"k": "世界", "r": "せ↓かい", "a": "dunia"}, {"k": "遊び", "r": "あそび○", "a": "permainan"}, {"k": "～体験", "r": "～た↓いけん", "a": "mencoba ~ (sesuatu)"}, {"k": "ファッションショー", "r": "ファッショ↓ンショー／", "a": "fashion show (peragaan busana)"}, {"k": "～ショー", "r": "～ショー", "a": "pertunjukan; peragaan ～"}, {"k": "スタンプラリー", "r": "スタンプラ↓リー", "a": "mengoleksi stempel"}, {"k": "国際交流", "r": "こくさいこ↓うりゅう", "a": "pertukaran budaya internasional"}, {"k": "入場料", "r": "にゅうじょ↓うりょう", "a": "harga tiket masuk (HTM)"}, {"k": "交流プラザ", "r": "こうりゅうプ↓ラザ", "a": "exchange plaza (ruang pertemuan / ruang pertukaran)"}, {"k": "主催", "r": "しゅさい○", "a": "pelaksana"}, {"k": "協力", "r": "きょうりょく○", "a": "kerja sama"}, {"k": "民族衣装", "r": "みんぞくい↓しょう", "a": "pakaian tradisional"}, {"k": "本部", "r": "ほ↓んぶ", "a": "kantor pusat"}, {"k": "ふれあい", "r": "ふれあい○", "a": "berinteraksi; bersentuhan langsung"}, {"k": "フラダンス", "r": "フラダ↓ンス", "a": "tarian Hula / Hula-Hula (tarian khas Hawaii)"}, {"k": "和太鼓", "r": "わだ↓いこ", "a": "Wadaiko (beduk khas Jepang)"}, {"k": "ワールドマーケット", "r": "ワールドマ↓ーケット", "a": "world market; pasar aneka barang dunia"}, {"k": "トルコ", "r": "ト↓ルコ", "a": "Turki"}, {"k": "ペルー", "r": "ペ↓ルー", "a": "Peru"}, {"k": "雑貨", "r": "ざっか○", "a": "aneka barang; pernak-pernik"}, {"k": "団体紹介", "r": "だんたいしょ↓うかい", "a": "pengenalan organisasi"}, {"k": "民芸品", "r": "みんげいひん○", "a": "kerajinan tradisional masyarakat"}, {"k": "手芸品", "r": "しゅげいひん○", "a": "kerajinan tangan"}, {"k": "ガーナ", "r": "ガ↓ーナ", "a": "Ghana"}, {"k": "フェアトレード", "r": "フェアトレ↓ード", "a": "fair trade (perdagangan adil)"}, {"k": "外国人支援ネットワーク", "r": "がいこくじんしえんネットワ↓ーク", "a": "jaringan dukungan bagi orang asing"}, {"k": "ピニャータ", "r": "ピニャ↓ータ", "a": "pinata (benda yang menjadi simbol tradisi saat anak-anak di Meksiko berulang tahun)"}, {"k": "くす玉割り", "r": "くすだま↓わり", "a": "memecahkan bola berisi konfeti"}, {"k": "中国ゴマ", "r": "ちゅうごくゴ↓マ", "a": "diabolo (semacam mainan yoyo khas Tiongkok)"}, {"k": "回す", "r": "まわす○", "a": "memutar"}, {"k": "手作り", "r": "てづ↓くり", "a": "buatan tangan"}, {"k": "やっている", "r": "やっている○", "a": "berlangsung; dilaksanakan"}, {"k": "まだ", "r": "ま↓だ", "a": "masih"}, {"k": "受け付け", "r": "うけつけ○", "a": "penerimaan tamu"}, {"k": "あっち", "r": "あっち↓", "a": "di sana"}, {"k": "つきあたり", "r": "つきあたり○", "a": "di ujung ~ (jalan; lorong)"}, {"k": "たぶん", "r": "た↓ぶん", "a": "mungkin Apakah tidak memungkinkan (lagi)?"}, {"k": "さあ", "r": "さ↓あ", "a": "Hmmm.. (ekspresi saat Anda menyatakan tidak begitu yakin tentang sesuatu)"}, {"k": "中学生", "r": "ちゅうが↓くせい", "a": "siswa SMP (Sekolah Menengah Pertama)"}, {"k": "プロ", "r": "プ↓ロ", "a": "profesional"}, {"k": "遠慮する", "r": "えんりょする○", "a": "diharapkan tidak melakukan (sesuatu)"}, {"k": "出る", "r": "で↓る", "a": "berpartisipasi (cth : berpartisipasi pada kompetisi karaoke)"}, {"k": "参加費", "r": "さんか↓ひ", "a": "biaya pendaftaran"}, {"k": "優勝する", "r": "ゆうしょうする○", "a": "memenangkan (kompetisi); pemenang pertama"}, {"k": "賞品", "r": "しょうひん○", "a": "hadiah"}, {"k": "出る", "r": "で↓る", "a": "(ada) hadiahnya"}, {"k": "楽器", "r": "がっき○", "a": "alat musik"}, {"k": "曲", "r": "きょく○", "a": "lagu"}, {"k": "相談する", "r": "そうだんする○", "a": "berkonsultasi"}, {"k": "申込書", "r": "もうしこみしょ○／", "a": "formulir pendaftaran"}, {"k": "必要事項", "r": "ひつようじ↓こう", "a": "informasi yang dibutuhkan"}, {"k": "申し込み", "r": "もうしこみ○", "a": "pendaftaran; registrasi"}, {"k": "先着順", "r": "せんちゃくじゅん○", "a": "berdasarkan urutan tiba (siapa cepat dia dapat)"}, {"k": "順番に", "r": "じゅんばんに○", "a": "secara berurutan menerima (ungkapan bentuk sopan dari もらう)"}, {"k": "スピーチ", "r": "スピ↓ーチ", "a": "pidato"}, {"k": "テーマ", "r": "テ↓ーマ", "a": "topik; tema"}, {"k": "動画", "r": "どうが○", "a": "video"}, {"k": "撮影", "r": "さつえい○", "a": "fotografi / pembuatan video"}, {"k": "飲食", "r": "いんしょく○", "a": "makan dan minum"}, {"k": "販売", "r": "はんばい○", "a": "penjualan"}, {"k": "携帯電話", "r": "けいたいで↓んわ", "a": "telepon genggam; handphone"}, {"k": "～内", "r": "～ない", "a": "dalam ～ (cth : dalam taman)"}, {"k": "協力（する）", "r": "きょうりょく（する）○", "a": "bekerja sama"}, {"k": "お子様", "r": "おこさま○", "a": "anak-anak (ungkapan bentuk sopan)"}, {"k": "皆様にお願いいたします", "r": "みな↓さまに おねがいいたしま↓", "a": "Kami mohon kepada Anda sekalian. (ungkapan bentuk sopan)"}, {"k": "お見えです", "r": "おみえで↓す", "a": "ada; datang (ungkapan bentuk sopan)"}, {"k": "ご遠慮ください", "r": "ごえんりょくださ↓い／", "a": "Harap menahan diri (untuk tidak melakukan) ～. (ungkapan bentuk sopan)"}, {"k": "ご協力よろしくお願いい", "r": "ごきょうりょく○ よろしくおねが", "a": "Kami mohon kerja sama Anda. (ungkapan bentuk sopan)"}, {"k": "電源", "r": "でんげん○", "a": "power; sumber daya (listrik)"}, {"k": "切る", "r": "き↓る", "a": "mematikan"}, {"k": "マナーモード", "r": "マナーモ↓ード", "a": "mode senyap (silent mode)"}, {"k": "設定する", "r": "せっていする○", "a": "mengeset; mengatur"}, {"k": "通話（する）", "r": "つうわ（する）○", "a": "berbicara di telepon"}, {"k": "お忙しい中", "r": "おいそがし↓い△な↓か／", "a": "Meskipun sibuk / sedang dalam kesibukan (ungkapan bentuk sopan)"}, {"k": "おいでくださって、あり", "r": "おいでくださ↓って、あり↓がとう", "a": "Terima kasih atas kedatangan Anda. (ungkapan bentuk sopan)"}, {"k": "かまいません", "r": "かまいませ↓ん", "a": "tidak apa-apa; tidak masalah"}, {"k": "持ち込み", "r": "もちこみ○", "a": "membawa"}, {"k": "禁止", "r": "きんし○", "a": "dilarang"}, {"k": "ロビー", "r": "ロ↓ビー", "a": "lobi"}, {"k": "ロールケーキ", "r": "ロールケ↓ーキ", "a": "kue bolu gulung"}, {"k": "終了する", "r": "しゅうりょうする○", "a": "berakhir; selesai"}, {"k": "個数", "r": "こす↓う", "a": "jumlah; kuantitas"}, {"k": "限られている", "r": "かぎら↓れている", "a": "dibatasi; terbatas"}, {"k": "列", "r": "れ↓つ", "a": "antrean"}, {"k": "お求めの", "r": "おもとめの○", "a": "ingin membeli (ungkapan bentuk sopan)"}, {"k": "お並びください", "r": "おならびくださ↓い", "a": "Silakan berbaris. (ungkapan bentuk sopan)"}, {"k": "太鼓", "r": "たいこ○", "a": "drums / beduk khas Jepang"}, {"k": "たたく", "r": "たた↓く", "a": "menabuh; memukul tahun depan"}, {"k": "来年", "r": "らいねん○", "a": "tahun depan"}, {"k": "バンブーダンス", "r": "バンブーダ↓ンス", "a": "Tinikling (tarian tradisional Filipina menggunakan bambu)"}, {"k": "バングラデシュ", "r": "バングラデ↓シュ", "a": "Bangladesh"}, {"k": "サテー", "r": "サ↓テー", "a": "sate (makanan khas Indonesia)"}]}, {"id": 27, "title": "Lesson 27: 成人の日は、何をするんですか？", "words": [{"k": "季節", "r": "き↓せつ", "a": "musim"}, {"k": "行事", "r": "ぎょ↓うじ", "a": "acara; kegiatan"}, {"k": "正月／お正月", "r": "しょうがつ↓／おしょうがつ↓", "a": "Hari Tahun Baru"}, {"k": "成人の日", "r": "せいじんのひ↓", "a": "Hari Kedewasaan"}, {"k": "ひな祭り", "r": "ひなま↓つり", "a": "Hinamatsuri (Festival Boneka)"}, {"k": "こどもの日", "r": "こどものひ↓", "a": "Kodomo-no-hi (Hari Anak-Anak)"}, {"k": "七夕", "r": "たなばた○", "a": "Tanabata (Festival Bintang)"}, {"k": "クリスマス", "r": "クリス↓マス", "a": "Hari Natal"}, {"k": "式", "r": "しき↓", "a": "upacara"}, {"k": "市長", "r": "し↓ちょう", "a": "wali kota"}, {"k": "話", "r": "はなし↓", "a": "sambutan"}, {"k": "チキン", "r": "チ↓キン", "a": "ayam"}, {"k": "笹の葉", "r": "ささのは○", "a": "daun bambu"}, {"k": "飾り", "r": "かざり○", "a": "dekorasi"}, {"k": "つける", "r": "つけ↓る", "a": "memasang (cth : memasang dekorasi)"}, {"k": "着物", "r": "きもの○", "a": "kimono (pakaian tradisional Jepang)"}, {"k": "ちらしずし", "r": "ちらし↓ずし", "a": "chirashi-zushi (hidangan yang terbuat dari nasi sushi dengan hiasan berbagai topping) berkencan; kencan"}, {"k": "デートする", "r": "デ↓ートする", "a": "berkencan; kencan"}, {"k": "短冊", "r": "たんざく○", "a": "tanzaku (lembaran kertas yang digunakan saat perayaan Tanabata)"}, {"k": "願い事", "r": "ねがいごと○", "a": "harapan; keinginan"}, {"k": "書く", "r": "か↓く", "a": "menulis amazake (minuman manis yang terbuat dari beras)"}, {"k": "こうして", "r": "こうして○", "a": "seperti ini"}, {"k": "お米", "r": "おこめ○", "a": "beras"}, {"k": "アルコール", "r": "アルコール○", "a": "alkohol"}, {"k": "若い", "r": "わか↓い", "a": "muda"}, {"k": "お祝いする", "r": "おいわいする○", "a": "merayakan"}, {"k": "成人式", "r": "せいじ↓んしき", "a": "Upacara Hari Kedewasaan"}, {"k": "おしゃれをする", "r": "おしゃ↓れをする", "a": "berdandan; berpakaian indah"}, {"k": "中学校", "r": "ちゅうが↓っこう", "a": "SMP (Sekolah Menengah Pertama)"}, {"k": "盛り上がる", "r": "もりあが↓る", "a": "meriah; semarak"}, {"k": "フライドチキン", "r": "フライドチ↓キン", "a": "fried chicken (ayam goreng)"}, {"k": "必ず", "r": "かならず○", "a": "selalu"}, {"k": "過ごす", "r": "すご↓す", "a": "menghabiskan waktu"}, {"k": "DVD", "r": "ディーブイディ↓ー", "a": "DVD"}, {"k": "実家", "r": "じっか○", "a": "rumah orang tua"}, {"k": "ごろごろする", "r": "ご↓ろごろする", "a": "bermalas-malasan"}, {"k": "お年玉", "r": "おとしだま○", "a": "otoshidama (angpau / uang hadiah saat perayaan Tahun Baru)"}, {"k": "乗り物", "r": "のりもの○", "a": "wahana permainan"}, {"k": "今年", "r": "ことし○", "a": "tahun ini"}, {"k": "親戚", "r": "しんせき○", "a": "kerabat"}, {"k": "集まる", "r": "あつま↓る", "a": "berkumpul"}, {"k": "毎年", "r": "まいとし○", "a": "setiap tahun"}, {"k": "甥", "r": "おい○", "a": "keponakan laki-laki"}, {"k": "姪", "r": "めい○", "a": "keponakan perempuan"}, {"k": "あけましておめでとう", "r": "あけま↓して△おめでとう", "a": "Selamat Tahun Baru"}, {"k": "祭り", "r": "まつり○", "a": "festival"}, {"k": "田舎", "r": "いなか○", "a": "kampung halaman (di pedesaan)"}, {"k": "飾る", "r": "かざる○", "a": "menghias"}, {"k": "特別（な）", "r": "とくべつ（な）○", "a": "spesial; khusus"}, {"k": "パーティー", "r": "パ↓ーティー", "a": "pesta"}, {"k": "歌う", "r": "うたう○", "a": "menyanyi"}, {"k": "踊る", "r": "おどる○", "a": "menari"}, {"k": "お金", "r": "おかね○", "a": "uang"}, {"k": "断食", "r": "だんじき○", "a": "berpuasa"}, {"k": "～明け", "r": "～あけ", "a": "setelah ～ (cth : setelah berpuasa)"}, {"k": "旧暦", "r": "きゅうれき○", "a": "kalender lunar Tiongkok"}, {"k": "キリスト教", "r": "キリストきょう○", "a": "agama Kristen"}, {"k": "お祝い", "r": "おいわい○", "a": "perayaan"}, {"k": "水かけ祭り", "r": "みずかけま↓つり", "a": "Festival Air (festival khas Thailand)"}, {"k": "年", "r": "とし↓", "a": "tahun bergantung pada ～"}, {"k": "～によって", "r": "～によって", "a": "(cth : bergantung pada tahun)"}, {"k": "春節", "r": "しゅんせつ○", "a": "Tahun Baru Imlek"}, {"k": "ソンクラーン", "r": "ソ↓ンクラーン", "a": "Songkran (perayaan tahun baru tradisional masyarakat Thailand)"}, {"k": "レバラン", "r": "レバラン○", "a": "Lebaran (hari raya dalam agama Islam)"}, {"k": "海外旅行", "r": "かいがいりょ↓こう", "a": "berwisata ke luar negeri"}, {"k": "赤い", "r": "あかい○／あか↓い", "a": "merah"}, {"k": "かけ合う", "r": "かけあ↓う", "a": "saling melempar / mencipratkan (air) ketupat (makanan khas Indonesia)"}, {"k": "餃子", "r": "ぎょうざ○", "a": "pangsit dengan isian"}, {"k": "豚", "r": "ぶた○", "a": "babi"}, {"k": "丸焼き", "r": "まるやき○", "a": "panggang (secara) utuh"}, {"k": "クッキー", "r": "ク↓ッキー", "a": "kue kering"}, {"k": "大切（な）", "r": "たいせつ（な）○", "a": "penting; berharga"}, {"k": "どんなふうに", "r": "ど↓んなふ↓うに／どんなふ↓うに", "a": "bagaimana"}, {"k": "祝う", "r": "いわ↓う", "a": "merayakan"}, {"k": "赤", "r": "あ↓か", "a": "merah"}, {"k": "おめでたい", "r": "おめでたい○／おめでた↓い", "a": "bernuansa perayaan"}, {"k": "色", "r": "いろ↓", "a": "warna"}, {"k": "イスラム教", "r": "イスラムきょう○", "a": "agama Islam"}, {"k": "ラマダン", "r": "ラマダン○", "a": "Ramadan"}, {"k": "例えば", "r": "たと↓えば", "a": "misalnya"}, {"k": "飾りつけ", "r": "かざりつけ○", "a": "dekorasi; hiasan"}, {"k": "半分", "r": "はんぶ↓ん／はんぶん○", "a": "setengah"}, {"k": "餅つき", "r": "もち↓つき", "a": "menumbuk kue Mochi (kue beras khas Jepang)"}, {"k": "当日", "r": "とうじつ○", "a": "pada hari itu"}, {"k": "大人", "r": "おとな○", "a": "orang dewasa"}, {"k": "味わう", "r": "あじわ↓う", "a": "merasakan; menikmati"}, {"k": "伝統的（な）", "r": "でんとうてき（な）○", "a": "tradisional"}, {"k": "文化", "r": "ぶ↓んか", "a": "kebudayaan"}, {"k": "感想", "r": "かんそう○", "a": "impresi; kesan"}, {"k": "語る", "r": "かたる○", "a": "bercerita"}, {"k": "活動報告", "r": "かつどうほ↓うこく", "a": "laporan kegiatan"}, {"k": "実際に", "r": "じっさいに○", "a": "sebenarnya"}, {"k": "杵", "r": "き↓ね", "a": "alu (semacam alat dari kayu untuk menumbuk)"}, {"k": "体験する", "r": "たいけんする○", "a": "mencoba; merasakan (pengalaman baru)"}, {"k": "つきたて", "r": "つきたて○", "a": "baru dibuat"}, {"k": "お餅", "r": "おもち○", "a": "mochi (kue beras khas Jepang)"}, {"k": "きなこ", "r": "き↓なこ", "a": "kinako (tepung kedelai)"}, {"k": "あんこ", "r": "あ↓んこ", "a": "anko (pasta kacang merah)"}, {"k": "餅をつく", "r": "もちをつ↓く", "a": "menumbuk"}, {"k": "チームワーク", "r": "チームワ↓ーク", "a": "kerja tim"}, {"k": "トック", "r": "ト↓ック", "a": "tteok (kue beras khas Korea)"}, {"k": "思ったより", "r": "おも↓ったよ↓り", "a": "lebih dari yang diharapkan"}, {"k": "昨年", "r": "さくねん○", "a": "tahun lalu"}, {"k": "昨年はいろいろお世話に", "r": "さくねん○は いろいろ○", "a": "Terima kasih banyak untuk semua hal di tahun lalu."}, {"k": "今年もよろしくお願いし", "r": "ことしもよろしくおねがいしま↓す", "a": "Saya berharap dapat bekerja bersama Anda kembali di tahun ini."}, {"k": "あけおめ", "r": "あけおめ○", "a": "あけましておめでとう) (bentuk singkat untuk mengatakan"}, {"k": "ことよろ", "r": "ことよろ○", "a": "ことしもよろしく) Selamat Tahun Baru (ungkapan salam ucapan"}, {"k": "謹賀新年", "r": "きんがし↓んねん", "a": "Selamat Tahun Baru (ungkapan salam ucapan tahun baru yang digunakan dalam kartu ucapan)"}, {"k": "遊ぼう", "r": "あそぼ↓う", "a": "Ayo nongkrong / hang out!"}, {"k": "また遊ぼうね", "r": "またあそぼ↓うね", "a": "Ayo nongkrong / hang out lagi selanjutnya, ya!"}]}, {"id": 28, "title": "Lesson 28: どんな服を着て行けばいいですか？", "words": [{"k": "葬式／お葬式", "r": "そうしき○／おそうしき○", "a": "upacara pemakaman"}, {"k": "スーツ", "r": "ス↓ーツ", "a": "setelan jas"}, {"k": "暗い", "r": "くらい○／くら↓い", "a": "gelap"}, {"k": "地味（な）", "r": "じみ↓（な）", "a": "tidak mencolok (yang berwarna gelap)"}, {"k": "ジャケット", "r": "ジャケット○／ジャケ↓ット", "a": "jas; baju atasan; jaket"}, {"k": "香典／お香典", "r": "こうでん○／おこうでん○", "a": "uang duka / belasungkawa"}, {"k": "香典袋", "r": "こうでんぶ↓くろ", "a": "amplop untuk uang duka / belasungkawa"}, {"k": "～用", "r": "～よう", "a": "untuk ～ (cth : untuk upacara pemakaman)"}, {"k": "披露宴", "r": "ひろ↓うえん", "a": "resepsi"}, {"k": "招待状", "r": "しょうたいじょう○", "a": "surat undangan"}, {"k": "だったら", "r": "だ↓ったら", "a": "kalau begitu"}, {"k": "カジュアル（な）", "r": "カ↓ジュアル（な）", "a": "kasual"}, {"k": "感じ", "r": "かんじ○", "a": "yang tampak; tampilan"}, {"k": "白", "r": "し↓ろ", "a": "putih"}, {"k": "花嫁", "r": "はな↓よめ", "a": "pengantin; mempelai wanita"}, {"k": "見舞い／お見舞い", "r": "みまい○／おみまい○", "a": "menjenguk orang sakit"}, {"k": "同僚", "r": "どうりょう○", "a": "rekan kerja"}, {"k": "骨", "r": "ほね↓", "a": "tulang"}, {"k": "折る", "r": "お↓る", "a": "patah (cth : patah tulang)"}, {"k": "入院する", "r": "にゅういんする○", "a": "dirawat di rumah sakit; opname"}, {"k": "鉢植え", "r": "はちうえ○", "a": "tanaman dalam pot"}, {"k": "イメージ", "r": "イメ↓ージ／イ↓メージ", "a": "gambaran; imaji"}, {"k": "花束", "r": "はな↓たば", "a": "karangan bunga"}, {"k": "本人", "r": "ほ↓んにん", "a": "orang itu sendiri; orangnya"}, {"k": "まあ", "r": "ま↓あ", "a": "Wow! (mengungkapkan keterkejutan atau emosi yang dalam)"}, {"k": "あら", "r": "あ↓ら", "a": "Ya ampun! (mengungkapkan keterkejutan ringan)"}, {"k": "どうすればいいですか？", "r": "ど↓うすればい↓いですか？", "a": "Apa yang harus saya lakukan?"}, {"k": "新築祝い", "r": "しんちくい↓わい", "a": "syukuran rumah baru"}, {"k": "習慣", "r": "しゅうかん○", "a": "kebiasaan"}, {"k": "全員", "r": "ぜんいん○", "a": "semuanya"}, {"k": "くり返す", "r": "くりか↓えす／くりかえす○", "a": "mengulang"}, {"k": "オトーリ", "r": "オトーリ○", "a": "otoori (kebiasaan khas saat minum minuman beralkohol bersama-sama oleh masyarakat di Pulau Miyako, Prefektur Okinawa, Jepang)"}, {"k": "待つ", "r": "ま↓つ", "a": "menunggu"}, {"k": "流す", "r": "なが↓す", "a": "mengalirkan"}, {"k": "ごみ箱", "r": "ごみば↓こ", "a": "bak sampah"}, {"k": "捨てる", "r": "すてる○", "a": "membuang"}, {"k": "電話", "r": "でんわ○", "a": "telepon"}, {"k": "片付ける", "r": "かたづけ↓る", "a": "membereskan; merapikan"}, {"k": "掃除の人", "r": "そうじのひと↓", "a": "orang atau petugas yang membereskan / merapikan"}, {"k": "不思議（な）", "r": "ふしぎ（な）○", "a": "aneh"}, {"k": "めんどくさい", "r": "めんどくさ↓い", "a": "menyusahkan"}, {"k": "まじめ（な）", "r": "まじめ（な）○", "a": "serius; rajin"}, {"k": "まねをする", "r": "まねをする○", "a": "meniru"}, {"k": "ルール", "r": "ル↓ール", "a": "peraturan; aturan"}, {"k": "守る", "r": "まも↓る", "a": "menaati; mematuhi (cth : menaati peraturan)"}, {"k": "貼り紙", "r": "はりがみ○", "a": "tanda; petunjuk"}, {"k": "もちろん", "r": "もち↓ろん", "a": "tentu saja"}, {"k": "つまる", "r": "つま↓る", "a": "menyumbat"}, {"k": "それじゃあ", "r": "それじゃ↓あ", "a": "lalu"}, {"k": "臭い", "r": "くさ↓い", "a": "bau tidak sedap"}, {"k": "普通に", "r": "ふつうに○", "a": "biasanya"}, {"k": "うるさい", "r": "うるさ↓い", "a": "berisik; bising"}, {"k": "～終わる", "r": "～おわ↓る", "a": "selesai ～ (cth : selesai makan)"}, {"k": "席", "r": "せ↓き", "a": "tempat duduk"}, {"k": "確かにねえ", "r": "た↓しかにねえ", "a": "Benar juga, ya."}, {"k": "どうしてかなあ", "r": "ど↓うしてかなあ", "a": "Kenapa ya? (Saya) penasaran / bertanya-tanya kenapa ~?"}, {"k": "～かな？", "r": "～かな？", "a": "(ekspresi ketika pembicara merasa penasaran dan bertanya pada dirinya sendiri)"}, {"k": "のどが渇く", "r": "の↓どがかわ↓く", "a": "merasa haus"}, {"k": "かご", "r": "かご○", "a": "keranjang"}, {"k": "空", "r": "から↓", "a": "kosong"}, {"k": "ボトル", "r": "ボトル○", "a": "botol"}, {"k": "そうしたら", "r": "そうした↓ら", "a": "lalu; dan kemudian"}, {"k": "怒る", "r": "おこ↓る", "a": "marah"}, {"k": "ちゃんと", "r": "ちゃんと○", "a": "sebagaimana mestinya"}, {"k": "店長", "r": "て↓んちょう", "a": "manajer toko"}, {"k": "泥棒", "r": "どろぼう○", "a": "pencuri"}, {"k": "イメージ", "r": "イメ↓ージ／イ↓メージ", "a": "kesan"}, {"k": "袋", "r": "ふくろ↓", "a": "pembungkus; bungkusan"}, {"k": "あとから", "r": "あ↓とから", "a": "setelahnya"}, {"k": "どうしたの？", "r": "ど↓うしたの？", "a": "Ada apa?"}, {"k": "そうなの？", "r": "そ↓うなの？", "a": "Benarkah itu?"}, {"k": "そうかなあ", "r": "そ↓うかなあ", "a": "(Saya) tidak begitu yakin. (Ekspresi bahwa pembicara merasa kurang setuju dengan orang lain)"}, {"k": "だんだん", "r": "だんだん○", "a": "sedikit demi sedikit"}, {"k": "気に入る", "r": "きにいる○", "a": "menyukai"}, {"k": "直接", "r": "ちょくせつ○", "a": "secara langsung"}, {"k": "～杯", "r": "～はい", "a": "～ gelas (untuk menyatakan satuan)"}, {"k": "お金を取る", "r": "おかねをと↓る", "a": "berbayar"}, {"k": "ひどい", "r": "ひど↓い", "a": "keterlaluan"}, {"k": "信じられない", "r": "しんじられ↓ない", "a": "tak dapat dipercaya"}, {"k": "信じる", "r": "しんじ↓る", "a": "percaya"}, {"k": "チップ", "r": "チ↓ップ", "a": "tip"}, {"k": "マナー", "r": "マ↓ナー", "a": "etika; adab; sopan santun"}, {"k": "ズズズズ", "r": "ズズズズ↓", "a": "slurp (bunyi yang muncul saat menikmati mi soba dengan cara menghirupnya)"}, {"k": "音を立てる", "r": "おと↓をたて↓る", "a": "membuat bunyi"}, {"k": "どんぶり", "r": "どんぶり○", "a": "mangkuk"}, {"k": "持ち上げる", "r": "もちあげる○", "a": "mengangkat"}, {"k": "口を付ける", "r": "くちをつけ↓る", "a": "menempelkan ke mulut"}, {"k": "嫌（な）", "r": "いや↓（な）", "a": "tidak menyukai; benci"}, {"k": "何杯でも", "r": "な↓んばいで↓も／なんばいでも○", "a": "bergelas-gelas; beberapa gelas pun (minuman)"}, {"k": "おかわり", "r": "おか↓わり", "a": "isi ulang"}, {"k": "おしぼり", "r": "おし↓ぼり", "a": "handuk kecil basah untuk mengelap tangan"}, {"k": "テーブルチャージ", "r": "テーブルチャ↓ージ", "a": "biaya tambahan"}, {"k": "しかも", "r": "しか↓も", "a": "selain itu"}, {"k": "こういう", "r": "こういう○", "a": "~ seperti ini Terima kasih untuk makanannya / hidangannya."}, {"k": "ごちそうさま", "r": "ごちそうさま↓", "a": "(Ungkapan yang diucapkan setelah selesai makan)"}, {"k": "どちらでもない", "r": "どちらでもな↓い／", "a": "bukan keduanya"}]}, {"id": 29, "title": "Lesson 29: ポイントカードを忘れてしまいました", "words": [{"k": "色", "r": "いろ↓", "a": "warna"}, {"k": "サイズ", "r": "サ↓イズ／サイズ○", "a": "ukuran"}, {"k": "赤", "r": "あ↓か", "a": "merah"}, {"k": "青", "r": "あ↓お", "a": "biru"}, {"k": "緑", "r": "み↓どり", "a": "hijau"}, {"k": "黄色", "r": "きいろ○", "a": "kuning"}, {"k": "黒", "r": "く↓ろ", "a": "hitam"}, {"k": "白", "r": "し↓ろ", "a": "putih"}, {"k": "ベージュ", "r": "ベージュ○", "a": "krem"}, {"k": "ピンク", "r": "ピ↓ンク", "a": "pink; merah muda; merah jambu"}, {"k": "茶色", "r": "ちゃいろ○", "a": "cokelat"}, {"k": "グレー", "r": "グレ↓ー", "a": "abu-abu"}, {"k": "カーキ", "r": "カ↓ーキ", "a": "khaki; cokelat muda"}, {"k": "S", "r": "エ↓ス", "a": "small; ukuran kecil"}, {"k": "M", "r": "エ↓ム", "a": "medium; ukuran sedang"}, {"k": "L", "r": "エ↓ル", "a": "large; ukuran besar"}, {"k": "XL", "r": "エックスエ↓ル", "a": "extra large; ukuran ekstra besar"}, {"k": "フリー", "r": "フリ↓ー", "a": "satu ukuran / satu ukuran cocok untuk semua"}, {"k": "～cm", "r": "～セ↓ンチ （に↓じゅう△", "a": "～ cm (cth : 24,5 cm)"}, {"k": "ただいま", "r": "ただ↓いま", "a": "saat ini"}, {"k": "全品", "r": "ぜ↓んぴん", "a": "semua produk"}, {"k": "～％オフ", "r": "～パーセントオ↓フ", "a": "diskon / potongan ～ % (cth : potongan 10%)"}, {"k": "セーター", "r": "セ↓ーター", "a": "sweter"}, {"k": "試着室", "r": "しちゃく↓しつ", "a": "ruang ganti; kamar pas"}, {"k": "派手（な）", "r": "はで↓（な）", "a": "mencolok"}, {"k": "試着（する）", "r": "しちゃく（する）○", "a": "mencoba memakai"}, {"k": "よろしければ", "r": "よろし↓ければ", "a": "jika Anda ingin (ungkapan bentuk sopan)"}, {"k": "ごゆっくりごらんください", "r": "ごゆっく↓りごらんくださ↓い", "a": "Silakan luangkan waktu Anda untuk melihat-lihat. (ungkapan bentuk sopan)"}, {"k": "ご案内いたします", "r": "ごあんないいたしま↓す", "a": "Saya akan menunjukkan tempatnya. (ungkapan bentuk sopan)"}, {"k": "駐輪場", "r": "ちゅうりんじょう○", "a": "tempat parkir sepeda"}, {"k": "インフォメーション", "r": "インフォメ↓ーション", "a": "layanan / bagian informasi"}, {"k": "フードコート", "r": "フードコ↓ート", "a": "food court; pujasera"}, {"k": "探す", "r": "さがす○", "a": "mencari"}, {"k": "レシート", "r": "レシート○／レシ↓ート", "a": "resi"}, {"k": "救急車", "r": "きゅうきゅ↓うしゃ", "a": "ambulans"}, {"k": "盗む", "r": "ぬす↓む", "a": "mencuri"}, {"k": "停める", "r": "とめる○", "a": "memarkir"}, {"k": "移動する", "r": "いどうする○", "a": "memindahkan; berpindah"}, {"k": "急に", "r": "きゅうに○", "a": "tiba-tiba"}, {"k": "ソファ", "r": "ソ↓ファ", "a": "sofa"}, {"k": "さっき", "r": "さ↓っき", "a": "tadi"}, {"k": "もしかしたら", "r": "も↓しかした↓ら", "a": "mungkin"}, {"k": "とる", "r": "と↓る", "a": "mengambil / mencuri"}, {"k": "ポイントカード", "r": "ポイントカ↓ード", "a": "kartu poin"}, {"k": "スタンプ", "r": "スタ↓ンプ", "a": "cap; stempel"}, {"k": "押す", "r": "おす○", "a": "membubuhkan (cth : membubuhkan cap)"}, {"k": "どうなさいましたか？", "r": "ど↓うなさいま↓したか？", "a": "Ada apa dengan Anda? (ungkapan bentuk sopan)"}, {"k": "お持ちください", "r": "おもちくださ↓い", "a": "Silakan bawa ～ . (ungkapan bentuk sopan)"}, {"k": "警察", "r": "けいさつ○", "a": "polisi"}, {"k": "気分が悪い", "r": "き↓ぶんが わる↓い", "a": "merasa sakit / tidak enak badan"}, {"k": "会員証", "r": "かいいんしょう○", "a": "kartu anggota"}, {"k": "お書きください", "r": "おかきくださ↓い", "a": "Silakan tulis ～ . (ungkapan bentuk sopan) Apa yang ingin Anda lakukan?"}, {"k": "どうなさいますか？", "r": "ど↓うなさいま↓すか？", "a": "(ungkapan bentuk sopan)"}, {"k": "特徴", "r": "とくちょう○", "a": "ciri-ciri"}, {"k": "値段", "r": "ねだん○", "a": "harga"}, {"k": "機種", "r": "き↓しゅ", "a": "model; tipe"}, {"k": "なくす", "r": "なくす○", "a": "menghilangkan"}, {"k": "届く", "r": "とど↓く", "a": "diserahkan"}, {"k": "スマートフォン／スマホ", "r": "スマート↓フォン／スマホ○", "a": "smartphone; ponsel pintar"}, {"k": "カバー", "r": "カ↓バー", "a": "cover; penutup"}, {"k": "ついている", "r": "つ↓いている", "a": "dengan ～"}, {"k": "買い物する", "r": "かいものする○", "a": "berbelanja"}, {"k": "気づく", "r": "きづ↓く", "a": "menyadari"}, {"k": "そのような", "r": "そのよ↓うな", "a": "seperti itu; demikian"}, {"k": "つながる", "r": "つながる○", "a": "tersambung"}, {"k": "見つかる", "r": "みつかる○", "a": "menemukan"}, {"k": "遺失物届", "r": "いしつぶつと↓どけ", "a": "laporan mengenai barang hilang"}, {"k": "連絡をとる", "r": "れんらくをと↓る", "a": "menghubungi Saya akan memeriksanya."}, {"k": "お調べいたします", "r": "おしらべいたしま↓す", "a": "(ungkapan bentuk sopan)"}, {"k": "落とし物", "r": "おとしもの○", "a": "barang hilang dan temuan"}, {"k": "案内", "r": "あんな↓い", "a": "informasi"}, {"k": "呼び出し", "r": "よびだし○", "a": "panggilan"}, {"k": "営業時間", "r": "えいぎょうじ↓かん", "a": "jam buka; jam operasional"}, {"k": "セール", "r": "セ↓ール", "a": "sale; obral"}, {"k": "延長する", "r": "えんちょうする○", "a": "memperpanjang"}, {"k": "営業する", "r": "えいぎょうする○", "a": "membuka; beroperasi"}, {"k": "レストラン街", "r": "レストラ↓ンがい", "a": "area restoran"}, {"k": "開催中", "r": "かいさいちゅう○", "a": "sedang berlangsung seperti biasanya"}, {"k": "通常どおり", "r": "つうじょうど↓おり", "a": "Sekali lagi kami informasikan…"}, {"k": "くり返しご案内いたします", "r": "くりかえしごあんないいたしま↓す", "a": "(ungkapan bentuk sopan)"}, {"k": "先ほど", "r": "さきほど○", "a": "tadi; baru saja"}, {"k": "婦人服", "r": "ふじ↓んふく", "a": "pakaian wanita"}, {"k": "～売り場", "r": "～う↓りば", "a": "area penjualan (cth : area penjualan pakaian wanita)"}, {"k": "お買い上げ", "r": "おかいあげ○", "a": "pembelian (ungkapan bentuk sopan) Saya memohon maaf atas ketidaknyamanannya,"}, {"k": "恐れ入りますが", "r": "おそ↓れいりま↓すが", "a": "akan tetapi ~ (ungkapan bentuk sopan) Saya ingin memanggil ~."}, {"k": "お呼び出しを申し上げます", "r": "およびだしをもうしあげま↓す", "a": "(ungkapan bentuk sopan)"}, {"k": "お伝えしたいことがござ", "r": "おつたえしたいこと↓が", "a": "Saya mempunyai informasi untuk Anda. (ungkapan bentuk sopan)"}, {"k": "お越しください", "r": "おこしくださ↓い", "a": "Silakan pergi / menuju ke ~. (ungkapan bentuk sopan)"}, {"k": "男性用", "r": "だんせいよう○", "a": "(untuk) laki-laki"}, {"k": "かぎ", "r": "かぎ↓", "a": "kunci"}, {"k": "心当たり", "r": "こころあ↓たり", "a": "mengetahui; mempunyai informasi"}, {"k": "インフォメーションカウン", "r": "インフォメーションカ↓ウンター", "a": "konter layanan informasi"}, {"k": "～フェア", "r": "～フェ↓ア", "a": "～ fair; pameran; pekan raya ～ (cth : Hokkaido Fair)"}, {"k": "海の幸", "r": "う↓みのさ↓ち", "a": "boga bahari; makanan / hidangan laut"}, {"k": "スイーツ", "r": "スイ↓ーツ", "a": "aneka makanan / camilan manis"}, {"k": "秋の味覚", "r": "あ↓きのみかく", "a": "makanan / masakan khas musim gugur"}, {"k": "～限り", "r": "～か↓ぎり", "a": "hanya ~ (saja) (cth : hanya untuk 1 minggu)"}, {"k": "札幌", "r": "さっぽろ○", "a": "Sapporo (ibu kota Prefektur Hokkaido, Jepang)"}, {"k": "機会", "r": "きか↓い", "a": "kesempatan"}, {"k": "ご来場を心からお待ちし", "r": "ごらいじょう○を こころ↓から", "a": "Kami tunggu kedatangan Anda sekalian. (ungkapan bentuk sopan)"}]}, {"id": 30, "title": "Lesson 30: この掃除機は軽くて動かしやすいですよ", "words": [{"k": "電気製品", "r": "でんきせ↓いひん", "a": "alat elektronik; peralatan elektronik"}, {"k": "冷蔵庫", "r": "れいぞ↓うこ", "a": "kulkas; lemari pendingin"}, {"k": "洗濯機", "r": "せんたく↓き", "a": "mesin cuci oven gelombang mikro;microwave"}, {"k": "掃除機", "r": "そうじ↓き", "a": "vacuum cleaner; penyedot debu"}, {"k": "ポット", "r": "ポ↓ット", "a": "dispenser air panas"}, {"k": "パソコン", "r": "パソコン○", "a": "personal computer (PC)"}, {"k": "タブレット", "r": "タ↓ブレット／タブレ↓ット", "a": "tablet"}, {"k": "イヤホン", "r": "イ↓ヤホン", "a": "earphone; penyuara telinga"}, {"k": "扇風機", "r": "せんぷ↓うき", "a": "kipas angin"}, {"k": "ストーブ", "r": "スト↓ーブ", "a": "penghangat ruangan; pemanas (stove)"}, {"k": "ヒーター", "r": "ヒ↓ーター", "a": "pemanas (heater)"}, {"k": "ドライヤー", "r": "ドライヤー○", "a": "hair-dryer; pengering rambut"}, {"k": "アイロン", "r": "アイロン○", "a": "setrika"}, {"k": "モデル", "r": "モデル○／モ↓デル", "a": "model; tipe"}, {"k": "音", "r": "おと↓", "a": "bunyi"}, {"k": "デザイン", "r": "デザ↓イン", "a": "desain"}, {"k": "商品", "r": "しょ↓うひん", "a": "produk"}, {"k": "送料", "r": "そ↓うりょう", "a": "ongkir (ongkos kirim)"}, {"k": "無料", "r": "むりょう○", "a": "gratis; bebas biaya"}, {"k": "お店の人", "r": "おみせのひと↓", "a": "staf toko"}, {"k": "相談（する）", "r": "そうだん（する）○", "a": "berkonsultasi"}, {"k": "届く", "r": "とど↓く", "a": "dikirimkan"}, {"k": "店員", "r": "てんいん○", "a": "staf toko"}, {"k": "便利（な）", "r": "べ↓んり（な）", "a": "praktis"}, {"k": "すぐ", "r": "す↓ぐ", "a": "langsung; segera"}, {"k": "見つかる", "r": "みつかる○", "a": "menemukan"}, {"k": "高く", "r": "たか↓く／た↓かく", "a": "harga tinggi"}, {"k": "売れる", "r": "うれる○", "a": "bisa / dapat menjual"}, {"k": "手続き", "r": "てつ↓づき", "a": "prosedur"}, {"k": "簡単（な）", "r": "かんたん（な）○", "a": "mudah / sederhana"}, {"k": "メーカー", "r": "メーカー○", "a": "produsen"}, {"k": "ワイヤレス", "r": "ワ↓イヤレス", "a": "wireless; nirkabel"}, {"k": "手元", "r": "てもと↓", "a": "(sampai ke) padaku"}, {"k": "電気屋", "r": "でんきや○", "a": "toko elektronik"}, {"k": "国道沿い", "r": "こくどうぞい○", "a": "di sepanjang jalur nasional"}, {"k": "開店", "r": "かいてん○", "a": "pembukaan toko (obral saat pembukaan toko)"}, {"k": "車を出す", "r": "くるまをだ↓す", "a": "memberi tumpangan"}, {"k": "フリマサイト", "r": "フリマサ↓イト", "a": "situs flea market"}, {"k": "家電", "r": "かでん○", "a": "perlengkapan rumah tangga"}, {"k": "カテゴリー", "r": "カテ↓ゴリー／カ↓テゴリー", "a": "kategori"}, {"k": "ブランド", "r": "ブランド○", "a": "merek"}, {"k": "ホーム", "r": "ホ↓ーム", "a": "homepage; laman"}, {"k": "出品", "r": "しゅっぴん○", "a": "submit; kirim my page; halaman saya"}, {"k": "マイページ", "r": "マイペ↓ージ", "a": "(halaman pribadi pengguna)"}, {"k": "住まい", "r": "す↓まい", "a": "(untuk) rumah"}, {"k": "絞り込み", "r": "しぼりこみ○", "a": "filter pencarian (mempersempit lingkup pencarian produk)"}, {"k": "販売中", "r": "はんばいちゅう○", "a": "dijual; dalam masa penjualan"}, {"k": "表示", "r": "ひょうじ○", "a": "tampilan"}, {"k": "～順", "r": "～じゅん", "a": "urutan ～ (cth : urutan dari harga terendah ke yang tertinggi)"}, {"k": "価格", "r": "かかく○", "a": "harga"}, {"k": "状態", "r": "じょうたい○", "a": "kondisi"}, {"k": "配送料", "r": "はいそ↓うりょう", "a": "ongkir (ongkos kirim)"}, {"k": "販売状況", "r": "はんばいじょ↓うきょう", "a": "status penjualan"}, {"k": "指定する", "r": "していする○", "a": "menentukan; menetapkan"}, {"k": "取り消し", "r": "とりけし○", "a": "batal; pembatalan"}, {"k": "完了", "r": "かんりょう○", "a": "konfirmasi"}, {"k": "購入（する）", "r": "こうにゅう（する）○", "a": "membeli"}, {"k": "傷", "r": "きず○", "a": "goresan"}, {"k": "汚れ", "r": "よごれ○", "a": "bercak; noda"}, {"k": "～込み", "r": "～こみ↓／", "a": "termasuk ～ (cth : termasuk ongkos kirim)"}, {"k": "～合", "r": "～ごう", "a": "～ go (satuan volume nasi di Jepang, sekitar 180 ml) (cth : 5,5 go = 990ml)"}, {"k": "出品する", "r": "しゅっぴんする○", "a": "melakukan submit barang untuk dijual"}, {"k": "問題なく", "r": "もんだいな↓く", "a": "tanpa masalah"}, {"k": "炊ける", "r": "たける○", "a": "menanak; memasak (cth : menanak nasi)"}, {"k": "詳細", "r": "しょうさい○", "a": "detail; rincian"}, {"k": "～製", "r": "～せい", "a": "buatan ～ (cth : buatan tahun 2018)"}, {"k": "幅", "r": "はば○", "a": "lebar"}, {"k": "奥行", "r": "おくゆき○", "a": "kedalaman"}, {"k": "高さ", "r": "た↓かさ", "a": "tinggi"}, {"k": "重さ", "r": "おもさ○", "a": "berat"}, {"k": "説明書", "r": "せつめいしょ○／せつめいしょ↓", "a": "buku petunjuk penggunaan; buku panduan"}, {"k": "～つき", "r": "～つき", "a": "dilengkapi (dengan) ～ (cth : dilengkapi (dengan) buku panduan)"}, {"k": "購入手続き", "r": "こうにゅうてつ↓づき", "a": "prosedur pembelian"}, {"k": "重さ", "r": "おもさ○", "a": "berat"}, {"k": "連続", "r": "れんぞく○", "a": "terus menerus; tanpa henti"}, {"k": "充電", "r": "じゅうでん○", "a": "pengecasan; isi ulang daya"}, {"k": "しっかり", "r": "しっか↓り", "a": "sepenuhnya; sampai tuntas; secara menyeluruh"}, {"k": "使用時間", "r": "しようじ↓かん", "a": "waktu penggunaan"}, {"k": "こんな", "r": "こんな○", "a": "ini / seperti ini (cth : orang (yang) seperti ini)"}, {"k": "モード", "r": "モ↓ード", "a": "mode (cth : mode kuat)"}, {"k": "多機能", "r": "たき↓のう", "a": "multifungsi"}, {"k": "長持ち", "r": "なが↓もち／ながも↓ち", "a": "tahan lama; jangka panjang"}, {"k": "超軽量", "r": "ちょ↓うけいりょう", "a": "sangat ringan"}, {"k": "お手入れ", "r": "おて↓いれ", "a": "pemeliharaan; perawatan"}, {"k": "吸引（する）", "r": "きゅういん（する）○", "a": "menghisap; menyedot"}, {"k": "吸引力", "r": "きゅうい↓んりょく", "a": "daya hisap; daya sedot"}, {"k": "コンパクト（な）", "r": "コ↓ンパクト（な）", "a": "terpadu; menyatu dan praktis"}, {"k": "持ち運ぶ", "r": "もちはこぶ○／もちはこ↓ぶ", "a": "membawa"}, {"k": "重視する", "r": "じゅ↓うしする", "a": "memprioritaskan"}, {"k": "すみずみ", "r": "すみ↓ずみ", "a": "(sampai) sudut ke sudut (ruangan)"}, {"k": "税別", "r": "ぜいべつ○", "a": "harga belum termasuk pajak"}, {"k": "広告の品", "r": "こうこくのしな○", "a": "barang yang diiklankan"}, {"k": "特別価格", "r": "とくべつか↓かく", "a": "harga spesial"}, {"k": "コードレス", "r": "コ↓ードレス", "a": "tanpa kabel; cordless"}, {"k": "希望小売価格", "r": "きぼうこうりか↓かく", "a": "disarankan"}, {"k": "軽い", "r": "かるい○／かる↓い", "a": "ringan"}, {"k": "動かす", "r": "うごか↓す", "a": "memindahkan; menggerakkan"}, {"k": "持つ", "r": "も↓つ", "a": "membawa"}, {"k": "比べる", "r": "くらべる○", "a": "membandingkan"}, {"k": "パワフル（な）", "r": "パ↓ワフル（な）", "a": "powerful; kuat"}, {"k": "機能", "r": "き↓のう", "a": "fitur; fungsi memiliki; menyertakan; termasuk"}, {"k": "つく", "r": "つ↓く", "a": "(cth : fungsi yang disertakan / memiliki fungsi)"}, {"k": "カーペット", "r": "カ↓ーペット", "a": "karpet"}, {"k": "畳", "r": "たたみ○", "a": "tatami"}, {"k": "エコモード", "r": "エコモ↓ード", "a": "eco mode; mode hemat daya"}, {"k": "ですから", "r": "で↓すから", "a": "karena itu"}, {"k": "～に合わせて", "r": "～にあわ↓せて", "a": "menyesuaikan ～ (cth: menyesuaikan dengan ruangan)"}, {"k": "複雑（な）", "r": "ふくざつ（な）○", "a": "rumit"}, {"k": "重い", "r": "おもい○／おも↓い", "a": "berat"}, {"k": "予算オーバー", "r": "よさんオ↓ーバー", "a": "melebihi anggaran"}, {"k": "シンプル（な）", "r": "シ↓ンプル（な）", "a": "simpel; sederhana"}, {"k": "消費税", "r": "しょうひ↓ぜい", "a": "pajak konsumen; pajak konsumsi"}, {"k": "～抜き", "r": "～ぬ↓き", "a": "tanpa ～ (cth : tanpa pajak konsumen)"}, {"k": "～引き", "r": "～びき", "a": "diskon ～ (cth : diskon sebesar 2.000 yen)"}, {"k": "配送", "r": "はいそう○", "a": "pengiriman"}, {"k": "合わせて", "r": "あわ↓せて", "a": "digabungkan"}, {"k": "ポイント", "r": "ポイント○", "a": "poin"}, {"k": "貯まる", "r": "たまる○", "a": "terakumulasi; terkumpul"}, {"k": "変わる", "r": "かわる○", "a": "berubah"}, {"k": "安くなりますか？", "r": "や↓すく なりま↓すか？", "a": "Bisakah Anda menurunkan harganya?"}, {"k": "おいくらぐらいでお探し", "r": "おいくらぐ↓らいでおさがしで↓す", "a": "Berapakah anggaran Anda? (ungkapan bentuk sopan)"}, {"k": "ですか？", "r": "か？", "a": "Di manakah Anda tinggal?"}, {"k": "どちらにお住まいですか？", "r": "ど↓ちらにおすまいで↓すか？", "a": "(ungkapan bentuk sopan) Apakah Anda akan menggunakan ～ ?"}, {"k": "ご利用になりますか？", "r": "ごりようになりま↓すか？", "a": "(ungkapan bentuk sopan)"}]}, {"id": 31, "title": "Lesson 31: いろいろな資料を展示してあります", "words": [{"k": "公共", "r": "こうきょう○", "a": "publik"}, {"k": "施設", "r": "し↓せつ", "a": "fasilitas"}, {"k": "図書館", "r": "としょ↓かん", "a": "perpustakaan"}, {"k": "美術館", "r": "びじゅつ↓かん", "a": "museum seni"}, {"k": "民俗資料館", "r": "みんぞくしりょ↓うかん", "a": "museum rakyat"}, {"k": "体育館", "r": "たいいく↓かん", "a": "gimnasium; gedung olahraga"}, {"k": "スポーツジム", "r": "スポーツジ↓ム", "a": "pusat kebugaran"}, {"k": "お風呂", "r": "おふ↓ろ", "a": "ruang berendam"}, {"k": "入浴施設", "r": "にゅうよくし↓せつ", "a": "ruang mandi"}, {"k": "インフォメーションコー", "r": "インフォメーションコ↓ーナー", "a": "pojok / ruang layanan informasi"}, {"k": "プラネタリウム", "r": "プラネタリ↓ウム", "a": "planetarium"}, {"k": "物産コーナー", "r": "ぶっさんコ↓ーナー", "a": "pojok atau ruang berbagai produk / barang jadi"}, {"k": "市内", "r": "し↓ない", "a": "dalam kota"}, {"k": "パンフレット", "r": "パ↓ンフレット", "a": "pamflet"}, {"k": "外国語", "r": "がいこくご○", "a": "bahasa asing"}, {"k": "CD", "r": "シーディ↓ー", "a": "CD"}, {"k": "昔", "r": "むかし○", "a": "dahulu; masa lalu"}, {"k": "道具", "r": "どうぐ↓", "a": "peralatan; alat"}, {"k": "文化施設", "r": "ぶんかし↓せつ", "a": "pusat kebudayaan"}, {"k": "建てる", "r": "たて↓る", "a": "mendirikan"}, {"k": "メイン", "r": "メ↓イン", "a": "utama"}, {"k": "PC", "r": "ピーシ↓ー", "a": "personal computer"}, {"k": "自由に", "r": "じゆ↓うに", "a": "dengan bebas"}, {"k": "展示する", "r": "てんじする○", "a": "memamerkan"}, {"k": "歴史", "r": "れきし○", "a": "sejarah"}, {"k": "利用（する）", "r": "りよう（する）○", "a": "menggunakan"}, {"k": "室内用", "r": "しつないよう○", "a": "untuk (penggunaan) dalam ruangan"}, {"k": "オリエンテーション", "r": "オリエンテ↓ーション", "a": "orientasi; pengenalan"}, {"k": "延長料金", "r": "えんちょうりょ↓うきん", "a": "biaya perpanjangan"}, {"k": "～につき", "r": "～につ↓き", "a": "untuk setiap ～ (cth : untuk setiap 30 menit)"}, {"k": "かかる", "r": "かか↓る", "a": "(dikenakan) biaya; biayanya"}, {"k": "下りる", "r": "おり↓る", "a": "turun"}, {"k": "シューズ", "r": "シュ↓ーズ", "a": "sepatu"}, {"k": "マシン", "r": "マシ↓ン", "a": "mesin"}, {"k": "トレーナー", "r": "トレーナー○", "a": "pelatih; trainer sekitar ～ (cth : sekitar 30 menit)"}, {"k": "受ける", "r": "うけ↓る", "a": "menerima"}, {"k": "声をかける", "r": "こ↓えを かけ↓る", "a": "menyapa; berbicara kepada Mohon dicatat; Mohon dipahami"}, {"k": "ご了承ください", "r": "ごりょうしょうくださ↓い", "a": "(ungkapan bentuk sopan)"}, {"k": "受けていただきます", "r": "う↓けていただきま↓す", "a": "Kami mohon Anda untuk bersedia mengikuti ～ (ungkapan bentuk sopan)"}, {"k": "絵", "r": "え↓", "a": "lukisan"}, {"k": "さまざま（な）", "r": "さま↓ざま（な）", "a": "berbagai macam"}, {"k": "彫刻", "r": "ちょうこく○", "a": "ukiran"}, {"k": "画家", "r": "がか○", "a": "pelukis"}, {"k": "～を中心に", "r": "～をちゅうしんに○", "a": "utamanya"}, {"k": "セット券", "r": "セット↓けん", "a": "tiket terusan"}, {"k": "フラッシュ", "r": "フラ↓ッシュ", "a": "lampu kilat; blitz"}, {"k": "券売機", "r": "けんば↓いき", "a": "mesin penjualan tiket"}, {"k": "休憩室", "r": "きゅうけ↓いしつ", "a": "lounge; ruang santai"}, {"k": "ついている", "r": "つ↓いている", "a": "disertai dengan ～; termasuk ～ (cth : termasuk handuk)"}, {"k": "IT", "r": "アイティ↓ー", "a": "IT; teknologi informasi"}, {"k": "利用者カード", "r": "りようしゃカ↓ード", "a": "kartu pengguna"}, {"k": "プリントアウト", "r": "プリントア↓ウト", "a": "print-out; hasil cetak"}, {"k": "インターネット", "r": "インターネ↓ット", "a": "internet"}, {"k": "プリンター", "r": "プリンター○", "a": "printer; mesin cetak"}, {"k": "空いている", "r": "あいている○", "a": "kosong"}, {"k": "確認する", "r": "かくにんする○", "a": "mengecek; memastikan"}, {"k": "在留カード", "r": "ざいりゅうカ↓ード", "a": "kartu izin tinggal"}, {"k": "何冊", "r": "な↓んさつ", "a": "berapa banyak (jilid) buku"}, {"k": "～冊", "r": "～さつ", "a": "～ jilid (buku) (cth : 10 jilid buku)"}, {"k": "合わせて", "r": "あわ↓せて", "a": "secara keseluruhan; total"}, {"k": "～点", "r": "～てん", "a": "～ item; ～ buah (barang) (cth : 3 buah barang)"}, {"k": "飲食禁止", "r": "いんしょくきんし○", "a": "larangan makan dan minum"}, {"k": "返す", "r": "か↓えす", "a": "mengembalikan"}, {"k": "閉まる", "r": "しま↓る", "a": "tutup"}, {"k": "返却ポスト", "r": "へんきゃくポ↓スト", "a": "kotak pengembalian"}, {"k": "開く", "r": "あく○", "a": "buka"}, {"k": "返却", "r": "へんきゃく○", "a": "pengembalian"}, {"k": "お読みください", "r": "およみくださ↓い", "a": "Silakan baca. (ungkapan bentuk sopan)"}, {"k": "延ばす", "r": "のば↓す", "a": "memperpanjang"}, {"k": "～のうち", "r": "～のうち", "a": "dalam ～ (cth : dalam 15 buah barang)"}, {"k": "カセットテープ", "r": "カセットテ↓ープ", "a": "kaset larangan (untuk) ～"}, {"k": "～禁止", "r": "～きんし", "a": "(cth : larangan (untuk) mengambil foto)"}, {"k": "立入禁止", "r": "たちいりきんし○", "a": "larangan masuk"}, {"k": "関係者", "r": "かんけ↓いしゃ", "a": "staf / personel yang berwenang"}, {"k": "～以外", "r": "～い↓がい （かんけいしゃい↓がい", "a": "kecuali ～ (cth : kecuali staf / personel yang berwenang)"}, {"k": "預ける", "r": "あずけ↓る", "a": "menitipkan; menyimpan"}, {"k": "お預けください", "r": "おあずけくださ↓い", "a": "Silakan menyimpan ～ . (ungkapan bentuk sopan)"}, {"k": "館内", "r": "か↓んない", "a": "(di)dalam gedung"}, {"k": "通話", "r": "つうわ○", "a": "panggilan telepon Mohon (menahan diri) untuk tidak ～ ."}, {"k": "ご遠慮ください", "r": "ごえんりょくださ↓い", "a": "(ungkapan bentuk sopan) Mohon (menahan diri) untuk tidak ～ ."}, {"k": "お控えください", "r": "おひかえくださ↓い", "a": "(ungkapan bentuk sopan) masuk ke gedung / ruangan;"}, {"k": "入館", "r": "にゅうかん○", "a": "memasuki suatu tempat"}, {"k": "入れ墨", "r": "いれずみ○", "a": "tato khas Jepang"}, {"k": "タトゥー", "r": "タトゥ↓ー", "a": "tato"}, {"k": "シール", "r": "シ↓ール", "a": "stiker tato"}, {"k": "ボディペイント", "r": "ボディペ↓イント", "a": "body paint; lukis tubuh"}, {"k": "お断りしています", "r": "おことわりしていま↓す", "a": "Kami menolak ～ . (ungkapan bentuk sopan)"}]}, {"id": 32, "title": "Lesson 32: 前髪は、もう少し短く切ってもらえますか？", "words": [{"k": "サービス", "r": "サ↓ービス", "a": "layanan"}, {"k": "郵便局", "r": "ゆうび↓んきょく", "a": "kantor pos"}, {"k": "不動産屋", "r": "ふどうさんや○", "a": "agen real estat"}, {"k": "理髪店", "r": "りはつ↓てん", "a": "barbershop; layanan pangkas rambut"}, {"k": "床屋", "r": "とこや○", "a": "barbershop; layanan pangkas rambut"}, {"k": "美容院", "r": "びよ↓ういん", "a": "salon kecantikan"}, {"k": "クリーニング店", "r": "クリーニング↓てん", "a": "layanan dry cleaning (cuci kering)"}, {"k": "コインランドリー", "r": "コインラ↓ンドリー", "a": "layanan laundry koin"}, {"k": "中古車店", "r": "ちゅうこしゃ↓てん", "a": "pusat mobil bekas"}, {"k": "自転車店", "r": "じてんしゃ↓てん", "a": "toko sepeda"}, {"k": "携帯ショップ", "r": "けいたいショ↓ップ", "a": "pusat penjualan ponsel / handphone"}, {"k": "スマホ修理店", "r": "スマホしゅうり↓てん", "a": "layanan perbaikan ponsel"}, {"k": "リサイクルショップ", "r": "リサイクルショ↓ップ", "a": "layanan recycle / daur ulang"}, {"k": "クリーニング", "r": "クリ↓ーニング", "a": "layanan laundry dry cleaning (cuci kering)"}, {"k": "シミ", "r": "シミ○", "a": "noda"}, {"k": "落ちる", "r": "おち↓る", "a": "hilang (cth : kotorannya hilang)"}, {"k": "シミ抜き", "r": "シミぬき○／シミぬ↓き", "a": "menghilangkan noda"}, {"k": "別料金", "r": "べつりょ↓うきん", "a": "biaya tambahan"}, {"k": "お渡し", "r": "おわたし○", "a": "penyerahan; pengembalian (ungkapan bentuk sopan)"}, {"k": "空気", "r": "く↓うき", "a": "angin; udara"}, {"k": "空気入れ", "r": "くうき↓いれ", "a": "pompa (untuk) mengisi angin"}, {"k": "入る", "r": "は↓いる", "a": "masuk (cth : angin / udaranya masuk)"}, {"k": "タイヤ", "r": "タイヤ○", "a": "ban"}, {"k": "キャップ", "r": "キャップ○", "a": "penutup"}, {"k": "はずす", "r": "はずす○", "a": "melepas"}, {"k": "はさむ", "r": "はさ↓む", "a": "menjepit"}, {"k": "かぶせる", "r": "かぶせ↓る", "a": "menutup"}, {"k": "ついでに", "r": "ついでに○", "a": "sekalian; sekaligus"}, {"k": "油を差す", "r": "あぶらをさ↓す", "a": "meminyaki; mengolesi minyak"}, {"k": "どれどれ", "r": "ど↓れ△ど↓れ", "a": "Biar saya lihat / cek. jasa layanan pengiriman paket"}, {"k": "宅配便", "r": "たくはいびん○", "a": "cash on delivery (COD); pembayaran oleh"}, {"k": "着払い", "r": "ちゃくば↓らい", "a": "penerima paket pembayaran di muka; pembayaran oleh"}, {"k": "元払い", "r": "もとば↓らい", "a": "pengirim paket"}, {"k": "受け取る", "r": "うけとる○", "a": "menerima"}, {"k": "伝票", "r": "でんぴょう○", "a": "slip pengiriman"}, {"k": "指定", "r": "してい○", "a": "tertentu"}, {"k": "午前中", "r": "ごぜんちゅう○", "a": "pagi hari"}, {"k": "最も", "r": "もっと↓も", "a": "paling"}, {"k": "お届け", "r": "おとどけ○", "a": "pengiriman (ungkapan bentuk sopan)"}, {"k": "お預かりします", "r": "おあずかりしま↓す", "a": "Kami terima paket Anda. (ungkapan bentuk sopan)"}, {"k": "表示する", "r": "ひょうじする○", "a": "menampilkan"}, {"k": "キャッシュカード", "r": "キャッシュカ↓ード", "a": "kartu ATM; kartu debet"}, {"k": "お引き出し", "r": "おひきだし○", "a": "penarikan uang (ungkapan bentuk sopan)"}, {"k": "次に", "r": "つぎ↓に", "a": "selanjutnya"}, {"k": "暗証番号", "r": "あんしょうば↓んごう", "a": "personal identification number (PIN)"}, {"k": "入力する", "r": "にゅうりょくする○", "a": "menginput"}, {"k": "～桁", "r": "～けた", "a": "～ digit (cth : 4 digit)"}, {"k": "緑色", "r": "みどりいろ○", "a": "(berwarna) hijau"}, {"k": "金額", "r": "きんがく○", "a": "besaran; nominal uang"}, {"k": "～円札", "r": "～え↓んさつ", "a": "uang pecahan ～ yen (cth : uang pecahan 10.000 yen)"}, {"k": "一部", "r": "いち↓ぶ", "a": "sebagian"}, {"k": "両替（する）", "r": "りょうがえ（する）○", "a": "menukar / melakukan penukaran (pecahan uang)"}, {"k": "利用明細／ご利用明細", "r": "りようめ↓いさい／", "a": "setruk transaksi"}, {"k": "紙幣", "r": "し↓へい", "a": "uang kertas"}, {"k": "お取りください", "r": "おとりくださ↓い", "a": "Silakan ambil ～ . (ungkapan bentuk sopan)"}, {"k": "ご利用ありがとうござい", "r": "ごりよう○ あり↓がとうござい", "a": "Terima kasih telah menggunakan layanan kami. (ungkapan bentuk sopan)"}, {"k": "ポストに入れる", "r": "ポ↓ストにいれる", "a": "mengirim via pos"}, {"k": "インターネット", "r": "インターネ↓ット", "a": "internet"}, {"k": "申し込む", "r": "もうしこ↓む", "a": "mendaftar"}, {"k": "郵便物", "r": "ゆうび↓んぶつ", "a": "paket"}, {"k": "不在／ご不在", "r": "ふざい○／ごふざい○", "a": "tidak berada di tempat"}, {"k": "窓口", "r": "まど↓ぐち", "a": "loket; konter"}, {"k": "再配達", "r": "さいは↓いたつ", "a": "pengiriman ulang"}, {"k": "自動", "r": "じどう○ （に↓じゅう△", "a": "otomatis (cth : penerimaan otomatis 24 jam)"}, {"k": "連絡票", "r": "れんらくひょう○", "a": "pemberitahuan"}, {"k": "受取り／お受け取り", "r": "うけとり○／おうけとり○", "a": "penerimaan"}, {"k": "印鑑", "r": "いんか↓ん", "a": "inkan (cap / stempel nama khas Jepang)"}, {"k": "免許証", "r": "めんきょしょう○／", "a": "surat izin mengemudi"}, {"k": "保険証", "r": "ほけんしょう○", "a": "kartu asuransi kesehatan"}, {"k": "マイナンバーカード", "r": "マイナンバーカ↓ード", "a": "kartu nomor individu"}, {"k": "当日", "r": "とうじつ○", "a": "hari yang sama; hari tersebut (cth : pengiriman di hari yang sama)"}, {"k": "携帯電話", "r": "けいたいで↓んわ", "a": "nomor ponsel / handphone"}, {"k": "固定電話", "r": "こていで↓んわ", "a": "telepon rumah"}, {"k": "郵便番号", "r": "ゆうびんば↓んごう", "a": "kode pos"}, {"k": "種類番号", "r": "しゅるいば↓んごう", "a": "nomor jenis surat"}, {"k": "国際", "r": "こくさい○", "a": "internasional"}, {"k": "書留", "r": "かきとめ○", "a": "surat tercatat"}, {"k": "小包", "r": "こづ↓つみ", "a": "paket ukuran kecil"}, {"k": "お知らせ番号", "r": "おしらせば↓んごう", "a": "nomor pemberitahuan"}, {"k": "配達日", "r": "はいたつ↓び", "a": "tanggal pengiriman"}, {"k": "保管期限", "r": "ほかんき↓げん", "a": "batas waktu penyimpanan"}, {"k": "勤め先／お勤め先", "r": "つとめさき○／おつとめさき○", "a": "alamat tempat kerja"}, {"k": "近所", "r": "き↓んじょ", "a": "tetangga"}, {"k": "配達希望日", "r": "はいたつきぼ↓うび", "a": "tanggal pengiriman yang diminta / diinginkan"}, {"k": "配達先", "r": "はいたつさき○", "a": "tujuan pengiriman"}, {"k": "どのように", "r": "ど↓のよ↓うに／どのよ↓うに", "a": "bagaimana"}, {"k": "全体的に", "r": "ぜんたいてきに○", "a": "secara keseluruhan"}, {"k": "～mm", "r": "～ミリ", "a": "～ milimeter"}, {"k": "まわり", "r": "まわり○", "a": "sekitarnya"}, {"k": "バリカン", "r": "バリカン○", "a": "mesin pencukur rambut (hair clippers)"}, {"k": "ひげ剃り", "r": "ひげそ↓り／ひげそり○", "a": "cukur jenggot"}, {"k": "鏡", "r": "かがみ↓", "a": "cermin"}, {"k": "後ろのほう", "r": "うしろのほ↓う", "a": "bagian belakang"}, {"k": "こんな感じ", "r": "こんなかんじ○", "a": "seperti ini"}, {"k": "洗面台", "r": "せんめんだい○", "a": "wastafel; bak cuci rambut"}, {"k": "洗う", "r": "あらう○", "a": "membasuh; mencuci"}, {"k": "カット", "r": "カ↓ット", "a": "potong rambut"}, {"k": "預かる", "r": "あずか↓る", "a": "menerima kembalian (ungkapan bentuk sopan)"}, {"k": "お返し", "r": "おかえし○", "a": "Apakah Anda ingin ～ ?"}, {"k": "なさいますか？", "r": "なさいま↓すか？", "a": "(ungkapan bentuk sopan)"}, {"k": "～円からお預かりします", "r": "～えんからおあずかりしま↓す", "a": "Saya terima sebesar ～ yen. (ungkapan bentuk sopan)"}, {"k": "どのような", "r": "ど↓のよ↓うな／どのよ↓うな", "a": "bagaimana"}, {"k": "長さ", "r": "な↓がさ／ながさ○", "a": "panjangnya"}, {"k": "シャンプー台", "r": "シャンプーだい○", "a": "tempat mencuci rambut; tempat sampo"}, {"k": "前髪", "r": "まえがみ○", "a": "poni Kami telah menunggu kedatangan Anda."}, {"k": "お待ちしておりました", "r": "おまちしておりま↓した", "a": "(ungkapan bentuk sopan) Apakah tidak ada bagian yang gatal?"}, {"k": "かゆいところはございま", "r": "かゆ↓いところ↓は ございませ↓", "a": "(ungkapan bentuk sopan)"}, {"k": "せんか？", "r": "んか？", "a": "Bagaimana menurut Anda?"}, {"k": "どうでしょうか？", "r": "ど↓うでしょうか？", "a": "(ungkapan bentuk sopan)"}, {"k": "カラー", "r": "カ↓ラー", "a": "pewarnaan"}, {"k": "パーマ", "r": "パ↓ーマ", "a": "pengeritingan"}, {"k": "トリートメント", "r": "トリ↓ートメント", "a": "perawatan"}, {"k": "外国人", "r": "がいこく↓じん", "a": "penduduk asing; orang asing"}, {"k": "外国語", "r": "がいこくご○", "a": "bahasa asing"}, {"k": "～による", "r": "～による", "a": "dengan ～ / menggunakan ～ (cth : konsultasi menggunakan bahasa asing)"}, {"k": "相談", "r": "そうだん○", "a": "konsultasi"}, {"k": "翻訳", "r": "ほんやく○", "a": "terjemahan"}, {"k": "通訳", "r": "つ↓うやく", "a": "penerjemahan lisan"}, {"k": "健康診断", "r": "けんこうし↓んだん", "a": "pemeriksaan kesehatan"}, {"k": "生活ガイドブック", "r": "せいかつガイドブ↓ック", "a": "buku pedoman kehidupan"}, {"k": "日本語教室", "r": "にほんごきょ↓うしつ", "a": "kelas bahasa Jepang"}, {"k": "交流イベント", "r": "こうりゅうイ↓ベント", "a": "acara / kegiatan sosial"}, {"k": "質問", "r": "しつもん○", "a": "pertanyaan"}, {"k": "ビザ", "r": "ビ↓ザ", "a": "visa"}, {"k": "ほかにも", "r": "ほかに↓も", "a": "ada juga / selain itu"}, {"k": "情報", "r": "じょうほう○", "a": "informasi"}, {"k": "けが", "r": "けが↓", "a": "luka"}, {"k": "有料", "r": "ゆうりょう○", "a": "berbayar"}, {"k": "助かる", "r": "たすか↓る", "a": "terbantu; tertolong"}, {"k": "楽に", "r": "らく↓に", "a": "dengan mudah"}, {"k": "暮らす", "r": "くらす○", "a": "hidup; tinggal"}, {"k": "センター", "r": "セ↓ンター", "a": "pusat"}, {"k": "入門", "r": "にゅうもん○", "a": "tingkat pemula"}, {"k": "上級", "r": "じょうきゅう○", "a": "tingkat mahir"}, {"k": "個人レッスン", "r": "こじんレ↓ッスン", "a": "kelas privat"}]}, {"id": 33, "title": "Lesson 33: 会議室の電気がついたままでした", "words": [{"k": "忘れずに", "r": "わすれずに○", "a": "Jangan lupa (untuk) ～ “Cool Biz” (gerakan Cool Business di Jepang)"}, {"k": "実施中", "r": "じっしちゅう○", "a": "sedang berlangsung"}, {"k": "軽装", "r": "けいそう○", "a": "pakaian ringan dan tipis"}, {"k": "ノー ～", "r": "ノー ～", "a": "tanpa ～ (cth : tanpa dasi)"}, {"k": "設定", "r": "せってい○", "a": "pengaturan; setelan"}, {"k": "ご理解とご協力のほど、", "r": "ごり↓かいと ごきょうりょくのほ", "a": "Kami mohon pengertian dan kerja sama Anda sekalian. (ungkapan bentuk sopan)"}, {"k": "節電", "r": "せつでん○", "a": "penghematan listrik"}, {"k": "両面印刷", "r": "りょうめんい↓んさつ", "a": "pencetakan dua sisi"}, {"k": "マイバッグ", "r": "マイバ↓ッグ", "a": "my bag (tas belanja ramah lingkungan)"}, {"k": "レジ袋", "r": "レジぶ↓くろ", "a": "tas belanja plastik sekali pakai"}, {"k": "有料化", "r": "ゆうりょうか○", "a": "dikenakan biaya; berbayar"}, {"k": "持参", "r": "じさん○", "a": "membawa"}, {"k": "環境", "r": "かんきょう○", "a": "lingkungan"}, {"k": "エコ", "r": "エ↓コ", "a": "ramah lingkungan"}, {"k": "節電する", "r": "せつでんする○", "a": "menghemat listrik"}, {"k": "節水する", "r": "せっすいする○", "a": "menghemat air"}, {"k": "紙", "r": "かみ↓", "a": "kertas"}, {"k": "節約する", "r": "せつやくする○", "a": "menghemat; melakukan penghematan"}, {"k": "リサイクルする", "r": "リサ↓イクルする", "a": "mendaur ulang"}, {"k": "ごみ", "r": "ごみ↓", "a": "sampah"}, {"k": "分別する", "r": "ぶんべつする○", "a": "memilah"}, {"k": "減らす", "r": "へらす○", "a": "mengurangi"}, {"k": "設定温度", "r": "せっていお↓んど", "a": "pengaturan / setelan temperatur"}, {"k": "下げる", "r": "さげ↓る", "a": "menurunkan"}, {"k": "もったいない", "r": "もったいな↓い", "a": "mubazir"}, {"k": "缶", "r": "か↓ん", "a": "kaleng"}, {"k": "まとめる", "r": "まとめる○", "a": "dikumpulkan; mengumpulkan"}, {"k": "出す", "r": "だ↓す", "a": "mengalirkan (air); membuka (keran)"}, {"k": "洗剤", "r": "せんざい○", "a": "detergen; sabun pembersih"}, {"k": "止める", "r": "とめる○", "a": "mematikan (air); menutup (keran)"}, {"k": "すすぐ", "r": "すすぐ○", "a": "membilas"}, {"k": "ストロー", "r": "スト↓ロー", "a": "sedotan"}, {"k": "マイ～", "r": "マイ～", "a": "my ～; ～ pribadi (cth : sedotan pribadi)"}, {"k": "持ち歩く", "r": "もちある↓く／もちあるく○", "a": "membawa"}, {"k": "マイボトル", "r": "マイボ↓トル", "a": "botol pribadi"}, {"k": "ペットボトル", "r": "ペットボ↓トル", "a": "botol plastik"}, {"k": "資源", "r": "し↓げん", "a": "dapat didaur ulang"}, {"k": "分け方", "r": "わけか↓た", "a": "cara memilah / memisahkan"}, {"k": "出し方", "r": "だしか↓た", "a": "cara membuang"}, {"k": "集積所", "r": "しゅうせきじょ○／", "a": "titik pengumpulan"}, {"k": "収集日", "r": "しゅうしゅ↓うび", "a": "hari pengumpulan"}, {"k": "資源ごみ", "r": "しげ↓んごみ", "a": "sampah yang dapat didaur ulang"}, {"k": "～種類", "r": "～しゅ↓るい", "a": "～ jenis (cth : 4 jenis)"}, {"k": "分ける", "r": "わけ↓る", "a": "memilah; membagi"}, {"k": "ひも", "r": "ひも○", "a": "tali"}, {"k": "しばる", "r": "しば↓る", "a": "mengikat"}, {"k": "新聞", "r": "しんぶん○", "a": "koran"}, {"k": "雑誌", "r": "ざっし○", "a": "majalah"}, {"k": "中身", "r": "なか↓み", "a": "isi"}, {"k": "びん", "r": "び↓ん", "a": "botol kaca"}, {"k": "キャップ", "r": "キャップ○", "a": "tutup botol plastik"}, {"k": "ラベル", "r": "ラベル○／ラ↓ベル", "a": "label"}, {"k": "つぶす", "r": "つぶす○", "a": "menghancurkan"}, {"k": "紙パック", "r": "かみパ↓ック", "a": "kemasan minuman karton"}, {"k": "切り開く", "r": "きりひら↓く", "a": "memotong terbuka"}, {"k": "食品トレイ", "r": "しょくひんト↓レイ", "a": "nampan makanan sampah yang dapat dibakar"}, {"k": "可燃ごみ", "r": "かね↓んごみ", "a": "sampah sisa makanan"}, {"k": "水を切る", "r": "みずをき↓る", "a": "dikeringkan; mengeringkan"}, {"k": "布", "r": "ぬの○", "a": "kain"}, {"k": "しみこませる", "r": "しみこませ↓る", "a": "dibiarkan terendam; diserap"}, {"k": "固める", "r": "かためる○", "a": "dipadatkan"}, {"k": "プラスチック", "r": "プラスチ↓ック", "a": "plastik"}, {"k": "再生（する）", "r": "さいせい（する）○", "a": "mendaur ulang"}, {"k": "少量", "r": "しょうりょ↓う／しょうりょう○", "a": "jumlah kecil"}, {"k": "植木", "r": "うえき○", "a": "tanaman"}, {"k": "枝", "r": "えだ○", "a": "cabang"}, {"k": "葉", "r": "は○", "a": "daun"}, {"k": "使い古し", "r": "つかいふるし○", "a": "bekas"}, {"k": "凝固剤", "r": "ぎょうこざい○／ぎょうこ↓ざい", "a": "zat pemadat (sering digunakan untuk memadatkan minyak goreng bekas sebelum dibuang)"}, {"k": "ビニール", "r": "ビニ↓ール", "a": "vinil"}, {"k": "～類", "r": "～るい", "a": "berjenis ～ (cth : berjenis vinil)"}, {"k": "ラップ", "r": "ラップ○", "a": "plastik pembungkus"}, {"k": "容器", "r": "よ↓うき", "a": "wadah"}, {"k": "発泡スチロール", "r": "はっぽうスチロ↓ール", "a": "styrofoam / gabus sintetis"}, {"k": "不燃ごみ", "r": "ふね↓んごみ", "a": "sampah yang tidak dapat dibakar"}, {"k": "割れる", "r": "われる○", "a": "pecah"}, {"k": "包む", "r": "つつ↓む", "a": "membungkus"}, {"k": "危険", "r": "きけん○", "a": "berbahaya; bahaya"}, {"k": "乾電池", "r": "かんで↓んち", "a": "baterai kering"}, {"k": "刃物", "r": "は↓もの", "a": "pisau; benda tajam"}, {"k": "ガラス", "r": "ガラス○", "a": "gelas"}, {"k": "陶磁器", "r": "とうじ↓き", "a": "porselen; keramik"}, {"k": "電球", "r": "でんきゅう○", "a": "bohlam"}, {"k": "アルミ製品", "r": "アルミせ↓いひん", "a": "benda berbahan alumunium"}, {"k": "金属", "r": "き↓んぞく", "a": "logam"}, {"k": "家電製品", "r": "かでんせ↓いひん", "a": "peralatan elektronik rumah tangga sampah ukuran besar"}, {"k": "粗大ごみ", "r": "そだ↓いごみ", "a": "furnitur; mebel; perabot rumah tangga"}, {"k": "寝具", "r": "し↓んぐ", "a": "peralatan untuk tidur"}, {"k": "牛乳パック", "r": "ぎゅうにゅうパ↓ック", "a": "karton kemasan susu"}, {"k": "使い切る", "r": "つかいき↓る", "a": "menghabiskan; habis digunakan"}, {"k": "燃える", "r": "もえる○", "a": "dapat dibakar (cth : sampah yang dapat dibakar)"}, {"k": "取る", "r": "と↓る", "a": "dilepas"}, {"k": "出す", "r": "だ↓す", "a": "membuang (cth : membuang sampah)"}, {"k": "粗大ごみ受付センター", "r": "そだ↓いごみ△うけつけセ↓ンター", "a": "pusat penerimaan sampah ukuran besar"}, {"k": "大きさ", "r": "おおきさ○", "a": "ukuran; besarnya"}, {"k": "シール", "r": "シ↓ール", "a": "stiker"}, {"k": "貼る", "r": "はる○", "a": "menempel"}]}, {"id": 34, "title": "Lesson 34: 地震が来ても、あわてて動かないでください", "words": [{"k": "災害", "r": "さいがい○", "a": "bencana"}, {"k": "台風", "r": "たいふ↓う", "a": "angin topan"}, {"k": "地震", "r": "じしん○", "a": "gempa bumi"}, {"k": "火事", "r": "か↓じ", "a": "kebakaran"}, {"k": "火災", "r": "かさい○", "a": "kebakaran"}, {"k": "大雪", "r": "おおゆき○", "a": "salju lebat"}, {"k": "津波", "r": "つなみ○", "a": "tsunami"}, {"k": "起こる", "r": "おこ↓る", "a": "terjadi (cth : terjadi gempa bumi)"}, {"k": "揺れる", "r": "ゆれる○", "a": "bergetar; bergoncang"}, {"k": "火事になる", "r": "か↓じにな↓る", "a": "berubah menjadi kebakaran"}, {"k": "火が出る", "r": "ひ↓がで↓る", "a": "terbakar"}, {"k": "積もる", "r": "つも↓る", "a": "menumpuk (cth : salju menumpuk)"}, {"k": "ニュース", "r": "ニュ↓ース", "a": "berita"}, {"k": "緊急速報", "r": "きんきゅうそ↓くほう", "a": "laporan darurat"}, {"k": "避難する", "r": "ひ↓なんする", "a": "mengungsi; evakuasi"}, {"k": "倒れる", "r": "たおれ↓る", "a": "jatuh"}, {"k": "離れる", "r": "はなれ↓る", "a": "menjauh"}, {"k": "近づく", "r": "ちかづく○／ちかづ↓く", "a": "mendekati"}, {"k": "隠れる", "r": "かくれ↓る", "a": "berlindung; bersembunyi"}, {"k": "あわてる", "r": "あわてる○", "a": "panik"}, {"k": "落ち着く", "r": "おちつく○", "a": "tenang"}, {"k": "行動する", "r": "こうどうする○", "a": "bertindak"}, {"k": "出る", "r": "で↓る", "a": "keluar; pergi ke luar"}, {"k": "最新", "r": "さいしん○", "a": "terbaru"}, {"k": "確認する", "r": "かくにんする○", "a": "mengecek"}, {"k": "海岸", "r": "かいがん○", "a": "pantai; pesisir"}, {"k": "上陸する", "r": "じょうりくする○", "a": "mencapai daratan"}, {"k": "非常に", "r": "ひじょうに○", "a": "sangat"}, {"k": "激しい", "r": "はげし↓い", "a": "kuat"}, {"k": "様子", "r": "ようす○", "a": "kondisi; keadaan"}, {"k": "絶対に", "r": "ぜったいに○", "a": "apapun yang terjadi"}, {"k": "やめる", "r": "やめる○", "a": "menghentikan; berhenti"}, {"k": "安全（な）", "r": "あんぜん（な）○", "a": "aman"}, {"k": "～から～にかけて", "r": "～から～にか↓けて", "a": "dari ～ sampai ～"}, {"k": "関東", "r": "か↓んとう／かんとうち↓ほう", "a": "wilayah Kanto"}, {"k": "見込み", "r": "みこみ○", "a": "diperkirakan; perkiraan"}, {"k": "伊豆諸島", "r": "いずしょ↓とう", "a": "Kepulauan Izu"}, {"k": "東海", "r": "とうかい○", "a": "wilayah Tokai"}, {"k": "局地的に", "r": "きょくちてきに○", "a": "di daerah tertentu"}, {"k": "係員", "r": "かかり↓いん", "a": "petugas"}, {"k": "指示", "r": "し↓じ", "a": "instruksi"}, {"k": "従う", "r": "したがう○", "a": "mematuhi (cth : mematuhi instruksi)"}, {"k": "年寄り／お年寄り", "r": "としよ↓り／おとしより○", "a": "lansia"}, {"k": "優先", "r": "ゆうせん○", "a": "diutamakan; diprioritaskan"}, {"k": "揺れ", "r": "ゆれ○", "a": "getaran; goncangan"}, {"k": "警戒する", "r": "けいかいする○", "a": "mewaspadai"}, {"k": "守る", "r": "まも↓る", "a": "melindungi (cth : melindungi diri)"}, {"k": "家具", "r": "か↓ぐ", "a": "furnitur; mebel"}, {"k": "震源", "r": "しんげん○", "a": "pusat gempa"}, {"k": "海底", "r": "かいてい○", "a": "dasar laut"}, {"k": "～のおそれがある", "r": "～のおそれ↓があ↓る", "a": "dikhawatirkan adanya ~"}, {"k": "緊急地震速報", "r": "きんきゅうじしんそ↓くほう", "a": "peringatan dini gempa bumi"}, {"k": "滋賀", "r": "し↓が", "a": "Shiga"}, {"k": "兵庫", "r": "ひょ↓うご", "a": "Hyogo"}, {"k": "福井", "r": "ふ↓くい", "a": "Fukui"}, {"k": "三重", "r": "み↓え", "a": "Mie"}, {"k": "和歌山", "r": "わか↓やま", "a": "Wakayama"}, {"k": "香川", "r": "か↓がわ", "a": "Kagawa"}, {"k": "近畿地方", "r": "きんきち↓ほう", "a": "wilayah Kinki"}, {"k": "感じる", "r": "かんじる○", "a": "merasakan"}, {"k": "防災訓練", "r": "ぼうさいく↓んれん", "a": "latihan mitigasi bencana"}, {"k": "避難訓練", "r": "ひなんく↓んれん", "a": "latihan evakuasi"}, {"k": "防災頭巾", "r": "ぼうさいず↓きん", "a": "tudung pelindung kepala saat bencana"}, {"k": "ヘルメット", "r": "ヘ↓ルメット／ヘルメ↓ット", "a": "helm"}, {"k": "かぶる", "r": "かぶ↓る", "a": "memakai (untuk bagian kepala) (cth : memakai helm)"}, {"k": "ドア", "r": "ド↓ア", "a": "pintu"}, {"k": "開ける", "r": "あける○", "a": "membuka"}, {"k": "火", "r": "ひ↓", "a": "api"}, {"k": "消す", "r": "けす○", "a": "memadamkan; mematikan (cth : memadamkan api)"}, {"k": "消火する", "r": "しょうかする○", "a": "memadamkan api"}, {"k": "消防署", "r": "しょうぼうしょ○／", "a": "pemadam kebakaran"}, {"k": "集まる", "r": "あつま↓る", "a": "berkumpul"}, {"k": "並ぶ", "r": "ならぶ○", "a": "berbaris"}, {"k": "点呼する", "r": "て↓んこする", "a": "mengabsen"}, {"k": "報告する", "r": "ほうこくする○", "a": "melaporkan"}, {"k": "知らせる", "r": "しらせる○", "a": "menginformasikan"}, {"k": "姿勢", "r": "しせい○", "a": "postur / posisi tubuh"}, {"k": "低くする", "r": "ひく↓くする", "a": "merendahkan"}, {"k": "しゃがむ", "r": "しゃがむ○", "a": "berjongkok"}, {"k": "ハンカチ", "r": "ハンカチ○／ハンカ↓チ", "a": "saputangan"}, {"k": "口に当てる", "r": "くちにあてる○", "a": "menutupi bagian mulut"}, {"k": "火災報知器", "r": "かさいほうち↓き", "a": "alarm kebakaran"}, {"k": "鳴る", "r": "なる○", "a": "berbunyi; berdering"}, {"k": "震度", "r": "し↓んど", "a": "intensitas seismik gempa"}, {"k": "おさまる", "r": "おさま↓る", "a": "reda; berhenti (cth : getaran berhenti)"}, {"k": "避難", "r": "ひ↓なん", "a": "evakuasi"}, {"k": "開始する", "r": "かいしする○", "a": "mulai"}, {"k": "中庭", "r": "なかにわ○", "a": "taman gedung"}, {"k": "～ごと", "r": "～ご↓と", "a": "tiap ～ (cth : tiap tim)"}, {"k": "初期消火", "r": "しょきしょ↓うか", "a": "memadamkam api pada tahap awal"}, {"k": "消火器", "r": "しょうか↓き", "a": "alat pemadam api"}, {"k": "逃げ遅れる", "r": "にげおくれ↓る／にげおくれる○", "a": "terlambat evakuasi"}, {"k": "一つ一つ", "r": "ひとつひと↓つ", "a": "satu per satu"}, {"k": "見て回る", "r": "み↓てまわる", "a": "berkeliling memeriksa"}, {"k": "煙体験", "r": "けむりた↓いけん", "a": "simulasi kondisi berasap"}, {"k": "煙", "r": "けむり○", "a": "asap"}, {"k": "充満する", "r": "じゅうまんする○", "a": "terisi"}, {"k": "逃げる", "r": "にげ↓る", "a": "melarikan diri"}, {"k": "進む", "r": "すすむ○", "a": "maju"}, {"k": "注意点", "r": "ちゅうい↓てん", "a": "hal yang perlu diperhatikan mengisap (cth : mengisap asap)"}, {"k": "声", "r": "こ↓え", "a": "suara; panggil saling berbicara satu sama lain;"}, {"k": "声をかけ合う", "r": "こ↓えを かけあ↓う", "a": "saling memanggil satu sama lain"}, {"k": "床", "r": "ゆか○", "a": "lantai"}, {"k": "安全ピン", "r": "あんぜ↓んピン", "a": "pin pengaman"}, {"k": "レバー", "r": "レ↓バー", "a": "tuas"}, {"k": "ホース", "r": "ホ↓ース", "a": "selang"}, {"k": "抜く", "r": "ぬく○", "a": "menarik; melepas"}, {"k": "先", "r": "さき○", "a": "ujung"}, {"k": "向ける", "r": "むける○", "a": "menghadap; mengarahkan"}, {"k": "途中", "r": "とちゅう○", "a": "tengah"}, {"k": "握る", "r": "にぎる○", "a": "menggenggam"}, {"k": "噴射する", "r": "ふんしゃする○", "a": "menyemprotkan"}, {"k": "左右", "r": "さ↓ゆう", "a": "kiri dan kanan"}, {"k": "狙う", "r": "ねらう○", "a": "membidik; mengarahkan"}, {"k": "消える", "r": "きえる○", "a": "padam"}, {"k": "～m", "r": "～メ↓ートル", "a": "～ meter (cth : 4 meter)"}, {"k": "～秒", "r": "～びょう", "a": "～ detik (cth : 20 detik)"}, {"k": "感じる", "r": "かんじる○", "a": "merasa; merasakan"}, {"k": "落ちる", "r": "おち↓る", "a": "jatuh; roboh"}, {"k": "ゆがむ", "r": "ゆがむ○", "a": "miring (gedung; bangunan); melengkung"}, {"k": "無理をする", "r": "む↓りをする", "a": "memaksakan diri"}, {"k": "ガスコンロ", "r": "ガスコ↓ンロ", "a": "kompor gas"}, {"k": "～必要がある／ない", "r": "～ひつようがあ↓る／な↓い", "a": "perlu / tidak perlu untuk ～"}, {"k": "天井", "r": "てんじょう○", "a": "atap; langit-langit; plafon"}, {"k": "届く", "r": "とど↓く", "a": "sampai; mencapai"}, {"k": "危ない", "r": "あぶない○／あぶな↓い", "a": "berbahaya"}, {"k": "町中", "r": "まちなか○", "a": "di jalan; di kota"}, {"k": "屋外", "r": "おく↓がい", "a": "di luar ruangan"}, {"k": "ガラス", "r": "ガラス○", "a": "kaca"}, {"k": "影響", "r": "えいきょう○", "a": "dampak"}, {"k": "断水する", "r": "だんすいする○", "a": "pemadaman air"}, {"k": "止まる", "r": "とまる○", "a": "berhenti (cth : air berhenti / air tidak keluar)"}, {"k": "停電する", "r": "ていでんする○", "a": "pemadaman listrik"}, {"k": "電気", "r": "で↓んき", "a": "listrik; lampu"}, {"k": "ガス", "r": "ガ↓ス", "a": "gas"}, {"k": "通行止め", "r": "つうこうどめ○", "a": "jalan tertutup"}, {"k": "避難所", "r": "ひなんじょ○／ひなんじょ↓", "a": "tempat evakuasi"}, {"k": "給水車", "r": "きゅうす↓いしゃ", "a": "truk tangki air"}, {"k": "炊き出し", "r": "たきだし○", "a": "distribusi makanan darurat; dapur umum"}, {"k": "必要（な）", "r": "ひつよう（な）○", "a": "diperlukan"}, {"k": "水", "r": "みず○", "a": "air"}, {"k": "非常食", "r": "ひじょ↓うしょく", "a": "makanan darurat"}, {"k": "懐中電灯", "r": "かいちゅうで↓んとう", "a": "senter"}, {"k": "ろうそく", "r": "ろうそ↓く", "a": "lilin"}, {"k": "ラジオ", "r": "ラ↓ジオ", "a": "radio"}, {"k": "毛布", "r": "も↓うふ", "a": "selimut"}, {"k": "寝袋", "r": "ねぶ↓くろ／ねぶくろ○", "a": "kantong tidur"}, {"k": "ポリタンク", "r": "ポリタ↓ンク", "a": "tangki / wadah plastik"}, {"k": "充電（する）", "r": "じゅうでん（する）○", "a": "mengecas; mengisi daya"}, {"k": "小学校", "r": "しょうが↓っこう", "a": "sekolah dasar (SD)"}, {"k": "総合福祉センター", "r": "そうごうふくしセ↓ンター", "a": "pusat kesejahteraan sosial"}, {"k": "ショップ", "r": "ショップ○／ショ↓ップ", "a": "toko"}, {"k": "今回", "r": "こ↓んかい", "a": "kali ini"}, {"k": "レベル", "r": "レベル○／レ↓ベル", "a": "level; tingkat"}, {"k": "一人暮らし", "r": "ひとりぐ↓らし", "a": "hidup; tinggal sendiri"}, {"k": "戻る", "r": "もど↓る", "a": "kembali"}, {"k": "早め", "r": "はやめ○", "a": "lebih awal"}, {"k": "続く", "r": "つづく○", "a": "berlanjut"}, {"k": "容器", "r": "よ↓うき", "a": "wadah"}, {"k": "仮設", "r": "かせつ○", "a": "sementara"}, {"k": "力", "r": "ちから↓／ちか↓ら", "a": "tenaga; kekuatan"}, {"k": "持ち出す", "r": "もちだす○／もちだ↓す", "a": "membawa keluar"}, {"k": "賞味期限", "r": "しょうみき↓げん", "a": "masa kedaluwarsa untuk dikonsumsi"}, {"k": "使用期限", "r": "しようき↓げん", "a": "masa kedaluwarsa untuk dipakai habis; sudah lewat"}, {"k": "切れる", "r": "きれ↓る", "a": "habis; sudah lewat (cth : sudah lewat masa kedaluwarsa untuk dikonsumsi)"}, {"k": "切れる", "r": "きれ↓る", "a": "habis (cth : baterainya habis)"}, {"k": "貴重品", "r": "きちょうひん○", "a": "barang berharga"}, {"k": "電灯", "r": "でんとう○", "a": "lampu listrik"}, {"k": "携帯ラジオ", "r": "けいたいラ↓ジオ", "a": "radio portabel"}, {"k": "非常持ち出し品", "r": "ひじょうもちだしひん○", "a": "barang yang harus dibawa dalam keadaan darurat"}, {"k": "生活（する）", "r": "せいかつ（する）○", "a": "hidup"}, {"k": "下着", "r": "したぎ○", "a": "pakaian dalam"}, {"k": "生理用品", "r": "せいりよ↓うひん", "a": "produk kebersihan untuk menstruasi"}, {"k": "ウェットティッシュ", "r": "ウェットティ↓ッシュ", "a": "tisu basah"}, {"k": "ライター", "r": "ラ↓イター", "a": "lighter / korek api gas bantalan pemanas / penghangat sekali pakai"}, {"k": "粉ミルク", "r": "こなミ↓ルク", "a": "susu bubuk"}, {"k": "おむつ", "r": "おむ↓つ", "a": "popok"}, {"k": "卓上コンロ", "r": "たくじょうコ↓ンロ", "a": "kompor portabel"}, {"k": "ガスボンベ", "r": "ガスボ↓ンベ", "a": "tabung gas"}, {"k": "なべ", "r": "な↓べ", "a": "panci; periuk perlengkapan untuk kegiatan luar ruangan"}, {"k": "アウトドア用品", "r": "アウトドアよ↓うひん", "a": "(outdoor)"}, {"k": "かぜ薬", "r": "かぜぐ↓すり", "a": "obat flu; obat pilek"}, {"k": "ばんそうこう", "r": "ばんそうこう○", "a": "plester; perban (untuk menutup luka)"}, {"k": "消毒液", "r": "しょうどく↓えき", "a": "larutan antiseptik charger / pengisi daya portabel"}, {"k": "現金", "r": "げんき↓ん", "a": "uang tunai"}, {"k": "預金通帳", "r": "よきんつ↓うちょう", "a": "buku tabungan rekening bank"}, {"k": "パスポート", "r": "パスポ↓ート", "a": "paspor"}, {"k": "健康保険証", "r": "けんこうほけんしょう○", "a": "kartu asuransi kesehatan"}, {"k": "外国人登録証", "r": "がいこくじんとうろくしょう○", "a": "kartu pendaftaran orang asing"}, {"k": "缶づめ", "r": "かんづ↓め", "a": "makanan kaleng"}, {"k": "インスタント食品", "r": "インスタントしょ↓くひん", "a": "makanan instan"}]}, {"id": 35, "title": "Lesson 35: 日本語が前より話せるようになりました", "words": [{"k": "和太鼓", "r": "わだ↓いこ", "a": "taiko; beduk khas Jepang"}, {"k": "サークル", "r": "サークル○", "a": "klub"}, {"k": "入る", "r": "は↓いる", "a": "ikut; bergabung (cth : bergabung di klub)"}, {"k": "誘う", "r": "さそう○", "a": "mengajak"}, {"k": "おかげで", "r": "おかげで○", "a": "berkat ～; berkat itu"}, {"k": "増える", "r": "ふえ↓る", "a": "bertambah"}, {"k": "ゲストハウス", "r": "ゲストハ↓ウス", "a": "guest house (penginapan berupa rumah dengan beberapa kamar untuk disewakan untuk umum)"}, {"k": "SNS", "r": "エスエヌエ↓ス", "a": "social networking service / media sosial"}, {"k": "やりとり", "r": "やり↓とり", "a": "interaksi; komunikasi"}, {"k": "～以外", "r": "～い↓がい", "a": "selain ～; di luar ～ (cth : selain / di luar pekerjaan)"}, {"k": "うまい", "r": "うま↓い", "a": "terampil; pintar"}, {"k": "ドラマ", "r": "ドラマ○／ド↓ラマ", "a": "drama; sinetron"}, {"k": "ほとんど", "r": "ほと↓んど", "a": "kebanyakan; umumnya"}, {"k": "セリフ", "r": "セリフ○", "a": "dialog"}, {"k": "アイディア", "r": "ア↓イディア", "a": "ide"}, {"k": "笑う", "r": "わらう○", "a": "tertawa"}, {"k": "そろそろ", "r": "そ↓ろそろ", "a": "sudah hampir"}, {"k": "～のころ", "r": "～のこ↓ろ", "a": "saat; waktu ～ (cth : saat awal-awal)"}, {"k": "苦労する", "r": "く↓ろうする", "a": "menjalani saat-saat yang berat; kesulitan"}, {"k": "締め日", "r": "しめ↓び", "a": "tenggat; batas waktu penyelesaian transaksi tenggat; batas waktu pengiriman"}, {"k": "友だちリクエスト", "r": "ともだちリクエ↓スト", "a": "permintaan pertemanan"}, {"k": "承認する", "r": "しょうにんする○", "a": "menyetujui; menerima"}, {"k": "授業", "r": "じゅ↓ぎょう", "a": "kuliah; pelajaran"}, {"k": "問題", "r": "もんだい○", "a": "masalah"}, {"k": "感謝する", "r": "か↓んしゃする", "a": "menghargai; berterima kasih"}]}, {"id": 36, "title": "Lesson 36: 将来、自分の会社を作ろうと思います", "words": [{"k": "将来", "r": "しょ↓うらい", "a": "masa depan"}, {"k": "夢", "r": "ゆめ↓", "a": "mimpi"}, {"k": "希望", "r": "きぼう○", "a": "harapan; keinginan"}, {"k": "作る", "r": "つく↓る", "a": "membuat; memulai (cth : memulai perusahaan) mendapatkan pekerjaan di perusahaan"}, {"k": "就職する", "r": "しゅうしょくする○", "a": "memiliki; mempunyai"}, {"k": "持つ", "r": "も↓つ", "a": "(cth : memiliki toko sendiri) mengumpulkan; mendapatkan"}, {"k": "稼ぐ", "r": "かせ↓ぐ", "a": "(cth : mengumpulkan uang)"}, {"k": "貯金する", "r": "ちょきんする○", "a": "menabung"}, {"k": "結婚する", "r": "けっこんする○", "a": "menikah membangun; mendirikan"}, {"k": "建てる", "r": "たて↓る", "a": "(cth : membangun rumah)"}, {"k": "進学する", "r": "しんがくする○", "a": "melanjutkan pendidikan ke tingkat yang lebih tinggi"}, {"k": "留学する", "r": "りゅうがくする○", "a": "belajar di luar negeri"}, {"k": "のんびり", "r": "のんび↓り", "a": "dengan santai"}, {"k": "暮らす", "r": "くらす○", "a": "menjalani hidup"}, {"k": "ずっと", "r": "ずっと○", "a": "selamanya"}, {"k": "住む", "r": "す↓む", "a": "hidup; tinggal"}, {"k": "働く", "r": "はたらく○", "a": "bekerja"}, {"k": "職人", "r": "しょくにん○", "a": "(seorang) ahli; profesional; perajin"}, {"k": "ガイド", "r": "ガ↓イド", "a": "pemandu"}, {"k": "通訳", "r": "つ↓うやく", "a": "penerjemah; juru bahasa"}, {"k": "日本語教師", "r": "にほんごきょ↓うし", "a": "guru / pengajar bahasa Jepang"}, {"k": "なる", "r": "な↓る", "a": "menjadi (cth : menjadi seorang ahli)"}, {"k": "自動車", "r": "じどうしゃ○／じど↓うしゃ", "a": "mobil"}, {"k": "整備", "r": "せ↓いび", "a": "perawatan"}, {"k": "役に立つ", "r": "やく↓にた↓つ", "a": "berguna; bermanfaat"}, {"k": "そのために", "r": "そのため↓に", "a": "untuk mencapai itu; untuk itu"}, {"k": "技術", "r": "ぎ↓じゅつ", "a": "teknik"}, {"k": "がんばる", "r": "がんば↓る", "a": "bekerja keras"}, {"k": "暮らし", "r": "くらし○", "a": "kehidupan"}, {"k": "うまくいく", "r": "う↓まくいく", "a": "berjalan lancar; sukses"}, {"k": "周りの人", "r": "まわりのひと↓", "a": "orang-orang di sekitar diri sendiri"}, {"k": "若者", "r": "わかもの○", "a": "pemuda"}, {"k": "卒業する", "r": "そつぎょうする○", "a": "lulus"}, {"k": "別の", "r": "べつの○", "a": "～ yang lain"}, {"k": "広げる", "r": "ひろげる○", "a": "memperluas"}, {"k": "もともと", "r": "もともと○", "a": "aslinya; awalnya"}, {"k": "募集", "r": "ぼしゅう○", "a": "perekrutan"}, {"k": "応募する", "r": "おうぼする○", "a": "melamar (pekerjaan)"}, {"k": "続ける", "r": "つづける○", "a": "melanjutkan"}, {"k": "とにかく", "r": "と↓にかく", "a": "pokoknya; bagaimanapun juga"}, {"k": "ストレス", "r": "スト↓レス", "a": "stres"}, {"k": "知り合う", "r": "しりあ↓う", "a": "berkenalan"}, {"k": "最後", "r": "さ↓いご", "a": "terakhir"}, {"k": "ひとこと", "r": "ひと↓こと", "a": "sepatah kata"}, {"k": "～始める", "r": "～はじめ↓る", "a": "mulai ～ (cth : mulai bekerja)"}, {"k": "下手（な）", "r": "へた↓（な）", "a": "tidak pandai; tidak mahir"}, {"k": "失敗する", "r": "しっぱいする○", "a": "gagal; berbuat salah"}, {"k": "工業", "r": "こ↓うぎょう", "a": "industri bersikap baik hati;"}, {"k": "親切にする", "r": "し↓んせつにする", "a": "memperlakukan (seseorang) dengan ramah"}, {"k": "助ける", "r": "たすけ↓る", "a": "menolong; membantu"}]}];
+
+/* ---------------- state ---------------- */
+function bookOf(l){ return l.id<=18 ? 'A2.1' : 'A2.2'; }
+function numOf(l){ return bookOf(l)==='A2.1' ? l.id : l.id-18; }
+let mode = 'jp-id';
+let currentBook = 'A2.1';
+let selectedLessons = new Set(LESSONS.filter(l=>bookOf(l)==='A2.1').map(l=>l.id));
+let sessionPool = [];       // full pool of card objects for the whole run
+let queue = [];             // current queue to review (array of indices into sessionPool)
+let round = 1;
+let currentIdx = null;      // current card index into sessionPool
+let rememberedSet = new Set(); // ids already remembered permanently
+let totalUnique = 0;
+let flipped = false;
+let dragging = false, startX=0, startY=0, curX=0, curY=0;
+
+/* ---------------- build setup screen ---------------- */
+const lessonListEl = document.getElementById('lessonList');
+function renderLessonList(){
+  lessonListEl.innerHTML = '';
+  LESSONS.filter(l=>bookOf(l)===currentBook).forEach(l=>{
+    const div = document.createElement('div');
+    div.className = 'lesson-item' + (selectedLessons.has(l.id) ? ' checked' : '');
+    div.dataset.id = l.id;
+    const shortTitle = l.title.replace(/^Lesson \d+:\s*/, '');
+    div.innerHTML = `<span class="l-num">Bab ${numOf(l)}</span><span class="l-title">${shortTitle}</span><span class="l-count">${l.words.length} kosakata</span>`;
+    div.addEventListener('click', ()=>{
+      div.classList.toggle('checked');
+      if(div.classList.contains('checked')) selectedLessons.add(l.id);
+      else selectedLessons.delete(l.id);
+      updateTotalNote();
+    });
+    lessonListEl.appendChild(div);
+  });
+}
+renderLessonList();
+
+document.getElementById('bookA21Btn').addEventListener('click', ()=>{
+  currentBook = 'A2.1';
+  document.getElementById('bookA21Btn').classList.add('active');
+  document.getElementById('bookA22Btn').classList.remove('active');
+  renderLessonList();
+});
+document.getElementById('bookA22Btn').addEventListener('click', ()=>{
+  currentBook = 'A2.2';
+  document.getElementById('bookA22Btn').classList.add('active');
+  document.getElementById('bookA21Btn').classList.remove('active');
+  renderLessonList();
+});
+
+document.getElementById('selAllBtn').addEventListener('click', ()=>{
+  LESSONS.filter(l=>bookOf(l)===currentBook).forEach(l=>selectedLessons.add(l.id));
+  document.querySelectorAll('.lesson-item').forEach(el=>el.classList.add('checked'));
+  updateTotalNote();
+});
+document.getElementById('selNoneBtn').addEventListener('click', ()=>{
+  LESSONS.filter(l=>bookOf(l)===currentBook).forEach(l=>selectedLessons.delete(l.id));
+  document.querySelectorAll('.lesson-item').forEach(el=>el.classList.remove('checked'));
+  updateTotalNote();
+});
+
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    mode = btn.dataset.mode;
+  });
+});
+
+function updateTotalNote(){
+  let total = 0;
+  LESSONS.forEach(l=>{ if(selectedLessons.has(l.id)) total += l.words.length; });
+  const note = document.getElementById('totalNote');
+  note.textContent = total>0 ? `Total ${total} kartu akan diuji.` : 'Pilih minimal satu bab untuk memulai.';
+  document.getElementById('startBtn').disabled = total===0;
+}
+updateTotalNote();
+
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  if(selectedLessons.size===0) return;
+  startSession();
+});
+
+/* ---------------- session logic ---------------- */
+function buildPool(){
+  const pool = [];
+  LESSONS.forEach(l=>{
+    if(!selectedLessons.has(l.id)) return;
+    l.words.forEach((w,idx)=>{
+      pool.push({
+        lessonId: l.id,
+        lessonNum: numOf(l),
+        book: bookOf(l),
+        lessonTitle: l.title.replace(/^Lesson \d+:\s*/, ''),
+        k: w.k, r: w.r, a: w.a,
+        uid: l.id+'-'+idx
+      });
+    });
+  });
+  return pool;
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function startSession(){
+  sessionPool = buildPool();
+  totalUnique = sessionPool.length;
+  rememberedSet = new Set();
+  queue = shuffle(sessionPool.map((_,i)=>i));
+  round = 1;
+  showScreen('studyScreen');
+  nextCard();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function updateHUD(){
+  const remembered = rememberedSet.size;
+  document.getElementById('progressFill').style.width = (totalUnique? (remembered/totalUnique*100):0)+'%';
+  document.getElementById('progressLabel').textContent = `${remembered} / ${totalUnique}`;
+  document.getElementById('roundLabel').textContent = `Ronde ${round}`;
+  document.getElementById('pillRemember').textContent = '✓ '+remembered;
+  document.getElementById('pillForget').textContent = '✕ '+forgetCountInQueue();
+  document.getElementById('pillNew').textContent = '? '+newCountInQueue();
+}
+function forgetCountInQueue(){ return queue.filter(i=>sessionPool[i]._status==='forget').length; }
+function newCountInQueue(){ return queue.filter(i=>sessionPool[i]._status==='new').length; }
+
+function nextCard(){
+  updateHUD();
+  if(queue.length===0){
+    // check if there is still unremembered cards -> new round
+    const remaining = sessionPool.map((c,i)=>i).filter(i=>!rememberedSet.has(sessionPool[i].uid));
+    if(remaining.length===0){
+      finishSession();
+      return;
+    } else {
+      round += 1;
+      queue = shuffle(remaining);
+    }
+  }
+  currentIdx = queue.shift();
+  flipped = false;
+  renderCard();
+  updateHUD();
+}
+
+function finishSession(){
+  const pct = totalUnique? Math.round((rememberedSet.size/totalUnique)*100) : 0;
+  document.getElementById('resultRing').style.setProperty('--pct', pct);
+  document.getElementById('pctNum').textContent = pct;
+  document.getElementById('statRemember').textContent = rememberedSet.size + '/' + totalUnique;
+  document.getElementById('statRounds').textContent = round;
+  let sub = 'Kerja bagus! Terus berlatih ya.';
+  if(pct===100) sub = 'Sempurna! Semua kosakata berhasil kamu ingat 🎉';
+  else if(pct>=70) sub = 'Bagus sekali! Sedikit lagi menuju sempurna.';
+  else if(pct>=40) sub = 'Lumayan! Ayo ulangi lagi supaya makin lancar.';
+  else sub = 'Jangan menyerah, ulangi lagi pelan-pelan ya!';
+  document.getElementById('resultSub').textContent = sub;
+  showScreen('resultScreen');
+}
+
+/* ---------------- card rendering ---------------- */
+const cardStage = document.getElementById('cardStage');
+
+function renderCard(){
+  cardStage.innerHTML = '';
+  const item = sessionPool[currentIdx];
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = 'activeCard';
+
+  const front = document.createElement('div');
+  front.className = 'card-face card-front';
+  const back = document.createElement('div');
+  back.className = 'card-face card-back';
+
+  const dirLabel = mode==='jp-id' ? 'JP → ID' : 'ID → JP';
+
+  if(mode==='jp-id'){
+    front.innerHTML = `
+      <span class="badge-lesson">${item.book} · Bab ${item.lessonNum}</span>
+      <span class="badge-dir">${dirLabel}</span>
+      <div class="card-word">${item.k}</div>
+      <div class="card-hint">Ketuk untuk lihat arti</div>
+    `;
+    back.innerHTML = `
+      <span class="badge-lesson">${item.book} · Bab ${item.lessonNum}</span>
+      <span class="badge-dir">${dirLabel}</span>
+      <div class="card-reading">${item.r}</div>
+      <div class="card-meaning">${item.a}</div>
+      <div class="card-hint">Geser untuk menilai</div>
+    `;
+  } else {
+    front.innerHTML = `
+      <span class="badge-lesson">${item.book} · Bab ${item.lessonNum}</span>
+      <span class="badge-dir">${dirLabel}</span>
+      <div class="card-word id-text">${item.a}</div>
+      <div class="card-hint">Ketuk untuk lihat kanji</div>
+    `;
+    back.innerHTML = `
+      <span class="badge-lesson">${item.book} · Bab ${item.lessonNum}</span>
+      <span class="badge-dir">${dirLabel}</span>
+      <div class="card-word">${item.k}</div>
+      <div class="card-reading">${item.r}</div>
+      <div class="card-hint">Geser untuk menilai</div>
+    `;
+  }
+
+  card.appendChild(front);
+  card.appendChild(back);
+
+  const tagRight = document.createElement('div');
+  tagRight.className='swipe-tag right'; tagRight.textContent='INGAT';
+  const tagLeft = document.createElement('div');
+  tagLeft.className='swipe-tag left'; tagLeft.textContent='LUPA';
+  const tagDown = document.createElement('div');
+  tagDown.className='swipe-tag down'; tagDown.textContent='BELUM PERNAH';
+  card.appendChild(tagRight); card.appendChild(tagLeft); card.appendChild(tagDown);
+
+  cardStage.appendChild(card);
+  attachCardEvents(card, tagRight, tagLeft, tagDown);
+}
+
+function attachCardEvents(card, tagRight, tagLeft, tagDown){
+  let isPointerDown=false;
+
+  function onDown(x,y){
+    isPointerDown = true;
+    dragging = false;
+    startX=x; startY=y; curX=x; curY=y;
+    card.classList.add('dragging');
+  }
+  function onMove(x,y){
+    if(!isPointerDown) return;
+    curX=x; curY=y;
+    const dx = curX-startX, dy = curY-startY;
+    if(Math.abs(dx)>8 || Math.abs(dy)>8) dragging = true;
+    const rot = dx/18;
+    card.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+    const opR = Math.min(Math.max(dx/100,0),1);
+    const opL = Math.min(Math.max(-dx/100,0),1);
+    const opD = Math.min(Math.max(dy/100,0),1);
+    tagRight.style.opacity = opR;
+    tagLeft.style.opacity = opL;
+    tagDown.style.opacity = (dy>0 && Math.abs(dx)<Math.abs(dy)) ? opD : 0;
+  }
+  function onUp(){
+    if(!isPointerDown) return;
+    isPointerDown = false;
+    card.classList.remove('dragging');
+    const dx = curX-startX, dy = curY-startY;
+    const absX = Math.abs(dx), absY = Math.abs(dy);
+    const THRESH = 90;
+
+    if(dy>THRESH && dy>absX){
+      flyOut(card,'down');
+      return;
+    }
+    if(absX>THRESH && absX>absY){
+      if(dx>0){ flyOut(card,'right'); }
+      else { flyOut(card,'left'); }
+      return;
+    }
+    // not enough movement -> snap back, or treat as tap (flip)
+    card.style.transform = '';
+    tagRight.style.opacity=0; tagLeft.style.opacity=0; tagDown.style.opacity=0;
+    if(!dragging){
+      toggleFlip(card);
+    }
+  }
+
+  card.addEventListener('pointerdown', e=>{
+    try{ card.setPointerCapture(e.pointerId); }catch(err){}
+    onDown(e.clientX,e.clientY);
+  });
+  card.addEventListener('pointermove', e=>onMove(e.clientX,e.clientY));
+  card.addEventListener('pointerup', onUp);
+  card.addEventListener('pointercancel', onUp);
+}
+
+function toggleFlip(card){
+  flipped = !flipped;
+  card.classList.toggle('flipped', flipped);
+}
+
+function flyOut(card, dir){
+  let tx=0, ty=0, rot=0;
+  if(dir==='right'){ tx=window.innerWidth; rot=25; }
+  else if(dir==='left'){ tx=-window.innerWidth; rot=-25; }
+  else if(dir==='down'){ ty=window.innerHeight*0.8; }
+  card.style.transition = 'transform .4s ease, opacity .4s ease';
+  card.style.transform = `translate(${tx}px, ${ty}px) rotate(${rot}deg)`;
+  card.style.opacity = '0';
+  setTimeout(()=>{ handleResult(dir); }, 220);
+}
+
+function handleResult(dir){
+  const item = sessionPool[currentIdx];
+  if(dir==='right'){
+    item._status = 'remembered';
+    rememberedSet.add(item.uid);
+  } else if(dir==='left'){
+    item._status = 'forget';
+    if(!rememberedSet.has(item.uid)){
+      queue.push(currentIdx); // re-add to be tested again
+    }
+  } else if(dir==='down'){
+    item._status = 'new';
+    if(!rememberedSet.has(item.uid)){
+      queue.push(currentIdx);
+    }
+  }
+  nextCard();
+}
+
+/* ---------------- button controls (non-swipe) ---------------- */
+document.getElementById('btnForget').addEventListener('click', ()=>{
+  const card = document.getElementById('activeCard');
+  if(card) flyOut(card,'left');
+});
+document.getElementById('btnNew').addEventListener('click', ()=>{
+  const card = document.getElementById('activeCard');
+  if(card) flyOut(card,'down');
+});
+document.getElementById('btnRemember').addEventListener('click', ()=>{
+  const card = document.getElementById('activeCard');
+  if(card) flyOut(card,'right');
+});
+document.getElementById('btnFlip').addEventListener('click', ()=>{
+  const card = document.getElementById('activeCard');
+  if(card) toggleFlip(card);
+});
+document.getElementById('quitBtn').addEventListener('click', ()=>{
+  showScreen('setupScreen');
+});
+document.getElementById('btnHome').addEventListener('click', ()=>{
+  showScreen('setupScreen');
+});
+document.getElementById('btnAgain').addEventListener('click', ()=>{
+  startSession();
+});
+
+/* keyboard support for desktop */
+window.addEventListener('keydown', e=>{
+  if(!document.getElementById('studyScreen').classList.contains('active')) return;
+  const card = document.getElementById('activeCard');
+  if(!card) return;
+  if(e.key==='ArrowRight'){ flyOut(card,'right'); }
+  else if(e.key==='ArrowLeft'){ flyOut(card,'left'); }
+  else if(e.key==='ArrowDown'){ flyOut(card,'down'); }
+  else if(e.key===' '){ e.preventDefault(); toggleFlip(card); }
+});
+</script>
+</body>
+</html>
